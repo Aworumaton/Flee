@@ -1,0 +1,111 @@
+
+#include <SDL.h>
+#include <stdio.h>
+#include "Controls.h"
+
+class Input
+{
+public:
+	Input();
+	~Input();
+	Game_Controls _game_controls;
+	Main_Agent_Controls _main_agent_controls;
+	bool force_exit;
+	void Tick(float dt);
+};
+
+Input::Input()
+{
+	force_exit = false;
+}
+
+Input::~Input()
+{
+	delete(&_game_controls);
+	delete(&_main_agent_controls);
+}
+
+void Input::Tick(float dt)
+{
+	bool quit = false;
+	SDL_Event e;
+
+	//_game_controls.reset();
+	//_main_agent_controls.reset();
+
+	while (SDL_PollEvent(&e) != 0)
+	{
+		switch (e.type)
+		{
+		case SDL_QUIT:
+			force_exit = true;
+			break;
+
+		case SDL_KEYDOWN:
+			switch (e.key.keysym.sym)
+			{
+			case SDLK_p:
+			case SDLK_PAUSE:
+				_game_controls.escape = true;
+				break;
+			case SDLK_w:
+			case SDLK_UP:
+				_main_agent_controls.move_forward = true;
+				break;
+			case SDLK_a:
+			case SDLK_LEFT:
+				_main_agent_controls.move_left = true;
+				break;
+			case SDLK_s:
+			case SDLK_DOWN:
+				_main_agent_controls.move_backward = true;
+				break;
+			case SDLK_d:
+			case SDLK_RIGHT:
+				_main_agent_controls.move_right = true;
+				break;
+			case SDLK_e:
+			case SDLK_f:
+				_main_agent_controls.action = true;
+				break;
+			default:
+				break;
+			}
+			break;
+
+		case SDL_KEYUP:
+			switch (e.key.keysym.sym)
+			{
+			case SDLK_p:
+			case SDLK_PAUSE:
+				_game_controls.escape = false;
+				break;
+			case SDLK_w:
+			case SDLK_UP:
+				_main_agent_controls.move_forward = false;
+				break;
+			case SDLK_a:
+			case SDLK_LEFT:
+				_main_agent_controls.move_left = false;
+				break;
+			case SDLK_s:
+			case SDLK_DOWN:
+				_main_agent_controls.move_backward = false;
+				break;
+			case SDLK_d:
+			case SDLK_RIGHT:
+				_main_agent_controls.move_right = false;
+				break;
+			case SDLK_e:
+			case SDLK_f:
+				_main_agent_controls.action = false;
+				break;
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+}
