@@ -151,6 +151,10 @@
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Controls.h" />
+    <ClInclude Include="Flee_Texture.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Texture_Manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

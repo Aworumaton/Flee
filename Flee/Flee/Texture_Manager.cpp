@@ -1,52 +1,10 @@
 #pragma once
-#include <SDL.h>
-#include <SDL_image.h>
-#include <stdio.h>
-#include <string>
-#include "Constants.h"
-#include "Flee_Texture.cpp"
+#include "Texture_Manager.h"
 
-//Texture wrapper class
-class Texture_Manager
+Texture_Manager::Texture_Manager()
 {
-public:
-	//Initializes variables
-	Texture_Manager(SDL_Window* window);
 
-	//Deallocates memory
-	~Texture_Manager();
-
-	//Loads image at specified path
-	bool loadFromFile(std::string path);
-
-	//Deallocates texture
-	void free();
-
-	//Renders texture at given point
-	void render(int x, int y, SDL_Rect* clip = NULL);
-
-	//Gets image dimensions
-	int getWidth();
-	int getHeight();
-
-private:
-	//The actual hardware texture
-	SDL_Texture * * mTexture;
-	//SDL_Window* _window;
-
-	//Image dimensions
-	int mWidth;
-	int mHeight;
-
-	SDL_Window* _window;
-	SDL_Renderer* _renderer;
-	//Scene sprites
-	SDL_Rect gSpriteClips[4];
-	Flee_Texture gSpriteSheetTexture;
-
-	void close();
-	bool loadMedia();
-};
+}
 
 Texture_Manager::Texture_Manager(SDL_Window* window)
 {
@@ -96,6 +54,11 @@ Texture_Manager::Texture_Manager(SDL_Window* window)
 
 	//Update screen
 	SDL_RenderPresent(_renderer);
+}
+
+Texture_Manager::~Texture_Manager()
+{
+
 }
 
 bool Texture_Manager::loadMedia()

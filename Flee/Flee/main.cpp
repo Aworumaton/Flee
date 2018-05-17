@@ -1,8 +1,5 @@
-//Using SDL and standard IO
-#include <SDL.h>
-#include <stdio.h>
-#include "Constants.h"
-#include "Game.cpp"
+#pragma once
+#include "Game.h"
 
 
 int main(int argc, char* args[])

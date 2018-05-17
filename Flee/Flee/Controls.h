@@ -1,4 +1,4 @@
-
+#pragma once
 class Main_Agent_Controls
 {
 public:
@@ -19,6 +19,7 @@ public:
 	}
 };
 
+#pragma once
 class Game_Controls
 {
 public:
