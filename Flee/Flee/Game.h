@@ -2,21 +2,14 @@
 #include <SDL.h>
 #include <stdio.h>
 #include "Controls.h"
-#include "Texture_Manager.h"
 #include "Input.h"
+#include "Constants.h"
+//#include "Texture_Manager.h"
 
 class Game
 {
 public:
-	static Game create_game()
-	{
-		Game g;
-		if (!g.init())
-		{
-			printf("Failed to initialize!\n");
-		}
-		return g;
-	}
+	static Game* create_game();
 
 	void run();
 

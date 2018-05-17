@@ -1,6 +1,16 @@
 #pragma once
 #include "Game.h"
 
+Game* Game::create_game()
+{
+	Game* g = new Game();
+	if (!g->init())
+	{
+		printf("Failed to initialize!\n");
+	}
+	return g;
+}
+
 void Game::run()
 {
 	_is_running = true;
@@ -45,7 +55,7 @@ bool Game::init()
 	else
 	{
 		//Create window
-		_window = SDL_CreateWindow("Flee", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		_window = SDL_CreateWindow("Flee", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		if (_window == NULL)
 		{
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -71,23 +81,23 @@ void Game::tick(float dt)
 void Game::game_tick(float dt)
 {
 
-	if (_input._main_agent_controls->move_forward)
+	if (_input._main_agent_controls.move_forward)
 	{
 		printf("move_forward\n");
 	}
-	if (_input._main_agent_controls->move_left)
+	if (_input._main_agent_controls.move_left)
 	{
 		printf("move_forward\n");
 	}
-	if (_input._main_agent_controls->move_backward)
+	if (_input._main_agent_controls.move_backward)
 	{
 		printf("move_backward\n");
 	}
-	if (_input._main_agent_controls->move_right)
+	if (_input._main_agent_controls.move_right)
 	{
 		printf("move_right\n");
 	}
-	if (_input._main_agent_controls->action)
+	if (_input._main_agent_controls.action)
 	{
 		printf("action\n");
 	}

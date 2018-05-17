@@ -5,23 +5,18 @@ Input::Input()
 {
 	force_exit = false;
 
-	_game_controls = new Game_Controls();
-	_main_agent_controls = new Main_Agent_Controls();
+	//_game_controls = new Game_Controls();
+	//_main_agent_controls = new Main_Agent_Controls();
 }
 
 Input::~Input()
 {
-	delete(_game_controls);
-	delete(_main_agent_controls);
 }
 
 void Input::Tick(float dt)
 {
 	bool quit = false;
 	SDL_Event e;
-
-	//_game_controls.reset();
-	//_main_agent_controls.reset();
 
 	while (SDL_PollEvent(&e) != 0)
 	{
@@ -36,27 +31,27 @@ void Input::Tick(float dt)
 			{
 			case SDLK_p:
 			case SDLK_PAUSE:
-				_game_controls->escape = true;
+				_game_controls.escape = true;
 				break;
 			case SDLK_w:
 			case SDLK_UP:
-				_main_agent_controls->move_forward = true;
+				_main_agent_controls.move_forward = true;
 				break;
 			case SDLK_a:
 			case SDLK_LEFT:
-				_main_agent_controls->move_left = true;
+				_main_agent_controls.move_left = true;
 				break;
 			case SDLK_s:
 			case SDLK_DOWN:
-				_main_agent_controls->move_backward = true;
+				_main_agent_controls.move_backward = true;
 				break;
 			case SDLK_d:
 			case SDLK_RIGHT:
-				_main_agent_controls->move_right = true;
+				_main_agent_controls.move_right = true;
 				break;
 			case SDLK_e:
 			case SDLK_f:
-				_main_agent_controls->action = true;
+				_main_agent_controls.action = true;
 				break;
 			default:
 				break;
@@ -68,27 +63,27 @@ void Input::Tick(float dt)
 			{
 			case SDLK_p:
 			case SDLK_PAUSE:
-				_game_controls->escape = false;
+				_game_controls.escape = false;
 				break;
 			case SDLK_w:
 			case SDLK_UP:
-				_main_agent_controls->move_forward = false;
+				_main_agent_controls.move_forward = false;
 				break;
 			case SDLK_a:
 			case SDLK_LEFT:
-				_main_agent_controls->move_left = false;
+				_main_agent_controls.move_left = false;
 				break;
 			case SDLK_s:
 			case SDLK_DOWN:
-				_main_agent_controls->move_backward = false;
+				_main_agent_controls.move_backward = false;
 				break;
 			case SDLK_d:
 			case SDLK_RIGHT:
-				_main_agent_controls->move_right = false;
+				_main_agent_controls.move_right = false;
 				break;
 			case SDLK_e:
 			case SDLK_f:
-				_main_agent_controls->action = false;
+				_main_agent_controls.action = false;
 				break;
 			default:
 				break;

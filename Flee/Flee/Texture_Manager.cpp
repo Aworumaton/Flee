@@ -44,13 +44,13 @@ Texture_Manager::Texture_Manager(SDL_Window* window)
 	gSpriteSheetTexture.render(0, 0, &gSpriteClips[0]);
 
 	//Render top right sprite
-	gSpriteSheetTexture.render(SCREEN_WIDTH - gSpriteClips[1].w, 0, &gSpriteClips[1]);
+	gSpriteSheetTexture.render(Constants::SCREEN_WIDTH - gSpriteClips[1].w, 0, &gSpriteClips[1]);
 
 	//Render bottom left sprite
-	gSpriteSheetTexture.render(0, SCREEN_HEIGHT - gSpriteClips[2].h, &gSpriteClips[2]);
+	gSpriteSheetTexture.render(0, Constants::SCREEN_HEIGHT - gSpriteClips[2].h, &gSpriteClips[2]);
 
 	//Render bottom right sprite
-	gSpriteSheetTexture.render(SCREEN_WIDTH - gSpriteClips[3].w, SCREEN_HEIGHT - gSpriteClips[3].h, &gSpriteClips[3]);
+	gSpriteSheetTexture.render(Constants::SCREEN_WIDTH - gSpriteClips[3].w, Constants::SCREEN_HEIGHT - gSpriteClips[3].h, &gSpriteClips[3]);
 
 	//Update screen
 	SDL_RenderPresent(_renderer);
