@@ -81,7 +81,7 @@ bool Map_Creator::setTiles(Flee_Tile* tiles[])
 			//If the number is a valid tile number
 			if ((tileType >= 0) && (tileType < Constants::TOTAL_TILE_SPRITES))
 			{
-				tiles[i] = new Flee_Tile(x, y, tileType, gRenderer, &gTileClips[i]);
+				tiles[i] = new Flee_Tile(x, y, tileType, gRenderer, &gTileClips[tileType]);
 			}
 			//If we don't recognize the tile type
 			else
