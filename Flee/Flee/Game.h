@@ -22,7 +22,13 @@ private:
 	//Texture_Manager * _texture_Manager;
 	Map_Creator* _map_creator;
 	SDL_Window * _window;
+	SDL_Renderer* _renderer;
 	SDL_Surface* _screen_surface;
+	//Level camera
+	SDL_Rect _camera;
+
+	//The dot that will be moving around on the screen
+	Dot* _dot;
 
 	bool _is_running;
 	Game();

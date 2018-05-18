@@ -1,18 +1,10 @@
 #pragma once
 #include "Dot.h"
 
-Dot::Dot(SDL_Renderer* renderer)
+Dot::Dot(SDL_Renderer* renderer, Main_Agent_Controls* controls) : Dot()
 {
 	gDotTexture = new Flee_Texture(renderer);
-	//Initialize the collision box
-	mBox.x = 0;
-	mBox.y = 0;
-	mBox.w = DOT_WIDTH;
-	mBox.h = DOT_HEIGHT;
-
-	//Initialize the velocity
-	mVelX = 0;
-	mVelY = 0;
+	_controls = controls;
 
 	//Load dot texture
 	if (!gDotTexture->loadFromFile("Resources/dot.bmp"))
@@ -21,41 +13,44 @@ Dot::Dot(SDL_Renderer* renderer)
 	}
 }
 
+Dot::Dot()
+{
+	//Initialize the collision box
+	mBox.x = 0;
+	mBox.y = 0;
+	mBox.w = DOT_WIDTH;
+	mBox.h = DOT_HEIGHT;
+}
+
 Dot::~Dot()
 {
 	gDotTexture->free();
 }
 
-void Dot::handleEvent(SDL_Event& e)
-{
-	//If a key was pressed
-	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
-	{
-		//Adjust the velocity
-		switch (e.key.keysym.sym)
-		{
-		case SDLK_UP: mVelY -= DOT_VEL; break;
-		case SDLK_DOWN: mVelY += DOT_VEL; break;
-		case SDLK_LEFT: mVelX -= DOT_VEL; break;
-		case SDLK_RIGHT: mVelX += DOT_VEL; break;
-		}
-	}
-	//If a key was released
-	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
-	{
-		//Adjust the velocity
-		switch (e.key.keysym.sym)
-		{
-		case SDLK_UP: mVelY += DOT_VEL; break;
-		case SDLK_DOWN: mVelY -= DOT_VEL; break;
-		case SDLK_LEFT: mVelX += DOT_VEL; break;
-		case SDLK_RIGHT: mVelX -= DOT_VEL; break;
-		}
-	}
-}
-
 void Dot::move(Flee_Tile *tiles[])
 {
+	int mVelY = 0;
+	int mVelX = 0;
+	if (_controls->move_forward)
+	{
+		mVelY -= DOT_VEL;
+	}
+	if (_controls->move_backward)
+	{
+		mVelY += DOT_VEL;
+	}
+	if (_controls->move_left)
+	{
+		mVelX -= DOT_VEL;
+	}
+	if (_controls->move_right)
+	{
+		mVelX += DOT_VEL;
+	}
+
+
+
+
 	//Move the dot left or right
 	mBox.x += mVelX;
 	

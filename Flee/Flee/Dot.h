@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include "Flee_Texture.h"
 #include "Flee_Tile.h"
+#include "Input.h"
 #include "Constants.h"
 
 //The dot that will move around on the screen
@@ -20,11 +21,9 @@ public:
 	static const int DOT_VEL = 10;
 
 	//Initializes the variables
-	Dot(SDL_Renderer* renderer);
+	Dot(SDL_Renderer* renderer, Main_Agent_Controls* controls);
+	Dot();
 	~Dot();
-
-	//Takes key presses and adjusts the dot's velocity
-	void handleEvent(SDL_Event& e);
 
 	//Moves the dot and check collision against tiles
 	void move(Flee_Tile *tiles[]);
@@ -38,11 +37,9 @@ public:
 	void render(SDL_Rect& camera);
 
 private:
+	Main_Agent_Controls * _controls;
 	//Collision box of the dot
 	SDL_Rect mBox;
-
-	//The velocity of the dot
-	int mVelX, mVelY;
 };
 
 #endif

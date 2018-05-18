@@ -19,6 +19,21 @@ void Game::run()
 	while (_is_running)
 	{
 		_input.Tick(dt);
+
+
+		//Move the dot
+		_dot->move(_map_creator->_tileSet);
+		_dot->setCamera(_camera);
+
+
+		//Render dot
+		_dot->render(_camera);
+		_map_creator->Tick(dt);
+
+		//Render dot
+		_dot->render(_camera);
+
+
 		game_tick(dt);
 
 
@@ -26,7 +41,7 @@ void Game::run()
 		//SDL_BlitSurface(gHelloWorld, NULL, gScreenSurface, NULL);
 
 		//Update the surface
-		SDL_UpdateWindowSurface(_window);
+		//SDL_UpdateWindowSurface(_window);
 	}
 }
 
@@ -62,10 +77,22 @@ bool Game::init()
 		}
 	}
 
+	//Create renderer for window
+	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+	//Initialize renderer color
+	SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
 
 	_screen_surface = SDL_GetWindowSurface(_window);
 	//_texture_Manager = new Texture_Manager(_window);
-	_map_creator = new Map_Creator(_window);
+
+
+	_camera = SDL_Rect{ 0, 0, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT };
+	_map_creator = new Map_Creator(_renderer, &_camera);
+
+	//The dot that will be moving around on the screen
+	_dot = new Dot(_renderer, &(_input._main_agent_controls));
 
 	//load level and characters
 
@@ -104,6 +131,12 @@ void Game::game_tick(float dt)
 }
 void Game::exit()
 {
+	if (_renderer != NULL)
+	{
+		//Destroy renderer
+		SDL_DestroyRenderer(_renderer);
+		_renderer = NULL;
+	}
 	if (_window != NULL)
 	{
 		//Destroy window

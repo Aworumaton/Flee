@@ -1,21 +1,4 @@
 #include "Map_Creator.h"
-
-
-bool Map_Creator::loadMedia(Flee_Tile* tiles[])
-{
-	//Loading success flag
-	bool success = true;
-	
-	//Load tile map
-	if (!setTiles(tiles))
-	{
-		printf("Failed to load tile set!\n");
-		success = false;
-	}
-
-	return success;
-}
-
 void Map_Creator::close(Flee_Tile* tiles[])
 {
 	//Deallocate tiles
@@ -30,15 +13,10 @@ void Map_Creator::close(Flee_Tile* tiles[])
 
 	//Free loaded images
 
-	//Destroy window	
-	SDL_DestroyRenderer(gRenderer);
-	SDL_DestroyWindow(gWindow);
-	gWindow = NULL;
-	gRenderer = NULL;
+	_renderer = NULL;
 
 	//Quit SDL subsystems
 	IMG_Quit();
-	SDL_Quit();
 }
 
 bool Map_Creator::setTiles(Flee_Tile* tiles[])
@@ -81,7 +59,7 @@ bool Map_Creator::setTiles(Flee_Tile* tiles[])
 			//If the number is a valid tile number
 			if ((tileType >= 0) && (tileType < Constants::TOTAL_TILE_SPRITES))
 			{
-				tiles[i] = new Flee_Tile(x, y, tileType, gRenderer, &gTileClips[tileType]);
+				tiles[i] = new Flee_Tile(x, y, tileType, _renderer, &gTileClips[tileType]);
 			}
 			//If we don't recognize the tile type
 			else
@@ -179,95 +157,55 @@ bool Map_Creator::setTiles(Flee_Tile* tiles[])
 }
 
 
-Map_Creator::Map_Creator(SDL_Window* window)
+void Map_Creator::Tick(float dt)
 {
-	gWindow = window;
-	//Start up SDL and create window
-	bool success = true;
-	//Create renderer for window
-	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (gRenderer == NULL)
+
+
+	//Clear screen
+	SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_RenderClear(_renderer);
+
+	//Render level
+	for (int i = 0; i < Constants::TOTAL_TILES; ++i)
+	{
+		_tileSet[i]->render(*_camera);
+	}
+
+
+	//Update screen
+	SDL_RenderPresent(_renderer);
+}
+
+Map_Creator::~Map_Creator()
+{
+	close(_tileSet);
+}
+
+Map_Creator::Map_Creator(SDL_Renderer* renderer, SDL_Rect* camera)
+{
+	_renderer = renderer;
+	//Level camera
+	_camera = camera;
+
+	//Initialize PNG loading
+	int imgFlags = IMG_INIT_PNG;
+	if (_renderer == NULL)
 	{
 		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-		success = false;
-	}
-	else
-	{
-		//Initialize renderer color
-		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-		//Initialize PNG loading
-		int imgFlags = IMG_INIT_PNG;
-		if (!(IMG_Init(imgFlags) & imgFlags))
-		{
-			printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-			success = false;
-		}
+		return;
 	}
 
-	if(success)
+	if(!(IMG_Init(imgFlags) & imgFlags))
 	{
-		//The level tiles
-		Flee_Tile* tileSet[Constants::TOTAL_TILES];
-
-		//Load media
-		if (!loadMedia(tileSet))
-		{
-			printf("Failed to load media!\n");
-		}
-		else
-		{
-			//Main loop flag
-			bool quit = false;
-
-			//Event handler
-			SDL_Event e;
-
-			//The dot that will be moving around on the screen
-			Dot dot = Dot(gRenderer);
-
-			//Level camera
-			SDL_Rect camera = { 0, 0, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT };
-
-			//While application is running
-			while (!quit)
-			{
-				//Handle events on queue
-				while (SDL_PollEvent(&e) != 0)
-				{
-					//User requests quit
-					if (e.type == SDL_QUIT)
-					{
-						quit = true;
-					}
-
-					//Handle input for the dot
-					dot.handleEvent(e);
-				}
-
-				//Move the dot
-				dot.move(tileSet);
-				dot.setCamera(camera);
-
-				//Clear screen
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-				SDL_RenderClear(gRenderer);
-
-				//Render level
-				for (int i = 0; i < Constants::TOTAL_TILES; ++i)
-				{
-					tileSet[i]->render(camera);
-				}
-
-				//Render dot
-				dot.render(camera);
-
-				//Update screen
-				SDL_RenderPresent(gRenderer);
-			}
-		}
-
-		//Free resources and close SDL
-		close(tileSet);
+		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+		return;
+	}
+	
+	//Load the level tiles
+	_tileSet = new Flee_Tile*[Constants::TOTAL_TILES];
+	if (!setTiles(_tileSet))
+	{
+		printf("Failed to load tile set!\n");
+		return;
 	}
 }
