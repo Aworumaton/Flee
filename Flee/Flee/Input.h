@@ -1,4 +1,6 @@
-#pragma once
+#ifndef INPUT_H
+#define INPUT_H
+
 #include <SDL.h>
 #include <stdio.h>
 #include "Controls.h"
@@ -13,3 +15,5 @@ public:
 	bool force_exit;
 	void Tick(float dt);
 };
+
+#endif

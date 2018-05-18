@@ -2,40 +2,26 @@
 #include "Flee_Texture.h"
 
 
-
-Flee_Texture::Flee_Texture()
+Flee_Texture::Flee_Texture(SDL_Renderer * renderer)
 {
+	gRenderer = renderer;
 
-}
-Flee_Texture::Flee_Texture(SDL_Renderer* renderer)
-{
-	_renderer = renderer;
 	//Initialize
-	_texture = NULL;
-	_width = 0;
-	_height = 0;
+	mTexture = NULL;
+	mWidth = 0;
+	mHeight = 0;
 }
 
 Flee_Texture::~Flee_Texture()
 {
-	if (_texture != NULL)
-	{
-		SDL_DestroyTexture(_texture);
-		_texture = NULL;
-		_width = 0;
-		_height = 0;
-	}
+	//Deallocate
+	free();
 }
 
 bool Flee_Texture::loadFromFile(std::string path)
 {
 	//Get rid of preexisting texture
-	if (_texture != NULL)
-	{
-
-		printf("image already loaded!");
-		return false;
-	}
+	free();
 
 	//The final texture
 	SDL_Texture* newTexture = NULL;
@@ -52,7 +38,7 @@ bool Flee_Texture::loadFromFile(std::string path)
 		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
 
 		//Create texture from surface pixels
-		newTexture = SDL_CreateTextureFromSurface(_renderer, loadedSurface);
+		newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
 		if (newTexture == NULL)
 		{
 			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
@@ -60,8 +46,8 @@ bool Flee_Texture::loadFromFile(std::string path)
 		else
 		{
 			//Get image dimensions
-			_width = loadedSurface->w;
-			_height = loadedSurface->h;
+			mWidth = loadedSurface->w;
+			mHeight = loadedSurface->h;
 		}
 
 		//Get rid of old loaded surface
@@ -69,14 +55,81 @@ bool Flee_Texture::loadFromFile(std::string path)
 	}
 
 	//Return success
-	_texture = newTexture;
-	return _texture != NULL;
+	mTexture = newTexture;
+	return mTexture != NULL;
 }
 
-void Flee_Texture::render(int x, int y, SDL_Rect* clip)
+#ifdef _SDL_TTF_H
+bool Flee_Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
+{
+	//Get rid of preexisting texture
+	free();
+
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
+	if (textSurface != NULL)
+	{
+		//Create texture from surface pixels
+		mTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+		if (mTexture == NULL)
+		{
+			printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+		}
+		else
+		{
+			//Get image dimensions
+			mWidth = textSurface->w;
+			mHeight = textSurface->h;
+		}
+
+		//Get rid of old surface
+		SDL_FreeSurface(textSurface);
+	}
+	else
+	{
+		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+
+
+	//Return success
+	return mTexture != NULL;
+}
+#endif
+
+void Flee_Texture::free()
+{
+	//Free texture if it exists
+	if (mTexture != NULL)
+	{
+		SDL_DestroyTexture(mTexture);
+		mTexture = NULL;
+		mWidth = 0;
+		mHeight = 0;
+	}
+}
+
+void Flee_Texture::setColor(Uint8 red, Uint8 green, Uint8 blue)
+{
+	//Modulate texture rgb
+	SDL_SetTextureColorMod(mTexture, red, green, blue);
+}
+
+void Flee_Texture::setBlendMode(SDL_BlendMode blending)
+{
+	//Set blending function
+	SDL_SetTextureBlendMode(mTexture, blending);
+}
+
+void Flee_Texture::setAlpha(Uint8 alpha)
+{
+	//Modulate texture alpha
+	SDL_SetTextureAlphaMod(mTexture, alpha);
+}
+
+void Flee_Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
 	//Set rendering space and render to screen
-	SDL_Rect renderQuad = { x, y, _width, _height };
+	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 
 	//Set clip rendering dimensions
 	if (clip != NULL)
@@ -86,15 +139,15 @@ void Flee_Texture::render(int x, int y, SDL_Rect* clip)
 	}
 
 	//Render to screen
-	SDL_RenderCopy(_renderer, _texture, clip, &renderQuad);
+	SDL_RenderCopyEx(gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
 }
 
 int Flee_Texture::getWidth()
 {
-	return _width;
+	return mWidth;
 }
 
 int Flee_Texture::getHeight()
 {
-	return _height;
+	return mHeight;
 }

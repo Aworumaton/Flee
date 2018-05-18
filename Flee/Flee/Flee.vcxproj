@@ -142,18 +142,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Dot.cpp" />
     <ClCompile Include="Flee_Texture.cpp" />
+    <ClCompile Include="Flee_Tile.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map_Creator.cpp" />
     <ClCompile Include="Texture_Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Controls.h" />
+    <ClInclude Include="Dot.h" />
     <ClInclude Include="Flee_Texture.h" />
+    <ClInclude Include="Flee_Tile.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Map_Creator.h" />
     <ClInclude Include="Texture_Manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

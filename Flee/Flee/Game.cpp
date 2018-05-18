@@ -37,7 +37,6 @@ Game::~Game()
 
 Game::Game()
 {
-
 }
 
 
@@ -66,6 +65,7 @@ bool Game::init()
 
 	_screen_surface = SDL_GetWindowSurface(_window);
 	//_texture_Manager = new Texture_Manager(_window);
+	_map_creator = new Map_Creator(_window);
 
 	//load level and characters
 

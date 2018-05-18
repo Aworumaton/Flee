@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CONTROLS_H
+#define CONTROLS_H
+
 class Main_Agent_Controls
 {
 public:
@@ -19,7 +21,6 @@ public:
 	}
 };
 
-#pragma once
 class Game_Controls
 {
 public:
@@ -32,3 +33,5 @@ public:
 		pause = false;
 	}
 };
+
+#endif
