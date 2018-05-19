@@ -30,9 +30,9 @@ private:
 	const int DOT_HEIGHT = 20;
 
 	//Default axis velocity of the dot
-	const int DEFAULT_DOT_VEL = 4;
+	const int DEFAULT_DOT_VEL = 20;
 	//Maximum axis velocity of the dot
-	const int MAX_DOT_VEL = 10;
+	const int MAX_DOT_VEL = 2;
 
 	Flee_Texture * gDotTexture;
 	Main_Agent_Controls * _controls;

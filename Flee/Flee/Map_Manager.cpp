@@ -18,16 +18,16 @@ void Map_Manager::close(Flee_Tile* tiles[])
 	IMG_Quit();
 }
 
-bool Map_Manager::setTiles(Flee_Tile* tiles[])
+bool Map_Manager::Read_Tiles()
 {
+	//Load the level tiles
+	_tileSet = new Flee_Tile*[768+32];
+
 	//Success flag
 	bool tilesLoaded = true;
 
-	//The tile offsets
-	int x = 0, y = 0;
-
 	//Open the map
-	std::ifstream map("Resources/lazy.map");
+	std::ifstream map("Resources/level_0.txt");
 
 	//If the map couldn't be loaded
 	if (!map.is_open())
@@ -37,52 +37,53 @@ bool Map_Manager::setTiles(Flee_Tile* tiles[])
 	}
 	else
 	{
+		_total_tiles = 0;
+
+		_level_width = 0;
+		_level_height = 0;
+
+		int cur_width = 0;
+		int cur_height = 0;
+
+		//Determines what kind of tile will be made
+		int tileType = -1;
+
 		//Initialize the tiles
-		for (int i = 0; i < _total_tiles; ++i)
+		while (map >> tileType)
 		{
-			//Determines what kind of tile will be made
-			int tileType = -1;
-
-			//Read tile from map file
-			map >> tileType;
-
-			//If the was a problem in reading the map
-			if (map.fail())
-			{
-				//Stop loading map
-				printf("Error loading map: Unexpected end of file!\n");
-				tilesLoaded = false;
-				break;
-			}
-
 			//If the number is a valid tile number
 			if ((tileType >= 0) && (tileType < Constants::Tile_Type::Count))
 			{
-				
-				tiles[i] = new Flee_Tile(x, y, _tile_width, _tile_height, tileType, _renderer, &gTileClips[tileType]);
-			}
-			//If we don't recognize the tile type
-			else
+				_tileSet[_total_tiles] = new Flee_Tile(cur_width, cur_height, _tile_width, _tile_height, tileType, _renderer, &gTileClips[tileType]);
+			}			
+			else //If we don't recognize the tile type
 			{
 				//Stop loading map
-				printf("Error loading map: Invalid tile type at %d!\n", i);
+				printf("Error loading map: Invalid tile type at %d!\n", _total_tiles);
 				tilesLoaded = false;
 				break;
 			}
 
-			//Move to next tile spot
-			x += _tile_width;
-
-			//If we've gone too far
-			if (x >= _level_width)
+			if (map.peek() == '\n')
 			{
 				//Move back
-				x = 0;
+				cur_width = 0;
 
 				//Move to the next row
-				y += _tile_height;
+				cur_height += _tile_height;
 			}
+			else if (map.peek() == ' ')
+			{
+				//Move to next tile spot
+				cur_width += _tile_width;
+			}
+			_total_tiles++;
 		}
+
+		_level_width = cur_width+_tile_width;
+		_level_height = cur_height + _tile_height;
+		
+
 
 		//Clip the sprite sheet
 		if (tilesLoaded)
@@ -229,9 +230,7 @@ Map_Manager::Map_Manager(SDL_Renderer* renderer)
 		return;
 	}
 	
-	//Load the level tiles
-	_tileSet = new Flee_Tile*[_total_tiles];
-	if (!setTiles(_tileSet))
+	if (!Read_Tiles())
 	{
 		printf("Failed to load tile set!\n");
 		return;

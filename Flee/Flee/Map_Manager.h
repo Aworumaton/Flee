@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <fstream>
+#include <string>
 #include "Flee_Tile.h"
 
 
@@ -40,7 +41,7 @@ private:
 	int _tile_width;
 
 	//Sets tiles from tile map
-	bool setTiles(Flee_Tile *tiles[]);
+	bool Read_Tiles();
 };
 
 #endif

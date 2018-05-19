@@ -56,27 +56,44 @@ void Dot::move()
 	}
 
 
+	SDL_Rect target_box =  SDL_Rect(mBox);
 
-
-	//Move the dot left or right
-	mBox.x += mVelX;
-
+	target_box.x = mBox.x + mVelX;
 	//If the dot went too far to the left or right or touched a wall
-	if ((mBox.x < 0) || (mBox.x + mBox.w > _map->Get_Level_Width()) || _map->touches_walls(mBox))
+	if (target_box.x < 0)
+	{
+		target_box.x = 0;
+	}
+	else if(target_box.x + target_box.w > _map->Get_Level_Width())
+	{
+		target_box.x = _map->Get_Level_Width() - target_box.w;
+	}
+	else if(_map->touches_walls(target_box))
 	{
 		//move back
-		mBox.x -= mVelX;
+		target_box.x = mBox.x;
+	}
+	
+	target_box.y = mBox.y + mVelY;
+
+	//If the dot went too far to the left or right or touched a wall
+	if (target_box.y < 0)
+	{
+		target_box.y = 0;
+	}
+	else if (target_box.y + target_box.h > _map->Get_Level_Height())
+	{
+		target_box.y = _map->Get_Level_Height() - target_box.h;
+	}
+	else if (_map->touches_walls(target_box))
+	{
+		//move back
+		target_box.y = mBox.y;
 	}
 
 	//Move the dot up or down
-	mBox.y += mVelY;
-
-	//If the dot went too far up or down or touched a wall
-	if ((mBox.y < 0) || (mBox.y + mBox.h > _map->Get_Level_Height()) || _map->touches_walls(mBox))
-	{
-		//move back
-		mBox.y -= mVelY;
-	}
+	//delete(&mBox);
+	mBox = target_box;
 }
 
 void Dot::setCamera(SDL_Rect& camera)
