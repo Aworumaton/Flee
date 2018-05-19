@@ -1,16 +1,16 @@
-#ifndef FLEE_TILE_H
-#define FLEE_TILE_H
+#ifndef FLEE_INTERACTABLE_H
+#define FLEE_INTERACTABLE_H
 
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Flee_Texture.h"
 #include "Constants.h"
 
-//The tile
-class Flee_Tile : Flee_Texture
+//The Interactable
+class Flee_Interactable : Flee_Texture
 {
 public:
-	enum Tile_Type
+	enum Interactable_Type
 	{
 		Invalid = -1,
 		TILE_RED = 0,
@@ -31,8 +31,8 @@ public:
 	};
 
 	//Initializes position and type
-	Flee_Tile(SDL_Rect bounds, int tileType, SDL_Renderer* renderer, SDL_Rect* rect);
-	Flee_Tile(int x, int y, int w, int h, int tileType, SDL_Renderer* renderer, SDL_Rect* rect);
+	Flee_Interactable(SDL_Rect bounds, int tileType, SDL_Renderer* renderer, SDL_Rect* rect);
+	Flee_Interactable(int x, int y, int w, int h, int tileType, SDL_Renderer* renderer, SDL_Rect* rect);
 
 
 	//Shows the tile

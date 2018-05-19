@@ -112,6 +112,12 @@ void Game::tick(float dt)
 
 void Game::game_tick(float dt)
 {
+	
+	if (_input._game_controls.escape)
+	{
+		_is_running = false;
+	}
+
 
 	if (_input._main_agent_controls.move_forward)
 	{
@@ -137,6 +143,7 @@ void Game::game_tick(float dt)
 }
 void Game::exit()
 {
+	delete(_map_manager);
 	if (_renderer != NULL)
 	{
 		//Destroy renderer

@@ -17,14 +17,11 @@ public:
 	void Render(SDL_Rect &camera);
 
 	bool touches_walls(SDL_Rect box);
-	SDL_Rect gTileClips[Constants::Tile_Type::Count];
+	SDL_Rect gTileClips[Flee_Tile::Tile_Type::Count];
 
 	//The window renderer
 	SDL_Renderer* _renderer = NULL;
 
-
-	//Frees media and shuts down SDL
-	void close(Flee_Tile* tiles[]);
 
 	Flee_Tile** _tileSet;
 

@@ -1,23 +1,4 @@
 #include "Map_Manager.h"
-
-void Map_Manager::close(Flee_Tile* tiles[])
-{
-	//Deallocate tiles
-	for (int i = 0; i < _total_tiles; ++i)
-	{
-		if (tiles[i] == NULL)
-		{
-			delete tiles[i];
-			tiles[i] = NULL;
-		}
-	}
-
-	_renderer = NULL;
-
-	//Quit SDL subsystems
-	IMG_Quit();
-}
-
 bool Map_Manager::Read_Tiles()
 {
 	if (_tileSet != NULL)
@@ -70,7 +51,7 @@ bool Map_Manager::Read_Tiles()
 			}
 
 			//If the number is a valid tile number
-			if ((tileType >= 0) && (tileType < Constants::Tile_Type::Count))
+			if ((tileType >= 0) && (tileType < Flee_Tile::Tile_Type::Count))
 			{
 				_tileSet[_total_tiles] = new Flee_Tile(cur_width, cur_height, _tile_width, _tile_height, tileType, _renderer, &gTileClips[tileType]);
 			}			
@@ -115,65 +96,65 @@ bool Map_Manager::Read_Tiles()
 		//Clip the sprite sheet
 		if (tilesLoaded)
 		{
-			gTileClips[Constants::Tile_Type::TILE_RED].x = 0;
-			gTileClips[Constants::Tile_Type::TILE_RED].y = 0;
-			gTileClips[Constants::Tile_Type::TILE_RED].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_RED].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_RED].x = 0;
+			gTileClips[Flee_Tile::Tile_Type::TILE_RED].y = 0;
+			gTileClips[Flee_Tile::Tile_Type::TILE_RED].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_RED].h = _tile_height;
 					   
-			gTileClips[Constants::Tile_Type::TILE_GREEN].x = 0;
-			gTileClips[Constants::Tile_Type::TILE_GREEN].y = 80;
-			gTileClips[Constants::Tile_Type::TILE_GREEN].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_GREEN].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_GREEN].x = 0;
+			gTileClips[Flee_Tile::Tile_Type::TILE_GREEN].y = 80;
+			gTileClips[Flee_Tile::Tile_Type::TILE_GREEN].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_GREEN].h = _tile_height;
 					   
-			gTileClips[Constants::Tile_Type::TILE_BLUE].x = 0;
-			gTileClips[Constants::Tile_Type::TILE_BLUE].y = 160;
-			gTileClips[Constants::Tile_Type::TILE_BLUE].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_BLUE].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BLUE].x = 0;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BLUE].y = 160;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BLUE].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BLUE].h = _tile_height;
 					   
-			gTileClips[Constants::Tile_Type::TILE_TOPLEFT].x = 80;
-			gTileClips[Constants::Tile_Type::TILE_TOPLEFT].y = 0;
-			gTileClips[Constants::Tile_Type::TILE_TOPLEFT].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_TOPLEFT].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOPLEFT].x = 80;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOPLEFT].y = 0;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOPLEFT].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOPLEFT].h = _tile_height;
 					   
-			gTileClips[Constants::Tile_Type::TILE_LEFT].x = 80;
-			gTileClips[Constants::Tile_Type::TILE_LEFT].y = 80;
-			gTileClips[Constants::Tile_Type::TILE_LEFT].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_LEFT].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_LEFT].x = 80;
+			gTileClips[Flee_Tile::Tile_Type::TILE_LEFT].y = 80;
+			gTileClips[Flee_Tile::Tile_Type::TILE_LEFT].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_LEFT].h = _tile_height;
 					   
-			gTileClips[Constants::Tile_Type::TILE_BOTTOMLEFT].x = 80;
-			gTileClips[Constants::Tile_Type::TILE_BOTTOMLEFT].y = 160;
-			gTileClips[Constants::Tile_Type::TILE_BOTTOMLEFT].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_BOTTOMLEFT].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOMLEFT].x = 80;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOMLEFT].y = 160;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOMLEFT].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOMLEFT].h = _tile_height;
 					  
-			gTileClips[Constants::Tile_Type::TILE_TOP].x = 160;
-			gTileClips[Constants::Tile_Type::TILE_TOP].y = 0;
-			gTileClips[Constants::Tile_Type::TILE_TOP].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_TOP].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOP].x = 160;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOP].y = 0;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOP].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOP].h = _tile_height;
 					  
-			gTileClips[Constants::Tile_Type::TILE_CENTER].x = 160;
-			gTileClips[Constants::Tile_Type::TILE_CENTER].y = 80;
-			gTileClips[Constants::Tile_Type::TILE_CENTER].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_CENTER].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_CENTER].x = 160;
+			gTileClips[Flee_Tile::Tile_Type::TILE_CENTER].y = 80;
+			gTileClips[Flee_Tile::Tile_Type::TILE_CENTER].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_CENTER].h = _tile_height;
 				
-			gTileClips[Constants::Tile_Type::TILE_BOTTOM].x = 160;
-			gTileClips[Constants::Tile_Type::TILE_BOTTOM].y = 160;
-			gTileClips[Constants::Tile_Type::TILE_BOTTOM].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_BOTTOM].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOM].x = 160;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOM].y = 160;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOM].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOM].h = _tile_height;
 					   
-			gTileClips[Constants::Tile_Type::TILE_TOPRIGHT].x = 240;
-			gTileClips[Constants::Tile_Type::TILE_TOPRIGHT].y = 0;
-			gTileClips[Constants::Tile_Type::TILE_TOPRIGHT].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_TOPRIGHT].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOPRIGHT].x = 240;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOPRIGHT].y = 0;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOPRIGHT].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_TOPRIGHT].h = _tile_height;
 					  
-			gTileClips[Constants::Tile_Type::TILE_RIGHT].x = 240;
-			gTileClips[Constants::Tile_Type::TILE_RIGHT].y = 80;
-			gTileClips[Constants::Tile_Type::TILE_RIGHT].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_RIGHT].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_RIGHT].x = 240;
+			gTileClips[Flee_Tile::Tile_Type::TILE_RIGHT].y = 80;
+			gTileClips[Flee_Tile::Tile_Type::TILE_RIGHT].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_RIGHT].h = _tile_height;
 					   
-			gTileClips[Constants::Tile_Type::TILE_BOTTOMRIGHT].x = 240;
-			gTileClips[Constants::Tile_Type::TILE_BOTTOMRIGHT].y = 160;
-			gTileClips[Constants::Tile_Type::TILE_BOTTOMRIGHT].w = _tile_width;
-			gTileClips[Constants::Tile_Type::TILE_BOTTOMRIGHT].h = _tile_height;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOMRIGHT].x = 240;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOMRIGHT].y = 160;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOMRIGHT].w = _tile_width;
+			gTileClips[Flee_Tile::Tile_Type::TILE_BOTTOMRIGHT].h = _tile_height;
 		}
 	}
 
@@ -210,7 +191,7 @@ bool Map_Manager::touches_walls(SDL_Rect box)
 	for (int i = 0; i < _total_tiles; ++i)
 	{
 		//If the tile is a wall type tile
-		if ((_tileSet[i]->getType() >= Constants::Tile_Type::TILE_CENTER) && (_tileSet[i]->getType() <= Constants::Tile_Type::TILE_TOPLEFT))
+		if ((_tileSet[i]->getType() >= Flee_Tile::Tile_Type::TILE_CENTER) && (_tileSet[i]->getType() <= Flee_Tile::Tile_Type::TILE_TOPLEFT))
 		{
 			//If the collision box touches the wall tile
 			if (Constants::checkCollision(box, _tileSet[i]->getBox()))
@@ -226,7 +207,20 @@ bool Map_Manager::touches_walls(SDL_Rect box)
 
 Map_Manager::~Map_Manager()
 {
-	close(_tileSet);
+	//Deallocate tiles
+	for (int i = 0; i < _total_tiles; ++i)
+	{
+		if (_tileSet[i] != NULL)
+		{
+			delete _tileSet[i];
+			_tileSet[i] = NULL;
+		}
+	}
+	delete(_tileSet);
+	_renderer = NULL;
+
+	//Quit SDL subsystems
+	IMG_Quit();
 }
 
 Map_Manager::Map_Manager(SDL_Renderer* renderer)

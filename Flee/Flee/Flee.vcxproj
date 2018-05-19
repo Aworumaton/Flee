@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dot.cpp" />
+    <ClCompile Include="Flee_Interactable.cpp" />
     <ClCompile Include="Flee_Texture.cpp" />
     <ClCompile Include="Flee_Tile.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Dot.h" />
+    <ClInclude Include="Flee_Interactable.h" />
     <ClInclude Include="Flee_Texture.h" />
     <ClInclude Include="Flee_Tile.h" />
     <ClInclude Include="Game.h" />

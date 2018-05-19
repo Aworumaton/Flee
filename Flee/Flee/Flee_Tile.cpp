@@ -2,9 +2,8 @@
 #include "Flee_Tile.h"
 
 
-Flee_Tile::Flee_Tile(SDL_Rect bounds, int tileType, SDL_Renderer* renderer, SDL_Rect* rect)
+Flee_Tile::Flee_Tile(SDL_Rect bounds, int tileType, SDL_Renderer* renderer, SDL_Rect* rect) : Flee_Texture(renderer)
 {
-	gTileTexture = new Flee_Texture(renderer);
 	gRect = rect;
 
 	mBox = bounds;
@@ -13,7 +12,7 @@ Flee_Tile::Flee_Tile(SDL_Rect bounds, int tileType, SDL_Renderer* renderer, SDL_
 	mType = tileType;
 
 	//Load tile texture
-	if (!gTileTexture->loadFromFile("Resources/tiles.png"))
+	if (!loadFromFile("Resources/tiles.png"))
 	{
 		printf("Failed to load tile set texture!\n");
 	}
@@ -21,10 +20,10 @@ Flee_Tile::Flee_Tile(SDL_Rect bounds, int tileType, SDL_Renderer* renderer, SDL_
 Flee_Tile::Flee_Tile(int x, int y, int w, int h, int tileType, SDL_Renderer* renderer, SDL_Rect* rect)
 	: Flee_Tile(SDL_Rect{ x, y, w, h}, tileType, renderer, rect){}
 
-Flee_Tile::~Flee_Tile()
-{
-	gTileTexture->free();
-}
+//Flee_Tile::~Flee_Tile()
+//{
+//	gTileTexture->free();
+//}
 
 void Flee_Tile::render(SDL_Rect& camera)
 {
@@ -32,7 +31,7 @@ void Flee_Tile::render(SDL_Rect& camera)
 	if (Constants::checkCollision(camera, mBox))
 	{
 		//Show the tile
-		gTileTexture->render(mBox.x - camera.x, mBox.y - camera.y, gRect);
+		Flee_Texture::render(mBox.x - camera.x, mBox.y - camera.y, gRect);
 	}
 }
 
