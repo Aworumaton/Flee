@@ -20,9 +20,10 @@ void Map_Manager::close(Flee_Tile* tiles[])
 
 bool Map_Manager::Read_Tiles()
 {
-	//Load the level tiles
-	_tileSet = new Flee_Tile*[768+32];
+	if (_tileSet != NULL)
+	{
 
+	}
 	//Success flag
 	bool tilesLoaded = true;
 
@@ -37,6 +38,9 @@ bool Map_Manager::Read_Tiles()
 	}
 	else
 	{
+		//Load the level tiles
+		int tiles_capacity = 10 * 10;
+		_tileSet = new Flee_Tile*[tiles_capacity];
 		_total_tiles = 0;
 
 		_level_width = 0;
@@ -47,10 +51,24 @@ bool Map_Manager::Read_Tiles()
 
 		//Determines what kind of tile will be made
 		int tileType = -1;
-
+		int max_column_count = 1;
+		int column_count = 1;
+		int max_row_count = 1;
 		//Initialize the tiles
 		while (map >> tileType)
 		{
+			if (tiles_capacity == _total_tiles)
+			{
+				tiles_capacity = max_column_count * max_row_count * 1.8f;
+				Flee_Tile** new_tile_set = new Flee_Tile*[tiles_capacity];
+				for (int i = 0; i < _total_tiles; i++)
+				{
+					new_tile_set[i] = _tileSet[i];
+				}
+				delete(_tileSet);
+				_tileSet = new_tile_set;
+			}
+
 			//If the number is a valid tile number
 			if ((tileType >= 0) && (tileType < Constants::Tile_Type::Count))
 			{
@@ -66,22 +84,31 @@ bool Map_Manager::Read_Tiles()
 
 			if (map.peek() == '\n')
 			{
+				max_row_count++;
 				//Move back
 				cur_width = 0;
-
+				column_count = 1;
 				//Move to the next row
 				cur_height += _tile_height;
 			}
 			else if (map.peek() == ' ')
 			{
+				column_count++;
+				if (max_column_count < column_count)
+				{
+					max_column_count = column_count;
+				}
 				//Move to next tile spot
 				cur_width += _tile_width;
 			}
+
+
+
 			_total_tiles++;
 		}
 
-		_level_width = cur_width+_tile_width;
-		_level_height = cur_height + _tile_height;
+		_level_width = max_column_count *_tile_width;
+		_level_height = max_row_count * _tile_height;
 		
 
 
@@ -208,13 +235,7 @@ Map_Manager::Map_Manager(SDL_Renderer* renderer)
 
 	_tile_width = 80;
 	_tile_height = 80;
-
-	_level_width = 32 * _tile_width;
-	_level_height = 24 * _tile_height;
-
-
-	_total_tiles = 768;
-
+	
 
 	//Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;

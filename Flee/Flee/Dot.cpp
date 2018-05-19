@@ -92,7 +92,6 @@ void Dot::move()
 	}
 
 	//Move the dot up or down
-	//delete(&mBox);
 	mBox = target_box;
 }
 
