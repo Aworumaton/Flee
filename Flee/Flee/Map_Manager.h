@@ -26,6 +26,7 @@ public:
 	void close(Flee_Tile* tiles[]);
 
 	Flee_Tile** _tileSet;
+
 	int Get_Level_Width();
 	int Get_Level_Height();
 

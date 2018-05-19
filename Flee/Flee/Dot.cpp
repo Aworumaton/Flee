@@ -1,10 +1,19 @@
 #pragma once
 #include "Dot.h"
 
-Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls) : Dot()
+Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls)
 {
+
 	_map = map;
 	_controls = controls;
+
+	//Initialize the collision box
+	mBox.x = 0;
+	mBox.y = 0;
+	mBox.w = DOT_WIDTH;
+	mBox.h = DOT_HEIGHT;
+
+
 	gDotTexture = new Flee_Texture(renderer);
 
 	//Load dot texture
@@ -13,16 +22,6 @@ Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls
 		printf("Failed to load dot texture!\n");
 	}
 }
-
-Dot::Dot()
-{
-	//Initialize the collision box
-	mBox.x = 0;
-	mBox.y = 0;
-	mBox.w = DOT_WIDTH;
-	mBox.h = DOT_HEIGHT;
-}
-
 Dot::~Dot()
 {
 	gDotTexture->free();
@@ -86,7 +85,7 @@ void Dot::setCamera(SDL_Rect& camera)
 	camera.x = (mBox.x + DOT_WIDTH / 2) - Constants::SCREEN_WIDTH / 2;
 	camera.y = (mBox.y + DOT_HEIGHT / 2) - Constants::SCREEN_HEIGHT / 2;
 
-	//Keep the camera in bounds
+	//Clamp the camera in bounds
 	if (camera.x < 0)
 	{
 		camera.x = 0;

@@ -11,18 +11,8 @@
 class Dot
 {
 public:
-	//The dimensions of the dot
-	const int DOT_WIDTH = 20;
-	const int DOT_HEIGHT = 20;
-
-	//Default axis velocity of the dot
-	const int DEFAULT_DOT_VEL = 4;
-	//Maximum axis velocity of the dot
-	const int MAX_DOT_VEL = 10;
-
 	//Initializes the variables
 	Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls);
-	Dot();
 	~Dot();
 
 	//Moves the dot and check collision against tiles
@@ -35,6 +25,15 @@ public:
 	void render(SDL_Rect& camera);
 
 private:
+	//The dimensions of the dot
+	const int DOT_WIDTH = 20;
+	const int DOT_HEIGHT = 20;
+
+	//Default axis velocity of the dot
+	const int DEFAULT_DOT_VEL = 4;
+	//Maximum axis velocity of the dot
+	const int MAX_DOT_VEL = 10;
+
 	Flee_Texture * gDotTexture;
 	Main_Agent_Controls * _controls;
 	//Collision box of the dot
