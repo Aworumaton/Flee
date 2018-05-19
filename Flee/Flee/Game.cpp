@@ -20,17 +20,20 @@ void Game::run()
 
 	while (_is_running)
 	{
-		_input.Tick(dt);
+		//game
+		{
+			_input.Tick(dt);
 
 
-		//Move the dot
-		_dot->move(_map_creator->_tileSet);
-		_dot->setCamera(_camera);
+			//Move the dot
+			_dot->move(_map_creator->_tileSet);
+			_dot->setCamera(_camera);
 
 
-		game_tick(dt);
+			game_tick(dt);
+		}
 
-
+		//renderer
 		{
 			//Clear screen
 			SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -91,7 +94,7 @@ bool Game::init()
 
 
 	_camera = SDL_Rect{ 0, 0, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT };
-	_map_creator = new Map_Creator(_renderer, &_camera);
+	_map_creator = new Map_Creator(_renderer);
 
 	//The dot that will be moving around on the screen
 	_dot = new Dot(_renderer, &(_input._main_agent_controls));
