@@ -17,13 +17,17 @@ void Input::Tick(float dt)
 {
 	bool quit = false;
 	SDL_Event e;
-
+	//if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP) { //Get mouse position int x, y; SDL_GetMouseState( &x, &y );
 	while (SDL_PollEvent(&e) != 0)
 	{
 		switch (e.type)
 		{
 		case SDL_QUIT:
 			force_exit = true;
+			break;
+
+		case SDL_MOUSEMOTION:
+			SDL_GetMouseState(&_main_agent_controls.look_at_x, &_main_agent_controls.look_at_y);
 			break;
 
 		case SDL_KEYDOWN:

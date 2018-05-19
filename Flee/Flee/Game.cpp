@@ -133,6 +133,7 @@ void Game::game_tick(float dt)
 	{
 		printf("action\n");
 	}
+	printf("mouse pos: (%d,%d)\n", _input._main_agent_controls.look_at_x, _input._main_agent_controls.look_at_y);
 }
 void Game::exit()
 {

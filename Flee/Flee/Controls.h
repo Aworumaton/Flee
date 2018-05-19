@@ -4,6 +4,8 @@
 class Main_Agent_Controls
 {
 public:
+	int look_at_x;
+	int look_at_y;
 	bool move_forward;
 	bool move_backward;
 	bool move_left;
