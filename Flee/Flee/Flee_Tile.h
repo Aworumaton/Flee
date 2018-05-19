@@ -11,7 +11,8 @@ class Flee_Tile
 {
 public:
 	//Initializes position and type
-	Flee_Tile(int x, int y, int tileType, SDL_Renderer* renderer, SDL_Rect* rect);
+	Flee_Tile(SDL_Rect bounds, int tileType, SDL_Renderer* renderer, SDL_Rect* rect);
+	Flee_Tile(int x, int y, int w, int h, int tileType, SDL_Renderer* renderer, SDL_Rect* rect);
 	~Flee_Tile();
 
 	//Shows the tile
@@ -30,7 +31,6 @@ private:
 	//The attributes of the tile
 	SDL_Rect mBox;
 
-	bool checkCollision(SDL_Rect a, SDL_Rect b);
 	//The tile type
 	int mType;
 };

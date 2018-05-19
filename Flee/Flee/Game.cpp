@@ -26,7 +26,7 @@ void Game::run()
 
 
 			//Move the dot
-			_dot->move(_map_creator->_tileSet);
+			_dot->move();
 			_dot->setCamera(_camera);
 
 
@@ -39,7 +39,7 @@ void Game::run()
 			SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 			SDL_RenderClear(_renderer);
 
-			_map_creator->Render(_camera);
+			_map_manager->Render(_camera);
 
 			//Render dot
 			_dot->render(_camera);
@@ -94,10 +94,10 @@ bool Game::init()
 
 
 	_camera = SDL_Rect{ 0, 0, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT };
-	_map_creator = new Map_Creator(_renderer);
+	_map_manager = new Map_Manager(_renderer);
 
 	//The dot that will be moving around on the screen
-	_dot = new Dot(_renderer, &(_input._main_agent_controls));
+	_dot = new Dot(_renderer, _map_manager, &(_input._main_agent_controls));
 
 	//load level and characters
 

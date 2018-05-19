@@ -8,16 +8,6 @@ namespace Constants
 	const int SCREEN_WIDTH = 800;
 	const int SCREEN_HEIGHT = 600;
 
-	const int TILE_HEIGHT = 80;
-	const int TILE_WIDTH = 80;
-
-	const int LEVEL_WIDTH = 1280;
-	const int LEVEL_HEIGHT = 960;
-
-
-	const int TOTAL_TILES = 192;
-	const int TOTAL_TILE_SPRITES = 12;
-
 
 	static bool checkCollision(SDL_Rect a, SDL_Rect b)
 	{

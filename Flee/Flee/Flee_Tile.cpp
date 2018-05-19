@@ -2,18 +2,12 @@
 #include "Flee_Tile.h"
 
 
-Flee_Tile::Flee_Tile(int x, int y, int tileType, SDL_Renderer* renderer, SDL_Rect* rect)
+Flee_Tile::Flee_Tile(SDL_Rect bounds, int tileType, SDL_Renderer* renderer, SDL_Rect* rect)
 {
 	gTileTexture = new Flee_Texture(renderer);
 	gRect = rect;
 
-	//Get the offsets
-	mBox.x = x;
-	mBox.y = y;
-
-	//Set the collision box
-	mBox.w = Constants::TILE_WIDTH;
-	mBox.h = Constants::TILE_HEIGHT;
+	mBox = bounds;
 
 	//Get the tile type
 	mType = tileType;
@@ -24,10 +18,11 @@ Flee_Tile::Flee_Tile(int x, int y, int tileType, SDL_Renderer* renderer, SDL_Rec
 		printf("Failed to load tile set texture!\n");
 	}
 }
+Flee_Tile::Flee_Tile(int x, int y, int w, int h, int tileType, SDL_Renderer* renderer, SDL_Rect* rect)
+	: Flee_Tile(SDL_Rect{ x, y, w, h}, tileType, renderer, rect){}
 
 Flee_Tile::~Flee_Tile()
 {
-
 	gTileTexture->free();
 }
 

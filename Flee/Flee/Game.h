@@ -6,7 +6,8 @@
 #include "Controls.h"
 #include "Input.h"
 #include "Constants.h"
-#include "Map_Creator.h"
+#include "Map_Manager.h"
+#include "Dot.h"
 //#include "Texture_Manager.h"
 
 class Game
@@ -20,7 +21,7 @@ public:
 private:
 	Input _input;
 	//Texture_Manager * _texture_Manager;
-	Map_Creator* _map_creator;
+	Map_Manager* _map_manager;
 	SDL_Window * _window;
 	SDL_Renderer* _renderer;
 	SDL_Surface* _screen_surface;

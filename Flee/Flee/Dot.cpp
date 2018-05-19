@@ -1,10 +1,11 @@
 #pragma once
 #include "Dot.h"
 
-Dot::Dot(SDL_Renderer* renderer, Main_Agent_Controls* controls) : Dot()
+Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls) : Dot()
 {
-	gDotTexture = new Flee_Texture(renderer);
+	_map = map;
 	_controls = controls;
+	gDotTexture = new Flee_Texture(renderer);
 
 	//Load dot texture
 	if (!gDotTexture->loadFromFile("Resources/dot.bmp"))
@@ -27,7 +28,7 @@ Dot::~Dot()
 	gDotTexture->free();
 }
 
-void Dot::move(Flee_Tile *tiles[])
+void Dot::move()
 {
 	int vel = DEFAULT_DOT_VEL;
 	if (_controls->sprint)
@@ -60,43 +61,23 @@ void Dot::move(Flee_Tile *tiles[])
 
 	//Move the dot left or right
 	mBox.x += mVelX;
-	
+
 	//If the dot went too far to the left or right or touched a wall
-	if ((mBox.x < 0) || (mBox.x + DOT_WIDTH > Constants::LEVEL_WIDTH) || touchesWall(mBox, tiles))
+	if ((mBox.x < 0) || (mBox.x + mBox.w > _map->Get_Level_Width()) || _map->touches_walls(mBox))
 	{
 		//move back
 		mBox.x -= mVelX;
 	}
-	
+
 	//Move the dot up or down
 	mBox.y += mVelY;
-	
+
 	//If the dot went too far up or down or touched a wall
-	if ((mBox.y < 0) || (mBox.y + DOT_HEIGHT > Constants::LEVEL_HEIGHT) || touchesWall(mBox, tiles))
+	if ((mBox.y < 0) || (mBox.y + mBox.h > _map->Get_Level_Height()) || _map->touches_walls(mBox))
 	{
 		//move back
 		mBox.y -= mVelY;
 	}
-}
-
-bool Dot::touchesWall(SDL_Rect box, Flee_Tile* tiles[])
-{
-	//Go through the tiles
-	for (int i = 0; i < Constants::TOTAL_TILES; ++i)
-	{
-		//If the tile is a wall type tile
-		if ((tiles[i]->getType() >= Constants::Tile_Type::TILE_CENTER) && (tiles[i]->getType() <= Constants::Tile_Type::TILE_TOPLEFT))
-		{
-			//If the collision box touches the wall tile
-			if (Constants::checkCollision(box, tiles[i]->getBox()))
-			{
-				return true;
-			}
-		}
-	}
-
-	//If no wall tiles were touched
-	return false;
 }
 
 void Dot::setCamera(SDL_Rect& camera)
@@ -114,13 +95,13 @@ void Dot::setCamera(SDL_Rect& camera)
 	{
 		camera.y = 0;
 	}
-	if (camera.x > Constants::LEVEL_WIDTH - camera.w)
+	if (camera.x > _map->Get_Level_Width() - camera.w)
 	{
-		camera.x = Constants::LEVEL_WIDTH - camera.w;
+		camera.x = _map->Get_Level_Width() - camera.w;
 	}
-	if (camera.y > Constants::LEVEL_HEIGHT - camera.h)
+	if (camera.y > _map->Get_Level_Height() - camera.h)
 	{
-		camera.y = Constants::LEVEL_HEIGHT - camera.h;
+		camera.y = _map->Get_Level_Height() - camera.h;
 	}
 }
 
