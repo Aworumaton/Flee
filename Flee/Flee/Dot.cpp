@@ -29,23 +29,30 @@ Dot::~Dot()
 
 void Dot::move(Flee_Tile *tiles[])
 {
+	int vel = DEFAULT_DOT_VEL;
+	if (_controls->sprint)
+	{
+		vel = MAX_DOT_VEL;
+	}
+
 	int mVelY = 0;
 	int mVelX = 0;
+
 	if (_controls->move_forward)
 	{
-		mVelY -= DOT_VEL;
+		mVelY -= vel;
 	}
 	if (_controls->move_backward)
 	{
-		mVelY += DOT_VEL;
+		mVelY += vel;
 	}
 	if (_controls->move_left)
 	{
-		mVelX -= DOT_VEL;
+		mVelX -= vel;
 	}
 	if (_controls->move_right)
 	{
-		mVelX += DOT_VEL;
+		mVelX += vel;
 	}
 
 

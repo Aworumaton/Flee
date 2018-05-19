@@ -157,23 +157,14 @@ bool Map_Creator::setTiles(Flee_Tile* tiles[])
 }
 
 
-void Map_Creator::Tick(float dt)
+void Map_Creator::Render(SDL_Rect &camera)
 {
-
-
-	//Clear screen
-	SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-	SDL_RenderClear(_renderer);
-
 	//Render level
 	for (int i = 0; i < Constants::TOTAL_TILES; ++i)
 	{
-		_tileSet[i]->render(*_camera);
+		_tileSet[i]->render(camera);
 	}
 
-
-	//Update screen
-	SDL_RenderPresent(_renderer);
 }
 
 Map_Creator::~Map_Creator()
@@ -181,11 +172,9 @@ Map_Creator::~Map_Creator()
 	close(_tileSet);
 }
 
-Map_Creator::Map_Creator(SDL_Renderer* renderer, SDL_Rect* camera)
+Map_Creator::Map_Creator(SDL_Renderer* renderer)
 {
 	_renderer = renderer;
-	//Level camera
-	_camera = camera;
 
 	//Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;

@@ -11,10 +11,10 @@
 class Map_Creator
 {
 public:
-	Map_Creator(SDL_Renderer* renderer, SDL_Rect* camera);
+	Map_Creator(SDL_Renderer* renderer);
 	~Map_Creator();
 
-	void Tick(float dt);
+	void Render(SDL_Rect &camera);
 
 	SDL_Rect gTileClips[Constants::Tile_Type::Count];
 
@@ -27,8 +27,6 @@ public:
 
 	Flee_Tile** _tileSet;
 private:
-	//Level camera
-	SDL_Rect* _camera;
 
 	//Sets tiles from tile map
 	bool setTiles(Flee_Tile *tiles[]);

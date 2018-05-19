@@ -16,6 +16,8 @@ void Game::run()
 	_is_running = true;
 	float dt = 0.0f;
 	//Event handler
+	float _spent_time = 0.0f;
+
 	while (_is_running)
 	{
 		_input.Tick(dt);
@@ -26,22 +28,22 @@ void Game::run()
 		_dot->setCamera(_camera);
 
 
-		//Render dot
-		_dot->render(_camera);
-		_map_creator->Tick(dt);
-
-		//Render dot
-		_dot->render(_camera);
-
-
 		game_tick(dt);
 
 
-		//Apply the image
-		//SDL_BlitSurface(gHelloWorld, NULL, gScreenSurface, NULL);
+		{
+			//Clear screen
+			SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+			SDL_RenderClear(_renderer);
 
-		//Update the surface
-		//SDL_UpdateWindowSurface(_window);
+			_map_creator->Render(_camera);
+
+			//Render dot
+			_dot->render(_camera);
+
+			//Update screen
+			SDL_RenderPresent(_renderer);
+		}
 	}
 }
 

@@ -17,8 +17,10 @@ public:
 	static const int DOT_WIDTH = 20;
 	static const int DOT_HEIGHT = 20;
 
+	//Default axis velocity of the dot
+	static const int DEFAULT_DOT_VEL = 4;
 	//Maximum axis velocity of the dot
-	static const int DOT_VEL = 10;
+	static const int MAX_DOT_VEL = 10;
 
 	//Initializes the variables
 	Dot(SDL_Renderer* renderer, Main_Agent_Controls* controls);

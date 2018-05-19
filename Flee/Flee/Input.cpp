@@ -49,6 +49,10 @@ void Input::Tick(float dt)
 			case SDLK_RIGHT:
 				_main_agent_controls.move_right = true;
 				break;
+			case SDLK_LSHIFT:
+			case SDLK_RSHIFT:
+				_main_agent_controls.sprint = true;
+				break;
 			case SDLK_e:
 			case SDLK_f:
 				_main_agent_controls.action = true;
@@ -80,6 +84,10 @@ void Input::Tick(float dt)
 			case SDLK_d:
 			case SDLK_RIGHT:
 				_main_agent_controls.move_right = false;
+				break;
+			case SDLK_LSHIFT:
+			case SDLK_RSHIFT:
+				_main_agent_controls.sprint = false;
 				break;
 			case SDLK_e:
 			case SDLK_f:
