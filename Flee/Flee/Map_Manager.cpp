@@ -39,7 +39,7 @@ bool Map_Manager::Read_Tiles()
 	else
 	{
 		//Load the level tiles
-		int tiles_capacity = 10 * 10;
+		int tiles_capacity = 72*32;
 		_tileSet = new Flee_Tile*[tiles_capacity];
 		_total_tiles = 0;
 
