@@ -37,9 +37,9 @@ private:
 
 	bool init();
 
-	void tick(float dt);
+	void tick(int dt);
 
-	void game_tick(float dt);
+	void game_tick(int dt);
 	void exit();
 };
 

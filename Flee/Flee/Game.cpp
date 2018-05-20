@@ -14,15 +14,35 @@ Game* Game::create_game()
 void Game::run()
 {
 	_is_running = true;
-	float dt = 0.0f;
 	//Event handler
 	float _spent_time = 0.0f;
 
+
+	int elapsed_time = SDL_GetTicks();
+	int elapsed_game_time = elapsed_time;
+
+	int target_frame_rate = 1000 / 120;
+	int target_game_frame_rate = 1000 / 60;
+
+
 	while (_is_running)
 	{
+		int now = SDL_GetTicks();
+		int delta_time = now - elapsed_time;
+		int delta_game_time = now - elapsed_game_time;
+		elapsed_time = now;
+
+		printf("Renderer frame rate: %f\n", (1000.0f / delta_time));
+
+
 		//game
+		if(target_game_frame_rate < delta_game_time)
 		{
-			_input.Tick(dt);
+			elapsed_game_time = now ;
+			printf("Game frame rate: %f\n", (1000.0f / delta_game_time));
+
+
+			_input.Tick(delta_game_time);
 
 
 			//Move the dot
@@ -30,11 +50,14 @@ void Game::run()
 			_dot->Update_Camera();
 
 
-			game_tick(dt);
+			game_tick(delta_game_time);
 		}
 
 		//renderer
 		{
+
+			_dot->Tick_Animations(delta_time);
+
 			//Clear screen
 			SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 			SDL_RenderClear(_renderer);
@@ -106,12 +129,12 @@ bool Game::init()
 	return true;
 }
 
-void Game::tick(float dt)
+void Game::tick(int dt)
 {
 
 }
 
-void Game::game_tick(float dt)
+void Game::game_tick(int dt)
 {
 	
 	if (_input._game_controls.escape)

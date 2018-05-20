@@ -7,17 +7,20 @@ Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls
 	_map = map;
 	_controls = controls;
 
+	_animation_timer = 0;
+
 	//Initialize the collision box
 	mBox.x = 0;
 	mBox.y = 0;
 	mBox.w = DOT_WIDTH;
 	mBox.h = DOT_HEIGHT;
 
+	animation_Frame = SDL_Rect{ 0,0,DOT_WIDTH,DOT_HEIGHT };
 
 	gDotTexture = new Flee_Texture(renderer);
 
 	//Load dot texture
-	if (!gDotTexture->loadFromFile("Resources/dot.bmp"))
+	if (!gDotTexture->loadFromFile("Resources/main_character.bmp"))
 	{
 		printf("Failed to load dot texture!\n");
 	}
@@ -94,7 +97,7 @@ void Dot::move()
 	//Move the dot up or down
 	mBox = target_box;
 
-	_rotation = (180.0f / M_PI * atan2((_controls->look_at_y + _camera->y) - (mBox.y + (DOT_HEIGHT*0.5f)),
+	_rotation = (int)(180.0f / M_PI * atan2((_controls->look_at_y + _camera->y) - (mBox.y + (DOT_HEIGHT*0.5f)),
 							(_controls->look_at_x + _camera->x) - (mBox.x + (DOT_WIDTH*0.5f))));
 
 	//normalize
@@ -127,8 +130,19 @@ void Dot::Update_Camera()
 	}
 }
 
+void Dot::Tick_Animations(int dt)
+{
+	_animation_timer += dt;
+	if (_animation_frame_rate < _animation_timer)
+	{
+		_animation_timer = _animation_timer % _animation_frame_rate;
+		animation_Frame.x = (animation_Frame.x + DOT_WIDTH) % (DOT_WIDTH * 4);
+	}
+}
+
 void Dot::render()
 {
+
 	//Show the dot
-	gDotTexture->render(mBox.x - _camera->x, mBox.y - _camera->y, 0, _rotation);
+	gDotTexture->render(mBox.x - _camera->x, mBox.y - _camera->y, &animation_Frame, _rotation);
 }

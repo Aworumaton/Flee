@@ -13,7 +13,7 @@ Input::~Input()
 {
 }
 
-void Input::Tick(float dt)
+void Input::Tick(int dt)
 {
 	bool quit = false;
 	SDL_Event e;

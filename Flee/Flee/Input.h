@@ -13,7 +13,7 @@ public:
 	Game_Controls _game_controls;
 	Main_Agent_Controls _main_agent_controls;
 	bool force_exit;
-	void Tick(float dt);
+	void Tick(int dt);
 };
 
 #endif

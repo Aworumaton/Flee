@@ -25,16 +25,21 @@ public:
 	//Shows the dot on the screen
 	void render();
 
+	void Tick_Animations(int dt);
 private:
 	SDL_Rect * _camera;
 	//The dimensions of the dot
-	const int DOT_WIDTH = 20;
-	const int DOT_HEIGHT = 20;
+	const int DOT_WIDTH = 40;
+	const int DOT_HEIGHT = 40;
 
 	//Default axis velocity of the dot
 	const int DEFAULT_DOT_VEL = 20;
 	//Maximum axis velocity of the dot
 	const int MAX_DOT_VEL = 2;
+
+	int _animation_frame_rate = 1000;
+	int _animation_timer;
+	SDL_Rect animation_Frame;
 
 	int _rotation;
 	Flee_Texture * gDotTexture;
