@@ -36,7 +36,7 @@ bool Map_Manager::Read_Tiles()
 		{
 			if (tiles_capacity == _total_tiles)
 			{
-				tiles_capacity = max_column_count * max_row_count * 1.8f;
+				tiles_capacity = (int)(max_column_count * max_row_count * 1.8f);
 				Flee_Sprite_Part** new_tile_set = new Flee_Sprite_Part*[tiles_capacity];
 				for (int i = 0; i < _total_tiles; i++)
 				{
@@ -46,12 +46,8 @@ bool Map_Manager::Read_Tiles()
 				_tileSet = new_tile_set;
 			}
 
-			//If the number is a valid tile number
-			if ((tileType >= 0) && (tileType < Flee_Sprite_Part::Tile_Type::Count))
-			{
-				_tileSet[_total_tiles] = _texture_Manager->Create_Sprite_At(cur_width, cur_height, tileType);
-			}			
-			else //If we don't recognize the tile type
+			Flee_Sprite_Part* target = _texture_Manager->Create_Sprite_At(cur_width, cur_height, tileType);
+			if (target == nullptr)
 			{
 				//Stop loading map
 				printf("Error loading map: Invalid tile type at %d!\n", _total_tiles);
@@ -59,23 +55,25 @@ bool Map_Manager::Read_Tiles()
 				break;
 			}
 
-			if (map.peek() == '\n')
+			_tileSet[_total_tiles] = target;
+
+			
+			if (map.peek() == '\n') //Move to the next row
 			{
 				max_row_count++;
-				//Move back
+
 				cur_width = 0;
 				column_count = 1;
-				//Move to the next row
 				cur_height += _tileSet[_total_tiles]->getBox().h;
+
 			}
-			else if (map.peek() == ' ')
+			else if (map.peek() == ' ') //Move to next tile spot
 			{
 				column_count++;
 				if (max_column_count < column_count)
 				{
 					max_column_count = column_count;
-				}
-				//Move to next tile spot
+				}				
 				cur_width += _tileSet[_total_tiles]->getBox().w;
 			}
 			_total_tiles++;
@@ -119,7 +117,7 @@ bool Map_Manager::touches_walls(SDL_Rect box)
 	for (int i = 0; i < _total_tiles; ++i)
 	{
 		//If the tile is a wall type tile
-		if ((_tileSet[i]->getType() >= Flee_Sprite_Part::Tile_Type::TILE_CENTER) && (_tileSet[i]->getType() <= Flee_Sprite_Part::Tile_Type::TILE_TOPLEFT))
+		if (_tileSet[i]->Is_Wall())
 		{
 			//If the collision box touches the wall tile
 			if (Constants::checkCollision(box, _tileSet[i]->getBox()))

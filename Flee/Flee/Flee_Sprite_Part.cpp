@@ -1,41 +1,30 @@
-#pragma once
 #include "Flee_Sprite_Part.h"
 
-
-Flee_Sprite_Part::Flee_Sprite_Part(Flee_Texture* sheet, SDL_Rect bounds, int tileType, SDL_Rect* rect)
+Flee_Sprite_Part::Flee_Sprite_Part(Flee_Texture * sheet, int x, int y, unsigned flags, SDL_Rect * rect)
 {
-	gRect = rect;
-
-	mBox = bounds;
-
-	//Get the tile type
-	mType = tileType;
-
-
+	_sprite_sheet_rect = rect;
+	_render_rect = SDL_Rect{ x, y, rect->w, rect->h };
 	_sprite_sheet = sheet;
-}
 
-//Flee_Tile::~Flee_Tile()
-//{
-//	gTileTexture->free();
-//}
+	_flags = flags;
+}
 
 void Flee_Sprite_Part::render(SDL_Rect& camera)
 {
 	//If the tile is on screen
-	if (Constants::checkCollision(camera, mBox))
+	if (Constants::checkCollision(camera, _render_rect))
 	{
 		//Show the tile
-		_sprite_sheet->render(mBox.x - camera.x, mBox.y - camera.y, gRect);
+		_sprite_sheet->render(_render_rect.x - camera.x, _render_rect.y - camera.y, _sprite_sheet_rect);
 	}
-}
-
-int Flee_Sprite_Part::getType()
-{
-	return mType;
 }
 
 SDL_Rect Flee_Sprite_Part::getBox()
 {
-	return mBox;
+	return _render_rect;
+}
+
+bool Flee_Sprite_Part::Is_Wall()
+{
+	return (_flags & Sprite_Flags::Wall) == Sprite_Flags::Wall;
 }

@@ -18,7 +18,6 @@ public:
 	void Render(SDL_Rect &camera);
 
 	bool touches_walls(SDL_Rect box);
-	SDL_Rect gTileClips[Flee_Sprite_Part::Tile_Type::Count];
 
 	//The window renderer
 	SDL_Renderer* _renderer = NULL;
