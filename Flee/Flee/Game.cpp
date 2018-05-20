@@ -27,7 +27,7 @@ void Game::run()
 
 			//Move the dot
 			_dot->move();
-			_dot->setCamera(_camera);
+			_dot->Update_Camera();
 
 
 			game_tick(dt);
@@ -42,7 +42,7 @@ void Game::run()
 			_map_manager->Render(_camera);
 
 			//Render dot
-			_dot->render(_camera);
+			_dot->render();
 
 			//Update screen
 			SDL_RenderPresent(_renderer);
@@ -98,7 +98,7 @@ bool Game::init()
 	_map_manager = new Map_Manager(_renderer, _texture_Manager);
 
 	//The dot that will be moving around on the screen
-	_dot = new Dot(_renderer, _map_manager, &(_input._main_agent_controls));
+	_dot = new Dot(_renderer, _map_manager, &(_input._main_agent_controls), &_camera);
 
 	//load level and characters
 
@@ -120,26 +120,26 @@ void Game::game_tick(float dt)
 	}
 
 
-	if (_input._main_agent_controls.move_forward)
-	{
-		printf("move_forward\n");
-	}
-	if (_input._main_agent_controls.move_left)
-	{
-		printf("move_forward\n");
-	}
-	if (_input._main_agent_controls.move_backward)
-	{
-		printf("move_backward\n");
-	}
-	if (_input._main_agent_controls.move_right)
-	{
-		printf("move_right\n");
-	}
-	if (_input._main_agent_controls.action)
-	{
-		printf("action\n");
-	}
+	//if (_input._main_agent_controls.move_forward)
+	//{
+	//	printf("move_forward\n");
+	//}
+	//if (_input._main_agent_controls.move_left)
+	//{
+	//	printf("move_forward\n");
+	//}
+	//if (_input._main_agent_controls.move_backward)
+	//{
+	//	printf("move_backward\n");
+	//}
+	//if (_input._main_agent_controls.move_right)
+	//{
+	//	printf("move_right\n");
+	//}
+	//if (_input._main_agent_controls.action)
+	//{
+	//	printf("action\n");
+	//}
 	printf("mouse pos: (%d,%d)\n", _input._main_agent_controls.look_at_x, _input._main_agent_controls.look_at_y);
 }
 void Game::exit()

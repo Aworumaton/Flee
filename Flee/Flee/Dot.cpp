@@ -1,9 +1,9 @@
 #pragma once
 #include "Dot.h"
 
-Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls)
+Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls, SDL_Rect* camera)
 {
-
+	_camera = camera;
 	_map = map;
 	_controls = controls;
 
@@ -93,35 +93,42 @@ void Dot::move()
 
 	//Move the dot up or down
 	mBox = target_box;
+
+	_rotation = (180.0f / M_PI * atan2((_controls->look_at_y + _camera->y) - (mBox.y + (DOT_HEIGHT*0.5f)),
+							(_controls->look_at_x + _camera->x) - (mBox.x + (DOT_WIDTH*0.5f))));
+
+	//normalize
+	_rotation = (450 + (int)_rotation) % 360;
+
 }
 
-void Dot::setCamera(SDL_Rect& camera)
+void Dot::Update_Camera()
 {
 	//Center the camera over the dot
-	camera.x = (mBox.x + DOT_WIDTH / 2) - Constants::SCREEN_WIDTH / 2;
-	camera.y = (mBox.y + DOT_HEIGHT / 2) - Constants::SCREEN_HEIGHT / 2;
+	_camera->x = (mBox.x + DOT_WIDTH / 2) - Constants::SCREEN_WIDTH / 2;
+	_camera->y = (mBox.y + DOT_HEIGHT / 2) - Constants::SCREEN_HEIGHT / 2;
 
 	//Clamp the camera in bounds
-	if (camera.x < 0)
+	if (_camera->x < 0)
 	{
-		camera.x = 0;
+		_camera->x = 0;
 	}
-	if (camera.y < 0)
+	if (_camera->y < 0)
 	{
-		camera.y = 0;
+		_camera->y = 0;
 	}
-	if (camera.x > _map->Get_Level_Width() - camera.w)
+	if (_camera->x > _map->Get_Level_Width() - _camera->w)
 	{
-		camera.x = _map->Get_Level_Width() - camera.w;
+		_camera->x = _map->Get_Level_Width() - _camera->w;
 	}
-	if (camera.y > _map->Get_Level_Height() - camera.h)
+	if (_camera->y > _map->Get_Level_Height() - _camera->h)
 	{
-		camera.y = _map->Get_Level_Height() - camera.h;
+		_camera->y = _map->Get_Level_Height() - _camera->h;
 	}
 }
 
-void Dot::render(SDL_Rect& camera)
+void Dot::render()
 {
 	//Show the dot
-	gDotTexture->render(mBox.x - camera.x, mBox.y - camera.y);
+	gDotTexture->render(mBox.x - _camera->x, mBox.y - _camera->y, 0, _rotation);
 }

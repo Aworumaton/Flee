@@ -12,9 +12,10 @@ class Flee_Sprite_Part
 public:
 	enum Sprite_Flags
 	{
-		None	= 0b0000000000000000,
-		Ground	= 0b0000000000000001,
-		Wall	= 0b0000000000000010
+		None			= 0b0000000000000000,
+		Ground			= 0b0000000000000001,
+		Wall			= 0b0000000000000010,
+		Interactable	= 0b0000000000000100,
 	};
 
 	//Initializes position and type
