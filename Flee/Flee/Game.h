@@ -20,7 +20,7 @@ public:
 	~Game();
 private:
 	Input _input;
-	//Texture_Manager * _texture_Manager;
+	Texture_Manager * _texture_Manager;
 	Map_Manager* _map_manager;
 	SDL_Window * _window;
 	SDL_Renderer* _renderer;

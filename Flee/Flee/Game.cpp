@@ -94,7 +94,8 @@ bool Game::init()
 
 
 	_camera = SDL_Rect{ 0, 0, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT };
-	_map_manager = new Map_Manager(_renderer);
+	_texture_Manager = new Texture_Manager(_renderer);
+	_map_manager = new Map_Manager(_renderer, _texture_Manager);
 
 	//The dot that will be moving around on the screen
 	_dot = new Dot(_renderer, _map_manager, &(_input._main_agent_controls));

@@ -1,3 +1,29 @@
+#ifndef TEXTURE_MANAGER_H
+#define TEXTURE_MANAGER_H
+
+#include <SDL_image.h>
+#include <string>
+#include <stdio.h>
+#include "Flee_Sprite_Part.h"
+#include "Flee_Texture.h"
+
+class Texture_Manager
+{
+public:
+	Texture_Manager(SDL_Renderer* renderer);
+	~Texture_Manager();
+
+	Flee_Sprite_Part* Create_Sprite_At(int x, int y, int tileType);
+
+private:
+	SDL_Rect* _tile_clips;
+	Flee_Sprite_Part * * _sprite_parts;
+	Flee_Texture* _sprite_sheet;
+
+	void Read();
+};
+
+#endif
 //#pragma once
 //#include <SDL.h>
 //#include <SDL_image.h>

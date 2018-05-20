@@ -145,7 +145,7 @@
     <ClCompile Include="Dot.cpp" />
     <ClCompile Include="Flee_Interactable.cpp" />
     <ClCompile Include="Flee_Texture.cpp" />
-    <ClCompile Include="Flee_Tile.cpp" />
+    <ClCompile Include="Flee_Sprite_Part.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -158,7 +158,7 @@
     <ClInclude Include="Dot.h" />
     <ClInclude Include="Flee_Interactable.h" />
     <ClInclude Include="Flee_Texture.h" />
-    <ClInclude Include="Flee_Tile.h" />
+    <ClInclude Include="Flee_Sprite_Part.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Map_Manager.h" />
