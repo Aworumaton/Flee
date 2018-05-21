@@ -14,8 +14,8 @@ Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls
 	_visual = Texture_Manager::Create_Animated_Sprite("main_character");
 
 
-	mBox.x = 0;
-	mBox.y = 0;
+	mBox.x = 250;
+	mBox.y = 250;
 	mBox.w = _visual->getBox().w;
 	mBox.h = _visual->getBox().h;
 }

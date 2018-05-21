@@ -22,7 +22,7 @@ bool Texture_Manager::Initialize(SDL_Renderer* renderer)
 	_current->_sprite_sheet = new Flee_Texture(renderer);
 
 	//Load tile texture
-	if (!_current->_sprite_sheet->loadFromFile("Resources/sprite_sheet.bmp"))
+	if (!_current->_sprite_sheet->loadFromFile("Resources/sprite_sheet.png"))
 	{
 		printf("Failed to load tile set texture!\n");
 		return false;
