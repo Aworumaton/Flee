@@ -157,6 +157,7 @@
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Dot.h" />
     <ClInclude Include="Flee_Animated_Sprite_Part.h" />
+    <ClInclude Include="Flee_Sprite_Part_Base.h" />
     <ClInclude Include="Flee_Texture.h" />
     <ClInclude Include="Flee_Sprite_Part.h" />
     <ClInclude Include="Game.h" />

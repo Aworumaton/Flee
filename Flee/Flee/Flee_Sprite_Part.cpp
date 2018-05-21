@@ -15,7 +15,7 @@ void Flee_Sprite_Part::Set_Position(int x, int y)
 	_render_rect.y = y;
 }
 
-void Flee_Sprite_Part::render(SDL_Rect& camera, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void Flee_Sprite_Part::Render(SDL_Rect& camera, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
 	//If the tile is on screen
 	if (Constants::checkCollision(camera, _render_rect))

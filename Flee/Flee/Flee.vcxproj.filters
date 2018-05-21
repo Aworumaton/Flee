@@ -74,5 +74,8 @@
     <ClInclude Include="Flee_Animated_Sprite_Part.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Flee_Sprite_Part_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

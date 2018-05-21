@@ -3,11 +3,12 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include "Flee_Sprite_Part_Base.h"
 #include "Flee_Texture.h"
 #include "Constants.h"
 
 //The tile
-class Flee_Sprite_Part
+class Flee_Sprite_Part : Flee_Sprite_Part_Base
 {
 public:
 	enum Sprite_Flags
@@ -24,15 +25,14 @@ public:
 	void Set_Position(int x, int y);
 
 	//Shows the tile
-	void render(SDL_Rect& camera, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void Render(SDL_Rect& camera, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 	//Get the collision box
 	SDL_Rect getBox();
-	
-	SDL_Rect* Get_Render_Box();
 
 	bool Is_Wall();
-protected:
+
+private:
 	unsigned int _flags;
 	Flee_Texture * _sprite_sheet;
 
@@ -41,5 +41,4 @@ protected:
 	//The attributes of the tile
 	SDL_Rect _render_rect;
 };
-
 #endif

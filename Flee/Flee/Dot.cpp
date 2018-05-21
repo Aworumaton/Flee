@@ -10,12 +10,14 @@ Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls
 	_animation_timer = 0;
 
 	//Initialize the collision box
-	mBox.x = 0;
-	mBox.y = 0;
-	mBox.w = DOT_WIDTH;
-	mBox.h = DOT_HEIGHT;
 	
 	_visual = Texture_Manager::Create_Animated_Sprite("main_character");
+
+
+	mBox.x = 0;
+	mBox.y = 0;
+	mBox.w = _visual->getBox().w;
+	mBox.h = _visual->getBox().h;
 }
 Dot::~Dot()
 {
@@ -131,6 +133,8 @@ void Dot::Tick_Animations(int dt)
 	{
 		_animation_timer = _animation_timer % _animation_frame_rate;
 		_visual->Set_Frame_Index((_visual->Get_Frame_Index()+1)% _visual->Get_Frame_Count());
+
+
 		//_visual->Tick_Animations(dt);
 	}
 }

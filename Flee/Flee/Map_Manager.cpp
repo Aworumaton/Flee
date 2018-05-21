@@ -194,7 +194,7 @@ void Map_Manager::Render(SDL_Rect &camera)
 	//Render level
 	for (int i = 0; i < _total_tiles; ++i)
 	{
-		_tileSet[i]->render(camera);
+		_tileSet[i]->Render(camera);
 	}
 }
 

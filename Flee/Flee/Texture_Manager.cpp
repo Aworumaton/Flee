@@ -22,7 +22,7 @@ bool Texture_Manager::Initialize(SDL_Renderer* renderer)
 	_current->_sprite_sheet = new Flee_Texture(renderer);
 
 	//Load tile texture
-	if (!_current->_sprite_sheet->loadFromFile("Resources/sprite_sheet.png"))
+	if (!_current->_sprite_sheet->loadFromFile("Resources/sprite_sheet.bmp"))
 	{
 		printf("Failed to load tile set texture!\n");
 		return false;
@@ -184,47 +184,42 @@ bool Texture_Manager::Read_Sprites()
 				success = false;
 				break;
 			}
-			//
-			//file >> target.id;
-			//if (file.eof())
-			//{
-			//	printf("Unable to parse sprite sheet file!\n");
-			//	success = false;
-			//	break;
-			//}
-
 			file >> target.flags;
+
+
 			if (file.eof())
 			{
 				printf("Unable to parse sprite sheet file!\n");
 				success = false;
 				break;
 			}
-
 			file >> target.bounds.x;
+
+
 			if (file.eof())
 			{
 				printf("Unable to parse sprite sheet file!\n");
 				success = false;
 				break;
 			}
-
 			file >> target.bounds.y;
+
+
 			if (file.eof())
 			{
 				printf("Unable to parse sprite sheet file!\n");
 				success = false;
 				break;
 			}
-
 			file >> target.bounds.w;
+
+
 			if (file.eof())
 			{
 				printf("Unable to parse sprite sheet file!\n");
 				success = false;
 				break;
 			}
-
 			file >> target.bounds.h;
 
 			if (capacity == _sprite_count)

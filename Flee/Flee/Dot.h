@@ -37,7 +37,7 @@ private:
 	//Maximum axis velocity of the dot
 	const int MAX_DOT_VEL = 2;
 
-	int _animation_frame_rate = 1000;
+	int _animation_frame_rate = 100;
 	int _animation_timer;
 
 	int _rotation;

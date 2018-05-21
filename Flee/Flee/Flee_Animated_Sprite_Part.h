@@ -2,10 +2,10 @@
 #define Flee_Sprite_H
 
 #include <SDL.h>
-#include "Flee_Sprite_Part.h"
+#include "Flee_Sprite_Part_Base.h"
 #include "Flee_Texture.h"
 
-class Flee_Animated_Sprite_Part
+class Flee_Animated_Sprite_Part : Flee_Sprite_Part_Base
 {
 public:
 	Flee_Animated_Sprite_Part(Flee_Texture* sheet, int sprite_count, SDL_Rect** sprite_positions, int animation_frame_rate = -1, int current_frame_index = 0);
@@ -39,15 +39,6 @@ private :
 	int _animation_frame_rate;
 };
 
-/*
-class Flee_Sprite_Part_Base
-{
-public:
-	virtual void Render(SDL_Rect& camera, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
-	virtual void Set_Position(int x, int y);
-	//Get the collision box
-	virtual SDL_Rect getBox();
 
-};
-*/
+
 #endif
