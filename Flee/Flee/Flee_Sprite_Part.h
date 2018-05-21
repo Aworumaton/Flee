@@ -20,10 +20,10 @@ public:
 
 	//Initializes position and type
 	Flee_Sprite_Part(Flee_Texture* sheet,
-		int x, int y,
 		unsigned flags,
 		SDL_Rect* rect);
 
+	void Set_Position(int x, int y);
 
 	//Shows the tile
 	void render(SDL_Rect& camera);
@@ -32,7 +32,7 @@ public:
 	SDL_Rect getBox();
 
 	bool Is_Wall();
-private:
+protected:
 	unsigned int _flags;
 	Flee_Texture * _sprite_sheet;
 

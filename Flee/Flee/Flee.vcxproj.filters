@@ -36,9 +36,6 @@
     <ClCompile Include="Map_Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Flee_Interactable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Flee_Sprite_Part.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -68,13 +65,10 @@
     <ClInclude Include="Map_Manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Flee_Interactable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Flee_Sprite_Part.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Flee_Sprite.h">
+    <ClInclude Include="Flee_Animated_Sprite_Part.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

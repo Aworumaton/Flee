@@ -1,8 +1,8 @@
 #include "Map_Manager.h"
-bool Map_Manager::Read_Tiles()
+bool Map_Manager::Read()
 {
 	//Success flag
-	bool tilesLoaded = true;
+	bool loaded = true;
 
 	//Open the map
 	std::ifstream map("Resources/level_0.txt");
@@ -11,7 +11,7 @@ bool Map_Manager::Read_Tiles()
 	if (!map.is_open())
 	{
 		printf("Unable to load map file!\n");
-		tilesLoaded = false;
+		loaded = false;
 	}
 	else
 	{
@@ -46,18 +46,19 @@ bool Map_Manager::Read_Tiles()
 				_tileSet = new_tile_set;
 			}
 
-			Flee_Sprite_Part* target = _texture_Manager->Create_Sprite_At(cur_width, cur_height, tileType);
+			Flee_Sprite_Part* target = _texture_Manager->Create_Sprite("Tile_" + to_string(tileType));
+			target->Set_Position(cur_width, cur_height);
 			if (target == nullptr)
 			{
 				//Stop loading map
 				printf("Error loading map: Invalid tile type at %d!\n", _total_tiles);
-				tilesLoaded = false;
+				loaded = false;
 				break;
 			}
 
 			_tileSet[_total_tiles] = target;
 
-			
+
 			if (map.peek() == '\n') //Move to the next row
 			{
 				max_row_count++;
@@ -73,23 +74,118 @@ bool Map_Manager::Read_Tiles()
 				if (max_column_count < column_count)
 				{
 					max_column_count = column_count;
-				}				
+				}
 				cur_width += _tileSet[_total_tiles]->getBox().w;
 			}
 			_total_tiles++;
 		}
-
-		_level_width = cur_width + _tileSet[_total_tiles-1]->getBox().w;
-		_level_height = cur_height + _tileSet[_total_tiles-1]->getBox().h;
-
-
+		if (_total_tiles == 0)
+		{
+			printf("No tiles were loaded %d!\n", _total_tiles);
+			loaded = false;
+		}
+		else
+		{
+			_level_width = cur_width + _tileSet[_total_tiles - 1]->getBox().w;
+			_level_height = cur_height + _tileSet[_total_tiles - 1]->getBox().h;
+		}
 		//Close the file
 		map.close();
 	}
 
 
+
+	//Open the map
+	std::ifstream file("Resources/level_0_objects.txt");
+
+	//If the map couldn't be loaded
+	if (!file.is_open())
+	{
+		printf("Unable to load map objects file!\n");
+		loaded = false;
+	}
+	else
+	{
+		//int capacity = 32;
+		//_tile_clips = new Flee_Sprite[capacity];
+		//_sprite_count = 0;
+		//string string_id = "";
+		//while (file >> string_id)
+		//{
+		//	Flee_Sprite target;
+		//	target.string_id = string_id;
+		//	if (file.eof())
+		//	{
+		//		printf("Unable to parse sprite sheet file!\n");
+		//		loaded = false;
+		//		break;
+		//	}
+		//
+		//	file >> target.id;
+		//	if (file.eof())
+		//	{
+		//		printf("Unable to parse sprite sheet file!\n");
+		//		loaded = false;
+		//		break;
+		//	}
+		//
+		//	file >> target.flags;
+		//	if (file.eof())
+		//	{
+		//		printf("Unable to parse sprite sheet file!\n");
+		//		loaded = false;
+		//		break;
+		//	}
+		//
+		//	file >> target.bounds.x;
+		//	if (file.eof())
+		//	{
+		//		printf("Unable to parse sprite sheet file!\n");
+		//		loaded = false;
+		//		break;
+		//	}
+		//
+		//	file >> target.bounds.y;
+		//	if (file.eof())
+		//	{
+		//		printf("Unable to parse sprite sheet file!\n");
+		//		loaded = false;
+		//		break;
+		//	}
+		//
+		//	file >> target.bounds.w;
+		//	if (file.eof())
+		//	{
+		//		printf("Unable to parse sprite sheet file!\n");
+		//		loaded = false;
+		//		break;
+		//	}
+		//
+		//	file >> target.bounds.h;
+		//
+		//	if (capacity == _sprite_count)
+		//	{
+		//		capacity = (int)(capacity * 1.8f);
+		//		Flee_Sprite* new_tile_set = new Flee_Sprite[capacity];
+		//		for (int i = 0; i < _sprite_count; i++)
+		//		{
+		//			new_tile_set[i] = _tile_clips[i];
+		//		}
+		//		//	delete(_tile_clips);
+		//		_tile_clips = new_tile_set;
+		//	}
+		//
+		//	_tile_clips[_sprite_count] = target;
+		//	_sprite_count++;
+		//}
+
+		//Close the file
+		file.close();
+	}
+
+
 	//If the map was loaded fine
-	return tilesLoaded;
+	return loaded;
 }
 
 
@@ -169,7 +265,7 @@ Map_Manager::Map_Manager(SDL_Renderer* renderer, Texture_Manager* texture_Manage
 		return;
 	}
 	
-	if (!Read_Tiles())
+	if (!Read())
 	{
 		printf("Failed to load tile set!\n");
 		return;

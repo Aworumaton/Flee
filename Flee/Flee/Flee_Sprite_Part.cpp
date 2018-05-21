@@ -1,12 +1,18 @@
 #include "Flee_Sprite_Part.h"
 
-Flee_Sprite_Part::Flee_Sprite_Part(Flee_Texture * sheet, int x, int y, unsigned flags, SDL_Rect * rect)
+Flee_Sprite_Part::Flee_Sprite_Part(Flee_Texture * sheet, unsigned flags, SDL_Rect * rect)
 {
 	_sprite_sheet_rect = rect;
-	_render_rect = SDL_Rect{ x, y, rect->w, rect->h };
+	_render_rect = SDL_Rect{ 0, 0, rect->w, rect->h };
 	_sprite_sheet = sheet;
 
 	_flags = flags;
+}
+
+void Flee_Sprite_Part::Set_Position(int x, int y)
+{
+	_render_rect.x = x;
+	_render_rect.y = y;
 }
 
 void Flee_Sprite_Part::render(SDL_Rect& camera)

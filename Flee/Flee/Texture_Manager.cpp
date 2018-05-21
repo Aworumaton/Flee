@@ -18,37 +18,18 @@ Texture_Manager::~Texture_Manager()
 	delete(_sprite_sheet);
 }
 
-Flee_Sprite_Part * Texture_Manager::Create_Sprite_At(int x, int y, string sprite_id)
+Flee_Sprite_Part * Texture_Manager::Create_Sprite(string sprite_id)
 {
 	for (int i = 0; i < _sprite_count; i++)
 	{
 		Flee_Sprite* target = &_tile_clips[i];
 		if (sprite_id.compare(target->string_id) == 0)
 		{
-			return Create_Sprite(x, y, target);
+			return new Flee_Sprite_Part(_sprite_sheet, target->flags, &(target->bounds));
 		}
 	}
 
 	return nullptr;
-}
-
-Flee_Sprite_Part * Texture_Manager::Create_Sprite_At(int x, int y, int sprite_id)
-{
-	for (int i = 0; i < _sprite_count; i++)
-	{
-		Flee_Sprite* target = &_tile_clips[i];
-		if (sprite_id == target->id)
-		{
-			return Create_Sprite(x, y, target);
-		}
-	}
-
-	return nullptr;
-}
-
-Flee_Sprite_Part * Texture_Manager::Create_Sprite(int x, int y, Flee_Sprite* sprite)
-{
-	return new Flee_Sprite_Part(_sprite_sheet, x, y, sprite->flags, &(sprite->bounds));
 }
 
 int Texture_Manager::Get_Sprite_Count()
@@ -86,14 +67,14 @@ bool Texture_Manager::Read()
 				success = false;
 				break;
 			}
-
-			file >> target.id;
-			if (file.eof())
-			{
-				printf("Unable to parse sprite sheet file!\n");
-				success = false;
-				break;
-			}
+			//
+			//file >> target.id;
+			//if (file.eof())
+			//{
+			//	printf("Unable to parse sprite sheet file!\n");
+			//	success = false;
+			//	break;
+			//}
 			
 			file >> target.flags;
 			if (file.eof())

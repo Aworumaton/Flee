@@ -24,6 +24,7 @@ public:
 
 
 	Flee_Sprite_Part** _tileSet;
+	Flee_Sprite_Part** _objects;
 
 	int Get_Level_Width();
 	int Get_Level_Height();
@@ -31,12 +32,13 @@ public:
 private:
 	Texture_Manager * _texture_Manager;
 	int _total_tiles;
+	int _total_objects;
 
 	int _level_width;
 	int _level_height;
 
 	//Sets tiles from tile map
-	bool Read_Tiles();
+	bool Read();
 };
 
 #endif

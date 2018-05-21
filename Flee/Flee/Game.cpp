@@ -32,14 +32,14 @@ void Game::run()
 		int delta_game_time = now - elapsed_game_time;
 		elapsed_time = now;
 
-		printf("Renderer frame rate: %f\n", (1000.0f / delta_time));
+		//printf("Renderer frame rate: %f\n", (1000.0f / delta_time));
 
 
 		//game
 		if(target_game_frame_rate < delta_game_time)
 		{
 			elapsed_game_time = now ;
-			printf("Game frame rate: %f\n", (1000.0f / delta_game_time));
+			//printf("Game frame rate: %f\n", (1000.0f / delta_game_time));
 
 
 			_input.Tick(delta_game_time);
@@ -163,7 +163,7 @@ void Game::game_tick(int dt)
 	//{
 	//	printf("action\n");
 	//}
-	printf("mouse pos: (%d,%d)\n", _input._main_agent_controls.look_at_x, _input._main_agent_controls.look_at_y);
+	//printf("mouse pos: (%d,%d)\n", _input._main_agent_controls.look_at_x, _input._main_agent_controls.look_at_y);
 }
 void Game::exit()
 {
