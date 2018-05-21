@@ -46,7 +46,7 @@ bool Map_Manager::Read()
 				_tileSet = new_tile_set;
 			}
 
-			Flee_Sprite_Part* target = _texture_Manager->Create_Sprite("Tile_" + to_string(tileType));
+			Flee_Sprite_Part* target = Texture_Manager::Create_Sprite("Tile_" + std::to_string(tileType));
 			target->Set_Position(cur_width, cur_height);
 			if (target == nullptr)
 			{
@@ -245,11 +245,9 @@ Map_Manager::~Map_Manager()
 	IMG_Quit();
 }
 
-Map_Manager::Map_Manager(SDL_Renderer* renderer, Texture_Manager* texture_Manager)
+Map_Manager::Map_Manager(SDL_Renderer* renderer)
 {
 	_renderer = renderer;
-	_texture_Manager = texture_Manager;
-
 
 	//Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;

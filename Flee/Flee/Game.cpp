@@ -107,18 +107,16 @@ bool Game::init()
 
 	//Create renderer for window
 	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
 	//Initialize renderer color
 	SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-
+	Texture_Manager::Initialize(_renderer);
+	
 	_screen_surface = SDL_GetWindowSurface(_window);
-	//_texture_Manager = new Texture_Manager(_window);
 
 
 	_camera = SDL_Rect{ 0, 0, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT };
-	_texture_Manager = new Texture_Manager(_renderer);
-	_map_manager = new Map_Manager(_renderer, _texture_Manager);
+	_map_manager = new Map_Manager(_renderer);
 
 	//The dot that will be moving around on the screen
 	_dot = new Dot(_renderer, _map_manager, &(_input._main_agent_controls), &_camera);

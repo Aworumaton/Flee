@@ -1,53 +1,36 @@
 #ifndef Flee_Sprite_H
 #define Flee_Sprite_H
 
+#include <SDL.h>
 #include "Flee_Sprite_Part.h"
+#include "Flee_Texture.h"
 
 class Flee_Animated_Sprite_Part
 {
-	Flee_Animated_Sprite_Part(Flee_Sprite_Part* sprites, int sprite_count, int animation_frame_rate = -1, int current_frame_index = 0)
-	{
-		_frame_index = current_frame_index;
-		
-		_sprites = sprites;
-		_sprite_count = sprite_count;
-		
-		_animation_frame_rate = animation_frame_rate;
-	};
+public:
+	Flee_Animated_Sprite_Part(Flee_Texture* sheet, int sprite_count, SDL_Rect** sprite_positions, int animation_frame_rate = -1, int current_frame_index = 0);
 
-	void Render(SDL_Rect& camera)
-	{
-		if (_frame_index >= 0 && _frame_index < _sprite_count)
-		{
-			_sprites[_frame_index].render(camera);
-		}
-	};
+	void Render(SDL_Rect& camera, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void Set_Position(int x, int y);
+	//Get the collision box
+	SDL_Rect getBox();
 
-	void Tick_Animations(int dt)
-	{
-		if (_animation_frame_rate >= 0)
-		{
-			_animation_timer += dt;
-			if (_animation_frame_rate < _animation_timer)
-			{
-				_animation_timer = _animation_timer % _animation_frame_rate;
-				_frame_index = (_frame_index+1) % _sprite_count;
-			}
-		}
-	};
 
-	int Get_Frame_Index()
-	{
-		return _frame_index;
-	};
+	void Tick_Animations(int dt);
+	
 
-	int Set_Frame_Index(int index)
-	{
-		_frame_index = index;
-	};
+	int Get_Frame_Index();
+	int Get_Frame_Count();
+
+	void Set_Frame_Index(int index);
+
 
 private :
-	Flee_Sprite_Part * _sprites;
+	unsigned int _flags;
+	Flee_Texture * _sprite_sheet;
+	SDL_Point _render_position;
+
+	SDL_Rect** _sprite_positions;
 	int _sprite_count;
 	
 	int _frame_index;
@@ -55,4 +38,16 @@ private :
 	int _animation_timer;
 	int _animation_frame_rate;
 };
+
+/*
+class Flee_Sprite_Part_Base
+{
+public:
+	virtual void Render(SDL_Rect& camera, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	virtual void Set_Position(int x, int y);
+	//Get the collision box
+	virtual SDL_Rect getBox();
+
+};
+*/
 #endif

@@ -39,6 +39,9 @@
     <ClCompile Include="Flee_Sprite_Part.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Flee_Animated_Sprite_Part.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">

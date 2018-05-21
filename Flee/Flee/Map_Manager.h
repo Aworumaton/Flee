@@ -12,7 +12,7 @@ class Map_Manager
 {
 public:
 	
-	Map_Manager(SDL_Renderer* renderer, Texture_Manager* texture_Manager);
+	Map_Manager(SDL_Renderer* renderer);
 	~Map_Manager();
 
 	void Render(SDL_Rect &camera);
@@ -30,7 +30,6 @@ public:
 	int Get_Level_Height();
 
 private:
-	Texture_Manager * _texture_Manager;
 	int _total_tiles;
 	int _total_objects;
 

@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "math.h"
-#include "Flee_Texture.h"
+#include "Flee_Animated_Sprite_Part.h"
 #include "Input.h"
 #include "Constants.h"
 #include "Map_Manager.h"
@@ -39,10 +39,9 @@ private:
 
 	int _animation_frame_rate = 1000;
 	int _animation_timer;
-	SDL_Rect animation_Frame;
 
 	int _rotation;
-	Flee_Texture * gDotTexture;
+	Flee_Animated_Sprite_Part * _visual;
 	Main_Agent_Controls * _controls;
 	//Collision box of the dot
 	SDL_Rect mBox; 

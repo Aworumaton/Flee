@@ -19,17 +19,17 @@ public:
 	};
 
 	//Initializes position and type
-	Flee_Sprite_Part(Flee_Texture* sheet,
-		unsigned flags,
-		SDL_Rect* rect);
+	Flee_Sprite_Part(Flee_Texture* sheet, unsigned flags, SDL_Rect * sprite_rect);
 
 	void Set_Position(int x, int y);
 
 	//Shows the tile
-	void render(SDL_Rect& camera);
+	void render(SDL_Rect& camera, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 	//Get the collision box
 	SDL_Rect getBox();
+	
+	SDL_Rect* Get_Render_Box();
 
 	bool Is_Wall();
 protected:

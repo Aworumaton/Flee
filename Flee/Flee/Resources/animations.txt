@@ -1,0 +1,6 @@
+main_character
+4
+main_character_0
+main_character_1
+main_character_2
+main_character_3
