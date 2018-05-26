@@ -54,6 +54,18 @@ namespace Constants
 		return true;
 	}
 
+	static bool checkCollision(SDL_Rect a, SDL_Point b)
+	{
+		return (a.x <= b.x && b.x <= (a.x + a.w) && a.y <= b.y && b.y <= (a.y + a.h));
+	}
+
+	static double Get_Distance_Between(SDL_Point a, SDL_Point b)
+	{
+		int w = b.x - a.x;
+		int h = b.y - a.y;
+		return sqrt((w*w) + (h*h));
+	}
+
 }
 
 #endif

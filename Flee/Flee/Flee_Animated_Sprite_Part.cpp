@@ -1,9 +1,10 @@
 #include "Flee_Animated_Sprite_Part.h"
 
-Flee_Animated_Sprite_Part::Flee_Animated_Sprite_Part(Flee_Texture* sheet, int sprite_count, SDL_Rect** sprite_positions, int animation_frame_rate, int current_frame_index)
+Flee_Animated_Sprite_Part::Flee_Animated_Sprite_Part(Flee_Texture* sheet, int sprite_count, SDL_Rect** sprite_positions, unsigned int* flags, int animation_frame_rate, int current_frame_index)
 {
 	_sprite_sheet = sheet;
 	_frame_index = current_frame_index;
+	_flags = flags;
 
 	_sprite_positions = sprite_positions;
 	_sprite_count = sprite_count;
@@ -57,4 +58,9 @@ void Flee_Animated_Sprite_Part::Set_Frame_Index(int index)
 SDL_Rect Flee_Animated_Sprite_Part::getBox()
 {
 	return SDL_Rect{ _render_position.x, _render_position.y, _sprite_positions[_frame_index]->w, _sprite_positions[_frame_index]->h};
+}
+
+unsigned int Flee_Animated_Sprite_Part::Get_Flags()
+{
+	return _flags[_frame_index];
 }

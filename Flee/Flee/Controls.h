@@ -13,7 +13,8 @@ public:
 
 	bool sprint;
 
-	bool action;
+	bool on_action;
+	bool active_action;
 
 	void reset()
 	{
@@ -22,7 +23,8 @@ public:
 		move_left = false;
 		move_right = false;
 		sprint = false;
-		action = false;
+		on_action = false;
+		active_action = false;
 	}
 };
 

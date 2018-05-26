@@ -62,13 +62,15 @@ Flee_Animated_Sprite_Part * Texture_Manager::Create_Animated_Sprite(std::string 
 		if (id.compare(target->string_id) == 0)
 		{
 			SDL_Rect** return_sprites = new SDL_Rect*[target->animation_frame_count];
+			unsigned int* return_flags =new unsigned int[target->animation_frame_count];
 
 			for (int j = 0; j < target->animation_frame_count; j++)
 			{
 				return_sprites[j] = &(target->animation_targets[j]->bounds);
+				return_flags[j] = target->animation_targets[j]->flags;
 			}
 
-			return new Flee_Animated_Sprite_Part(_current->_sprite_sheet, target->animation_frame_count, return_sprites);
+			return new Flee_Animated_Sprite_Part(_current->_sprite_sheet, target->animation_frame_count, return_sprites, return_flags);
 		}
 	}
 

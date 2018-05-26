@@ -106,78 +106,40 @@ bool Map_Manager::Read()
 	}
 	else
 	{
-		//int capacity = 32;
-		//_tile_clips = new Flee_Sprite[capacity];
-		//_sprite_count = 0;
-		//string string_id = "";
-		//while (file >> string_id)
-		//{
-		//	Flee_Sprite target;
-		//	target.string_id = string_id;
-		//	if (file.eof())
-		//	{
-		//		printf("Unable to parse sprite sheet file!\n");
-		//		loaded = false;
-		//		break;
-		//	}
-		//
-		//	file >> target.id;
-		//	if (file.eof())
-		//	{
-		//		printf("Unable to parse sprite sheet file!\n");
-		//		loaded = false;
-		//		break;
-		//	}
-		//
-		//	file >> target.flags;
-		//	if (file.eof())
-		//	{
-		//		printf("Unable to parse sprite sheet file!\n");
-		//		loaded = false;
-		//		break;
-		//	}
-		//
-		//	file >> target.bounds.x;
-		//	if (file.eof())
-		//	{
-		//		printf("Unable to parse sprite sheet file!\n");
-		//		loaded = false;
-		//		break;
-		//	}
-		//
-		//	file >> target.bounds.y;
-		//	if (file.eof())
-		//	{
-		//		printf("Unable to parse sprite sheet file!\n");
-		//		loaded = false;
-		//		break;
-		//	}
-		//
-		//	file >> target.bounds.w;
-		//	if (file.eof())
-		//	{
-		//		printf("Unable to parse sprite sheet file!\n");
-		//		loaded = false;
-		//		break;
-		//	}
-		//
-		//	file >> target.bounds.h;
-		//
-		//	if (capacity == _sprite_count)
-		//	{
-		//		capacity = (int)(capacity * 1.8f);
-		//		Flee_Sprite* new_tile_set = new Flee_Sprite[capacity];
-		//		for (int i = 0; i < _sprite_count; i++)
-		//		{
-		//			new_tile_set[i] = _tile_clips[i];
-		//		}
-		//		//	delete(_tile_clips);
-		//		_tile_clips = new_tile_set;
-		//	}
-		//
-		//	_tile_clips[_sprite_count] = target;
-		//	_sprite_count++;
-		//}
+		int capacity = 32;
+		_objects = new Flee_Interactable_Object*[capacity];
+		_total_objects = 0;
+		std::string string_id = "";
+		while (file >> string_id)
+		{
+			unsigned int flags;
+			int x;
+			int y;
+
+			file >> flags;
+			file >> x;
+			file >> y;
+
+
+			if (capacity == _total_objects)
+			{
+				capacity = (int)(capacity * 1.8f);
+				Flee_Interactable_Object** new_set = new Flee_Interactable_Object*[capacity];
+				for (int i = 0; i < _total_objects; i++)
+				{
+					new_set[i] = _objects[i];
+				}
+				//	delete(_tile_clips);
+				_objects = new_set;
+			}
+
+			Flee_Animated_Sprite_Part* target_Sprite = Texture_Manager::Create_Animated_Sprite(string_id);
+			Flee_Interactable_Object* target = new Flee_Interactable_Object(target_Sprite);
+
+			target->Set_Position(x, y);
+			_objects[_total_objects] = target;
+			_total_objects++;
+		}
 
 		//Close the file
 		file.close();
@@ -189,12 +151,18 @@ bool Map_Manager::Read()
 }
 
 
+
+
 void Map_Manager::Render(SDL_Rect &camera)
 {
 	//Render level
 	for (int i = 0; i < _total_tiles; ++i)
 	{
 		_tileSet[i]->Render(camera);
+	}
+	for (int i = 0; i < _total_objects; ++i)
+	{
+		_objects[i]->Render(camera);
 	}
 }
 
@@ -205,6 +173,20 @@ int Map_Manager::Get_Level_Width()
 int Map_Manager::Get_Level_Height()
 {
 	return _level_height;
+}
+
+Flee_Interactable_Object* Map_Manager::Get_First_Objet_Under(SDL_Point point)
+{
+	for (int i = 0; i < _total_objects; i++)
+	{
+		Flee_Interactable_Object* target = _objects[i];
+		if (Constants::checkCollision(target->getBox(), point))
+		{
+			return target;
+		}
+	}
+
+	return nullptr;
 }
 
 bool Map_Manager::touches_walls(SDL_Rect box)
@@ -223,8 +205,28 @@ bool Map_Manager::touches_walls(SDL_Rect box)
 		}
 	}
 
+
+	for (int i = 0; i < _total_objects; ++i)
+	{
+		if (_objects[i]->Is_Obstruction())
+		{
+			if (Constants::checkCollision(box, _objects[i]->getBox()))
+			{
+				return true;
+			}
+		}
+	}
+
 	//If no wall tiles were touched
 	return false;
+}
+
+void Map_Manager::Tick(int dt)
+{
+	for (int i = 0; i < _total_objects; ++i)
+	{
+		_objects[i]->Tick(dt);
+	}
 }
 
 Map_Manager::~Map_Manager()

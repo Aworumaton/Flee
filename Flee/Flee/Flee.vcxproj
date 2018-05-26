@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="Dot.cpp" />
     <ClCompile Include="Flee_Animated_Sprite_Part.cpp" />
+    <ClCompile Include="Flee_Interactable_Object.cpp" />
     <ClCompile Include="Flee_Texture.cpp" />
     <ClCompile Include="Flee_Sprite_Part.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Dot.h" />
     <ClInclude Include="Flee_Animated_Sprite_Part.h" />
+    <ClInclude Include="Flee_Interactable_Object.h" />
     <ClInclude Include="Flee_Sprite_Part_Base.h" />
     <ClInclude Include="Flee_Texture.h" />
     <ClInclude Include="Flee_Sprite_Part.h" />

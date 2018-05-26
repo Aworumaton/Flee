@@ -13,19 +13,61 @@ Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls
 	
 	_visual = Texture_Manager::Create_Animated_Sprite("main_character");
 
+	_is_Hidden = false;
 
 	mBox.x = 250;
 	mBox.y = 250;
 	mBox.w = _visual->getBox().w;
 	mBox.h = _visual->getBox().h;
 }
+
 Dot::~Dot()
 {
 	delete(_visual);
 }
 
+void Dot::Update()
+{
+	move();
+	if (_controls->on_action)
+	{
+		if (_is_Hidden)
+		{
+			_is_Hidden = false;
+		}
+		else
+		{
+			SDL_Point pos;
+			Get_Position(pos.x, pos.y);
+
+			SDL_Point target_action_pos = SDL_Point{ (_controls->look_at_y + _camera->y),(_controls->look_at_x + _camera->x) };
+			if (Constants::Get_Distance_Between(target_action_pos, pos) <= ACTION_RADIUS)
+			{
+				Flee_Interactable_Object* target_object = _map->Get_First_Objet_Under(target_action_pos);
+
+				if (target_object != nullptr)
+				{
+					if (target_object->Is_Hiding_Place())
+					{
+						target_object->OnAction();
+						_is_Hidden = true;
+					}
+					else if (target_object->Is_Door() && !Constants::checkCollision(mBox, target_object->getBox()))
+					{
+						target_object->OnAction();
+					}
+				}
+			}
+		}
+	}
+}
 void Dot::move()
 {
+	if (_is_Hidden)
+	{
+		return;
+	}
+
 	int vel = DEFAULT_DOT_VEL;
 	if (_controls->sprint)
 	{
@@ -93,8 +135,10 @@ void Dot::move()
 	
 	_visual->Set_Position(mBox.x, mBox.y);
 
-	_rotation = (int)(180.0f / M_PI * atan2((_controls->look_at_y + _camera->y) - (mBox.y + (DOT_HEIGHT*0.5f)),
-							(_controls->look_at_x + _camera->x) - (mBox.x + (DOT_WIDTH*0.5f))));
+	int x, y;
+	Get_Position(x, y);
+	_rotation = (int)(180.0f / M_PI * atan2((_controls->look_at_y + _camera->y) - y,
+							(_controls->look_at_x + _camera->x) - x));
 
 	//normalize
 	_rotation = (450 + (int)_rotation) % 360;
@@ -103,9 +147,16 @@ void Dot::move()
 
 void Dot::Update_Camera()
 {
+	if (_is_Hidden)
+	{
+		return;
+	}
+
+	int x, y;
+	Get_Position(x, y);
 	//Center the camera over the dot
-	_camera->x = (mBox.x + DOT_WIDTH / 2) - Constants::SCREEN_WIDTH / 2;
-	_camera->y = (mBox.y + DOT_HEIGHT / 2) - Constants::SCREEN_HEIGHT / 2;
+	_camera->x = x - Constants::SCREEN_WIDTH / 2;
+	_camera->y = y - Constants::SCREEN_HEIGHT / 2;
 
 	//Clamp the camera in bounds
 	if (_camera->x < 0)
@@ -141,5 +192,8 @@ void Dot::Tick_Animations(int dt)
 
 void Dot::render()
 {
-	_visual->Render(*_camera, _rotation);
+	if (!_is_Hidden)
+	{
+		_visual->Render(*_camera, _rotation);
+	}
 }

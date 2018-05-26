@@ -11,13 +11,6 @@
 class Flee_Sprite_Part : Flee_Sprite_Part_Base
 {
 public:
-	enum Sprite_Flags
-	{
-		None			= 0b0000000000000000,
-		Ground			= 0b0000000000000001,
-		Wall			= 0b0000000000000010,
-		Interactable	= 0b0000000000000100,
-	};
 
 	//Initializes position and type
 	Flee_Sprite_Part(Flee_Texture* sheet, unsigned flags, SDL_Rect * sprite_rect);
@@ -32,6 +25,7 @@ public:
 
 	bool Is_Wall();
 
+	unsigned int Get_Flags();
 private:
 	unsigned int _flags;
 	Flee_Texture * _sprite_sheet;

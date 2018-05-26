@@ -6,6 +6,14 @@
 class Flee_Sprite_Part_Base
 {
 public:
+	enum Sprite_Flags
+	{
+		None = 0b0000000000000000,
+		Ground = 0b0000000000000001,
+		Wall = 0b0000000000000010,
+		Door = 0b0000000000000100,
+		Hiding_Place = 0b0000000000001000,
+	};
 	virtual void Render(SDL_Rect& camera, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE) = 0;
 	virtual void Set_Position(int x, int y) = 0;
 	//Get the collision box

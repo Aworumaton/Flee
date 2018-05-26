@@ -4,3 +4,10 @@ main_character_0
 main_character_1
 main_character_2
 main_character_3
+door
+2
+door_opened
+door_closed
+closet
+1
+closet

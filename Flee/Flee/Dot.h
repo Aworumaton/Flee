@@ -4,6 +4,7 @@
 #include <SDL_image.h>
 #include "math.h"
 #include "Flee_Animated_Sprite_Part.h"
+#include "Flee_Interactable_Object.h"
 #include "Input.h"
 #include "Constants.h"
 #include "Map_Manager.h"
@@ -16,9 +17,8 @@ public:
 	Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls, SDL_Rect* camera);
 	~Dot();
 
-	//Moves the dot and check collision against tiles
-	void move();
-
+	void Update();
+	
 	//Centers the camera over the dot
 	void Update_Camera();
 
@@ -27,11 +27,15 @@ public:
 
 	void Tick_Animations(int dt);
 private:
+	bool _is_Hidden;
+	//Moves the dot and check collision against tiles
+	void move();
 	SDL_Rect * _camera;
 	//The dimensions of the dot
 	const int DOT_WIDTH = 40;
 	const int DOT_HEIGHT = 40;
 
+	const int ACTION_RADIUS = 2 * (0.5*(DOT_WIDTH+DOT_HEIGHT));
 	//Default axis velocity of the dot
 	const int DEFAULT_DOT_VEL = 20;
 	//Maximum axis velocity of the dot
@@ -46,6 +50,12 @@ private:
 	//Collision box of the dot
 	SDL_Rect mBox; 
 	Map_Manager * _map;
+
+	void Get_Position(int &x, int &y)
+	{
+		x = mBox.x + (DOT_WIDTH*0.5);
+		y = mBox.y + (DOT_HEIGHT*0.5);
+	};
 
 };
 

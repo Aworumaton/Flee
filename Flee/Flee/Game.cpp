@@ -41,14 +41,12 @@ void Game::run()
 			elapsed_game_time = now ;
 			//printf("Game frame rate: %f\n", (1000.0f / delta_game_time));
 
-
 			_input.Tick(delta_game_time);
-
-
 			//Move the dot
-			_dot->move();
+			_dot->Update();
 			_dot->Update_Camera();
 
+			_map_manager->Tick(delta_game_time);
 
 			game_tick(delta_game_time);
 		}

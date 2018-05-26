@@ -34,3 +34,9 @@ bool Flee_Sprite_Part::Is_Wall()
 {
 	return (_flags & Sprite_Flags::Wall) == Sprite_Flags::Wall;
 }
+
+
+unsigned int Flee_Sprite_Part::Get_Flags()
+{
+	return _flags;
+}

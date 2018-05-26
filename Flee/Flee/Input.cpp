@@ -5,8 +5,8 @@ Input::Input()
 {
 	force_exit = false;
 
-	//_game_controls = new Game_Controls();
-	//_main_agent_controls = new Main_Agent_Controls();
+	_game_controls.reset();
+	_main_agent_controls.reset();
 }
 
 Input::~Input()
@@ -15,6 +15,7 @@ Input::~Input()
 
 void Input::Tick(int dt)
 {
+	_main_agent_controls.on_action = false;
 	bool quit = false;
 	SDL_Event e;
 	//if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP) { //Get mouse position int x, y; SDL_GetMouseState( &x, &y );
@@ -59,7 +60,11 @@ void Input::Tick(int dt)
 				break;
 			case SDLK_e:
 			case SDLK_f:
-				_main_agent_controls.action = true;
+				_main_agent_controls.on_action = !(_main_agent_controls.active_action);
+
+				_main_agent_controls.active_action = true;
+
+				printf("ttry: %d\n", _main_agent_controls.on_action);
 				break;
 			default:
 				break;
@@ -95,7 +100,8 @@ void Input::Tick(int dt)
 				break;
 			case SDLK_e:
 			case SDLK_f:
-				_main_agent_controls.action = false;
+				_main_agent_controls.on_action = false;
+				_main_agent_controls.active_action = false;
 				break;
 			default:
 				break;
