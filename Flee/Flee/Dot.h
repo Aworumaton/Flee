@@ -14,7 +14,7 @@ class Dot
 {
 public:
 	//Initializes the variables
-	Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls, SDL_Rect* camera);
+	Dot(Map_Manager* map, Main_Agent_Controls* controls, Transform* camera);
 	~Dot();
 
 	void Update();
@@ -30,7 +30,7 @@ private:
 	bool _is_Hidden;
 	//Moves the dot and check collision against tiles
 	void move();
-	SDL_Rect * _camera;
+	Transform * _camera;
 	//The dimensions of the dot
 	const int DOT_WIDTH = 40;
 	const int DOT_HEIGHT = 40;
@@ -45,7 +45,7 @@ private:
 	int _animation_timer;
 
 	int _rotation;
-	Flee_Animated_Sprite_Part * _visual;
+	//Flee_Animated_Sprite_Part * _visual;
 	Main_Agent_Controls * _controls;
 	//Collision box of the dot
 	SDL_Rect mBox; 

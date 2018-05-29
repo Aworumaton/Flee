@@ -151,12 +151,13 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map_Manager.cpp" />
-    <ClCompile Include="Texture_Manager.cpp" />
+    <ClCompile Include="FleeRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Dot.h" />
+    <ClInclude Include="FleeList.h" />
     <ClInclude Include="Flee_Animated_Sprite_Part.h" />
     <ClInclude Include="Flee_Interactable_Object.h" />
     <ClInclude Include="Flee_Sprite_Part_Base.h" />
@@ -165,7 +166,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Map_Manager.h" />
-    <ClInclude Include="Texture_Manager.h" />
+    <ClInclude Include="FleeRenderer.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,11 +21,6 @@ public:
 private:
 	Input _input;
 	Map_Manager* _map_manager;
-	SDL_Window * _window;
-	SDL_Renderer* _renderer;
-	SDL_Surface* _screen_surface;
-	//Level camera
-	SDL_Rect _camera;
 
 	//The dot that will be moving around on the screen
 	Dot* _dot;

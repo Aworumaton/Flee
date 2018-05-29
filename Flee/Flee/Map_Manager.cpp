@@ -16,8 +16,6 @@ bool Map_Manager::Read()
 	else
 	{
 		//Load the level tiles
-		int tiles_capacity = 2500;
-		_tileSet = new Flee_Sprite_Part*[tiles_capacity];
 		_total_tiles = 0;
 
 		_level_width = 0;
@@ -34,21 +32,22 @@ bool Map_Manager::Read()
 		//Initialize the tiles
 		while (map >> tileType)
 		{
-			if (tiles_capacity == _total_tiles)
-			{
-				tiles_capacity = (int)(max_column_count * max_row_count * 1.8f);
-				Flee_Sprite_Part** new_tile_set = new Flee_Sprite_Part*[tiles_capacity];
-				for (int i = 0; i < _total_tiles; i++)
-				{
-					new_tile_set[i] = _tileSet[i];
-				}
-				delete(_tileSet);
-				_tileSet = new_tile_set;
-			}
 
-			Flee_Sprite_Part* target = Texture_Manager::Create_Sprite("Tile_" + std::to_string(tileType));
-			target->Set_Position(cur_width, cur_height);
-			if (target == nullptr)
+
+
+
+
+
+			SpriteData* sData = new SpriteData();
+
+			sData->Transform.Y = cur_height;
+			sData->Transform.X = cur_width;
+			sData->Transform.Height = -1;
+			sData->Transform.Width = -1;
+
+			sData->Id = "Tile_" + std::to_string(tileType);
+			
+			if (!FleeRenderer::Register(sData))
 			{
 				//Stop loading map
 				printf("Error loading map: Invalid tile type at %d!\n", _total_tiles);
@@ -56,7 +55,7 @@ bool Map_Manager::Read()
 				break;
 			}
 
-			_tileSet[_total_tiles] = target;
+			_layout.Add(sData);
 
 
 			if (map.peek() == '\n') //Move to the next row
@@ -65,7 +64,7 @@ bool Map_Manager::Read()
 
 				cur_width = 0;
 				column_count = 1;
-				cur_height += _tileSet[_total_tiles]->getBox().h;
+				cur_height += sData->Transform.Height;
 
 			}
 			else if (map.peek() == ' ') //Move to next tile spot
@@ -75,7 +74,7 @@ bool Map_Manager::Read()
 				{
 					max_column_count = column_count;
 				}
-				cur_width += _tileSet[_total_tiles]->getBox().w;
+				cur_width += sData->Transform.Width;
 			}
 			_total_tiles++;
 		}
@@ -86,8 +85,8 @@ bool Map_Manager::Read()
 		}
 		else
 		{
-			_level_width = cur_width + _tileSet[_total_tiles - 1]->getBox().w;
-			_level_height = cur_height + _tileSet[_total_tiles - 1]->getBox().h;
+			_level_width = cur_width + _layout.ItemAt(_layout.Size() - 1)->Transform.Width;
+			_level_height = cur_height + _layout.ItemAt(_layout.Size() - 1)->Transform.Height;
 		}
 		//Close the file
 		map.close();
@@ -133,12 +132,12 @@ bool Map_Manager::Read()
 				_objects = new_set;
 			}
 
-			Flee_Animated_Sprite_Part* target_Sprite = Texture_Manager::Create_Animated_Sprite(string_id);
-			Flee_Interactable_Object* target = new Flee_Interactable_Object(target_Sprite);
+			//Flee_Animated_Sprite_Part* target_Sprite = Texture_Manager::Create_Animated_Sprite(string_id);
+			//Flee_Interactable_Object* target = new Flee_Interactable_Object(target_Sprite);
 
-			target->Set_Position(x, y);
-			_objects[_total_objects] = target;
-			_total_objects++;
+			//target->Set_Position(x, y);
+			//_objects[_total_objects] = target;
+			//_total_objects++;
 		}
 
 		//Close the file
@@ -156,14 +155,14 @@ bool Map_Manager::Read()
 void Map_Manager::Render(SDL_Rect &camera)
 {
 	//Render level
-	for (int i = 0; i < _total_tiles; ++i)
-	{
-		_tileSet[i]->Render(camera);
-	}
-	for (int i = 0; i < _total_objects; ++i)
-	{
-		_objects[i]->Render(camera);
-	}
+	//for (int i = 0; i < _total_tiles; ++i)
+	//{
+	//	_tileSet[i]->Render(camera);
+	//}
+	//for (int i = 0; i < _total_objects; ++i)
+	//{
+	//	_objects[i]->Render(camera);
+	//}
 }
 
 int Map_Manager::Get_Level_Width()
@@ -192,30 +191,30 @@ Flee_Interactable_Object* Map_Manager::Get_First_Objet_Under(SDL_Point point)
 bool Map_Manager::touches_walls(SDL_Rect box)
 {
 	//Go through the tiles
-	for (int i = 0; i < _total_tiles; ++i)
-	{
-		//If the tile is a wall type tile
-		if (_tileSet[i]->Is_Wall())
-		{
-			//If the collision box touches the wall tile
-			if (Constants::checkCollision(box, _tileSet[i]->getBox()))
-			{
-				return true;
-			}
-		}
-	}
-
-
-	for (int i = 0; i < _total_objects; ++i)
-	{
-		if (_objects[i]->Is_Obstruction())
-		{
-			if (Constants::checkCollision(box, _objects[i]->getBox()))
-			{
-				return true;
-			}
-		}
-	}
+	//for (int i = 0; i < _total_tiles; ++i)
+	//{
+	//	//If the tile is a wall type tile
+	//	if (_tileSet[i]->Is_Wall())
+	//	{
+	//		//If the collision box touches the wall tile
+	//		if (Constants::checkCollision(box, _tileSet[i]->getBox()))
+	//		{
+	//			return true;
+	//		}
+	//	}
+	//}
+	//
+	//
+	//for (int i = 0; i < _total_objects; ++i)
+	//{
+	//	if (_objects[i]->Is_Obstruction())
+	//	{
+	//		if (Constants::checkCollision(box, _objects[i]->getBox()))
+	//		{
+	//			return true;
+	//		}
+	//	}
+	//}
 
 	//If no wall tiles were touched
 	return false;
@@ -241,30 +240,11 @@ Map_Manager::~Map_Manager()
 		}
 	}
 	delete(_tileSet);
-	_renderer = NULL;
 
-	//Quit SDL subsystems
-	IMG_Quit();
 }
 
-Map_Manager::Map_Manager(SDL_Renderer* renderer)
-{
-	_renderer = renderer;
-
-	//Initialize PNG loading
-	int imgFlags = IMG_INIT_PNG;
-	if (_renderer == NULL)
-	{
-		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-		return;
-	}
-
-	if(!(IMG_Init(imgFlags) & imgFlags))
-	{
-		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-		return;
-	}
-	
+Map_Manager::Map_Manager()
+{	
 	if (!Read())
 	{
 		printf("Failed to load tile set!\n");

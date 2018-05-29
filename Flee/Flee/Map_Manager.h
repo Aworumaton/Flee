@@ -4,7 +4,8 @@
 #include <SDL.h>
 #include <fstream>
 #include <string>
-#include "Texture_Manager.h"
+//#include "Texture_Manager.h"
+#include "FleeRenderer.h"
 #include "Flee_Sprite_Part.h"
 #include "Flee_Animated_Sprite_Part.h"
 #include "Flee_Interactable_Object.h"
@@ -14,15 +15,10 @@ class Map_Manager
 {
 public:
 	
-	Map_Manager(SDL_Renderer* renderer);
+	Map_Manager();
 	~Map_Manager();
 
-	void Render(SDL_Rect &camera);
-
 	bool touches_walls(SDL_Rect box);
-
-	//The window renderer
-	SDL_Renderer* _renderer = NULL;
 
 	void Tick(int dt);
 
@@ -32,7 +28,7 @@ public:
 	Flee_Interactable_Object* Get_First_Objet_Under(SDL_Point point);
 
 private:
-
+	FleeList<SpriteData*> _layout;
 	Flee_Sprite_Part * * _tileSet;
 	Flee_Interactable_Object** _objects;
 

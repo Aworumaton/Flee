@@ -142,6 +142,17 @@ void Flee_Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point*
 	SDL_RenderCopyEx(gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
 }
 
+void Flee_Texture::Render(Transform * renderClip, Transform * worldClip)
+{
+	//Set rendering space and render to screen
+	SDL_Rect renderRect = { renderClip->X, renderClip->Y, renderClip->Width, renderClip->Height };
+	SDL_Rect worldRect = { worldClip->X, worldClip->Y,worldClip->Width, worldClip->Height };
+
+
+	//Render to screen
+	SDL_RenderCopyEx(gRenderer, mTexture, &renderRect, &worldRect, worldClip->Rotation, NULL, SDL_FLIP_NONE);
+}
+
 int Flee_Texture::getWidth()
 {
 	return mWidth;

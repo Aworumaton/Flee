@@ -1,7 +1,7 @@
 #pragma once
 #include "Dot.h"
 
-Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls, SDL_Rect* camera)
+Dot::Dot(Map_Manager* map, Main_Agent_Controls* controls, Transform* camera)
 {
 	_camera = camera;
 	_map = map;
@@ -11,19 +11,19 @@ Dot::Dot(SDL_Renderer* renderer, Map_Manager* map, Main_Agent_Controls* controls
 
 	//Initialize the collision box
 	
-	_visual = Texture_Manager::Create_Animated_Sprite("main_character");
+	//_visual = Texture_Manager::Create_Animated_Sprite("main_character");
 
 	_is_Hidden = false;
 
 	mBox.x = 250;
 	mBox.y = 250;
-	mBox.w = _visual->getBox().w;
-	mBox.h = _visual->getBox().h;
+	//mBox.w = _visual->getBox().w;
+	//mBox.h = _visual->getBox().h;
 }
 
 Dot::~Dot()
 {
-	delete(_visual);
+	//delete(_visual);
 }
 
 void Dot::Update()
@@ -40,7 +40,7 @@ void Dot::Update()
 			SDL_Point pos;
 			Get_Position(pos.x, pos.y);
 
-			SDL_Point target_action_pos = SDL_Point{ (_controls->look_at_y + _camera->y),(_controls->look_at_x + _camera->x) };
+			SDL_Point target_action_pos = SDL_Point{ (_controls->look_at_y + _camera->Y),(_controls->look_at_x + _camera->X) };
 			if (Constants::Get_Distance_Between(target_action_pos, pos) <= ACTION_RADIUS)
 			{
 				Flee_Interactable_Object* target_object = _map->Get_First_Objet_Under(target_action_pos);
@@ -133,15 +133,19 @@ void Dot::move()
 	//Move the dot up or down
 	mBox = target_box;
 	
-	_visual->Set_Position(mBox.x, mBox.y);
+	//_visual->Set_Position(mBox.x, mBox.y);
 
 	int x, y;
 	Get_Position(x, y);
-	_rotation = (int)(180.0f / M_PI * atan2((_controls->look_at_y + _camera->y) - y,
-							(_controls->look_at_x + _camera->x) - x));
+	_rotation = (int)(180.0f / M_PI * atan2((_controls->look_at_y + _camera->Y) - y,
+							(_controls->look_at_x + _camera->X) - x));
 
 	//normalize
 	_rotation = (450 + (int)_rotation) % 360;
+
+
+	printf("dot pos (%d, %d)\n", x, y);
+
 
 }
 
@@ -155,26 +159,27 @@ void Dot::Update_Camera()
 	int x, y;
 	Get_Position(x, y);
 	//Center the camera over the dot
-	_camera->x = x - Constants::SCREEN_WIDTH / 2;
-	_camera->y = y - Constants::SCREEN_HEIGHT / 2;
+	_camera->X = x - _camera->Width / 2;
+	_camera->Y = y - _camera->Height / 2;
 
 	//Clamp the camera in bounds
-	if (_camera->x < 0)
+	if (_camera->X < 0)
 	{
-		_camera->x = 0;
+		_camera->X = 0;
 	}
-	if (_camera->y < 0)
+	if (_camera->Y < 0)
 	{
-		_camera->y = 0;
+		_camera->Y = 0;
 	}
-	if (_camera->x > _map->Get_Level_Width() - _camera->w)
+	if (_camera->X > _map->Get_Level_Width() - _camera->Width)
 	{
-		_camera->x = _map->Get_Level_Width() - _camera->w;
+		_camera->X = _map->Get_Level_Width() - _camera->Width;
 	}
-	if (_camera->y > _map->Get_Level_Height() - _camera->h)
+	if (_camera->Y > _map->Get_Level_Height() - _camera->Height)
 	{
-		_camera->y = _map->Get_Level_Height() - _camera->h;
+		_camera->Y = _map->Get_Level_Height() - _camera->Height;
 	}
+	printf("dot pos (%d, %d)       camera dot pos (%d, %d)\n", x, y, _camera->X, _camera->Y);
 }
 
 void Dot::Tick_Animations(int dt)
@@ -183,7 +188,7 @@ void Dot::Tick_Animations(int dt)
 	if (_animation_frame_rate < _animation_timer)
 	{
 		_animation_timer = _animation_timer % _animation_frame_rate;
-		_visual->Set_Frame_Index((_visual->Get_Frame_Index()+1)% _visual->Get_Frame_Count());
+		//_visual->Set_Frame_Index((_visual->Get_Frame_Index()+1)% _visual->Get_Frame_Count());
 
 
 		//_visual->Tick_Animations(dt);
@@ -194,6 +199,6 @@ void Dot::render()
 {
 	if (!_is_Hidden)
 	{
-		_visual->Render(*_camera, _rotation);
+		//_visual->Render(*_camera, _rotation);
 	}
 }
