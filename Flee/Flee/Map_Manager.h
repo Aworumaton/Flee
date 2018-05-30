@@ -18,7 +18,7 @@ public:
 	Map_Manager();
 	~Map_Manager();
 
-	bool touches_walls(SDL_Rect box);
+	bool TouchesWalls(Transform* sourceTransform);
 
 	void Tick(int dt);
 

@@ -57,8 +57,7 @@ void Game::run()
 			_dot->Tick_Animations(delta_time);
 
 			FleeRenderer::Tick(0.0f);
-			//Render dot
-			_dot->render();
+
 		}
 	}
 }

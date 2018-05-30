@@ -1,7 +1,7 @@
 #pragma once
 #include "Dot.h"
 
-Dot::Dot(Map_Manager* map, Main_Agent_Controls* controls, Transform* camera)
+Dot::Dot(Map_Manager* map, Main_Agent_Controls* controls, Transform* camera) : _visualData("main_character_0")
 {
 	_camera = camera;
 	_map = map;
@@ -13,27 +13,33 @@ Dot::Dot(Map_Manager* map, Main_Agent_Controls* controls, Transform* camera)
 	
 	//_visual = Texture_Manager::Create_Animated_Sprite("main_character");
 
-	_is_Hidden = false;
+	FleeRenderer::Register(&_visualData);
 
-	mBox.x = 250;
-	mBox.y = 250;
+	_transform = &_visualData.Transform;
+	_actionRadius = 2 * (0.5*(_transform->Width + _transform->Height));
+
+	_transform->X = 250;
+	_transform->Y = 250;
 	//mBox.w = _visual->getBox().w;
 	//mBox.h = _visual->getBox().h;
 }
 
 Dot::~Dot()
 {
+	_transform = nullptr;
 	//delete(_visual);
 }
 
 void Dot::Update()
 {
-	move();
+	Move();
+
+
 	if (_controls->on_action)
 	{
-		if (_is_Hidden)
+		if (_visualData.IsHidden)
 		{
-			_is_Hidden = false;
+			_visualData.IsHidden = false;
 		}
 		else
 		{
@@ -41,7 +47,7 @@ void Dot::Update()
 			Get_Position(pos.x, pos.y);
 
 			SDL_Point target_action_pos = SDL_Point{ (_controls->look_at_y + _camera->Y),(_controls->look_at_x + _camera->X) };
-			if (Constants::Get_Distance_Between(target_action_pos, pos) <= ACTION_RADIUS)
+			if (Constants::Get_Distance_Between(target_action_pos, pos) <= _actionRadius)
 			{
 				Flee_Interactable_Object* target_object = _map->Get_First_Objet_Under(target_action_pos);
 
@@ -50,20 +56,20 @@ void Dot::Update()
 					if (target_object->Is_Hiding_Place())
 					{
 						target_object->OnAction();
-						_is_Hidden = true;
+						_visualData.IsHidden = true;
 					}
-					else if (target_object->Is_Door() && !Constants::checkCollision(mBox, target_object->getBox()))
-					{
-						target_object->OnAction();
-					}
+					//else if (target_object->Is_Door() && !Constants::checkCollision(mBox, target_object->getBox()))
+					//{
+					//	target_object->OnAction();
+					//}
 				}
 			}
 		}
 	}
 }
-void Dot::move()
+void Dot::Move()
 {
-	if (_is_Hidden)
+	if (_visualData.IsHidden)
 	{
 		return;
 	}
@@ -94,54 +100,52 @@ void Dot::move()
 		mVelX += vel;
 	}
 
+	int oldX = _transform->X;
+	int oldY = _transform->Y;
 
-	SDL_Rect target_box =  SDL_Rect(mBox);
+	_transform->X += mVelX;
 
-	target_box.x = mBox.x + mVelX;
-	//If the dot went too far to the left or right or touched a wall
-	if (target_box.x < 0)
+	if (_transform->X < 0)
 	{
-		target_box.x = 0;
+		_transform->X = 0;
 	}
-	else if(target_box.x + target_box.w > _map->Get_Level_Width())
+	else if(_transform->X + _transform->Width > _map->Get_Level_Width())
 	{
-		target_box.x = _map->Get_Level_Width() - target_box.w;
+		_transform->X = _map->Get_Level_Width() - _transform->Width;
 	}
-	else if(_map->touches_walls(target_box))
+	else if(_map->TouchesWalls(_transform))
 	{
 		//move back
-		target_box.x = mBox.x;
+		_transform->X = oldX;
 	}
 	
-	target_box.y = mBox.y + mVelY;
+	_transform->Y += mVelY;
 
 	//If the dot went too far to the left or right or touched a wall
-	if (target_box.y < 0)
+	if (_transform->Y < 0)
 	{
-		target_box.y = 0;
+		_transform->Y = 0;
 	}
-	else if (target_box.y + target_box.h > _map->Get_Level_Height())
+	else if (_transform->Y + _transform->Height > _map->Get_Level_Height())
 	{
-		target_box.y = _map->Get_Level_Height() - target_box.h;
+		_transform->Y = _map->Get_Level_Height() - _transform->Height;
 	}
-	else if (_map->touches_walls(target_box))
+	else if (_map->TouchesWalls(_transform))
 	{
 		//move back
-		target_box.y = mBox.y;
+		_transform->Y = oldY;
 	}
 
-	//Move the dot up or down
-	mBox = target_box;
 	
 	//_visual->Set_Position(mBox.x, mBox.y);
 
 	int x, y;
 	Get_Position(x, y);
-	_rotation = (int)(180.0f / M_PI * atan2((_controls->look_at_y + _camera->Y) - y,
+	_transform->Rotation = (int)(180.0f / M_PI * atan2((_controls->look_at_y + _camera->Y) - y,
 							(_controls->look_at_x + _camera->X) - x));
 
 	//normalize
-	_rotation = (450 + (int)_rotation) % 360;
+	_transform->Rotation = (450 + (int)_transform->Rotation) % 360;
 
 
 	printf("dot pos (%d, %d)\n", x, y);
@@ -151,7 +155,7 @@ void Dot::move()
 
 void Dot::Update_Camera()
 {
-	if (_is_Hidden)
+	if (_visualData.IsHidden)
 	{
 		return;
 	}
@@ -192,13 +196,5 @@ void Dot::Tick_Animations(int dt)
 
 
 		//_visual->Tick_Animations(dt);
-	}
-}
-
-void Dot::render()
-{
-	if (!_is_Hidden)
-	{
-		//_visual->Render(*_camera, _rotation);
 	}
 }

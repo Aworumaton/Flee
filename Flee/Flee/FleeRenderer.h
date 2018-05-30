@@ -15,15 +15,73 @@
 
 struct Sprite
 {
+	enum FlagTypes
+	{
+		None = 0b0000000000000000,
+		Ground = 0b0000000000000001,
+		Wall = 0b0000000000000010,
+		Door = 0b0000000000000100,
+		Hiding_Place = 0b0000000000001000,
+	};
+
 	std::string Id;
 	Transform Transform; //spritesheet transform
 	unsigned int Flags;
 };
-struct SpriteData
+
+class SpriteData
 {
-	std::string Id;
+public:
+	SpriteData(std::string id)
+	{
+		_id = id;
+		IsHidden = false;
+
+		Transform.Width = -1;
+		Transform.Height = -1;
+	};
+
+	bool InitializeWith(Sprite* source)
+	{
+		if (source->Id != _id)
+		{
+			return false;
+		}
+
+		_isWall = (source->Flags & Sprite::FlagTypes::Wall) == Sprite::FlagTypes::Wall;
+
+		if (Transform.Width < 0)
+		{
+			Transform.Width = source->Transform.Width;
+		}
+
+		if (Transform.Height < 0)
+		{
+			Transform.Height = source->Transform.Height;
+		}
+
+
+		return true;
+	};
+
 	Transform Transform; //World transform
 	bool IsHidden;
+
+	bool IsWall()
+	{
+		return _isWall;
+	};
+
+	std::string Id()
+	{
+		return _id;
+	};
+
+private:
+	std::string _id;
+	bool _isWall;
+
+
 };
 
 class FleeRenderer
@@ -43,6 +101,10 @@ private:
 	const static int SCREEN_WIDTH;
 	const static int SCREEN_HEIGHT;
 
+
+	FleeRenderer(bool& success);
+	~FleeRenderer();
+
 	bool RegisterSprite(SpriteData* spriteData);
 	Sprite* GetSprite(std::string id);
 	void RenderTick(float dt);
@@ -54,6 +116,7 @@ private:
 		SpriteData* SpriteData;
 	};
 
+	static FleeRenderer* _current;
 
 	FleeList<SpriteDataSpritePair*> SpriteDataSpriteList;
 	FleeList<Sprite*> _sprites;
@@ -62,31 +125,10 @@ private:
 	SDL_Window * _window;
 	SDL_Renderer* _renderer;
 	SDL_Surface* _screen_surface;
-	/*
-	struct Flee_Sprite
-	{
-		std::string string_id;
-		unsigned int flags;
-		SDL_Rect bounds;
-	};
-
-	struct Flee_Animated_Sprite
-	{
-		std::string string_id;
-		int animation_frame_count;
-		Flee_Sprite** animation_targets;
-	};
-	*/
-
-	FleeRenderer(bool& success);
-	~FleeRenderer();
 	
-	static FleeRenderer* _current;
 
 
 	FleeList<Sprite*>* ReadSprites();
-	//bool Read_Animations();
-	//Sprite* Get_Flee_Sprite(std::string string_id);
 };
 
 #endif

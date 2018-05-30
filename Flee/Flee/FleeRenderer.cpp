@@ -121,21 +121,15 @@ bool FleeRenderer::RegisterSprite(SpriteData* spriteData)
 {
 	SpriteDataSpritePair* pair = new SpriteDataSpritePair();
 	pair->SpriteData = spriteData;
-	pair->Sprite = GetSprite(spriteData->Id);
+	pair->Sprite = GetSprite(spriteData->Id());
 	if (pair->Sprite == nullptr)
 	{
 		return false;
 	}
-
-
-	if (spriteData->Transform.Width < 0)
+	
+	if (!spriteData->InitializeWith(pair->Sprite))
 	{
-		spriteData->Transform.Width = pair->Sprite->Transform.Width;
-	}
-
-	if (spriteData->Transform.Height < 0)
-	{
-		spriteData->Transform.Height = pair->Sprite->Transform.Height;
+		return false;
 	}
 
 

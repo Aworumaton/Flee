@@ -32,20 +32,10 @@ bool Map_Manager::Read()
 		//Initialize the tiles
 		while (map >> tileType)
 		{
-
-
-
-
-
-
-			SpriteData* sData = new SpriteData();
+			SpriteData* sData = new SpriteData("Tile_" + std::to_string(tileType));
 
 			sData->Transform.Y = cur_height;
 			sData->Transform.X = cur_width;
-			sData->Transform.Height = -1;
-			sData->Transform.Width = -1;
-
-			sData->Id = "Tile_" + std::to_string(tileType);
 			
 			if (!FleeRenderer::Register(sData))
 			{
@@ -172,21 +162,22 @@ Flee_Interactable_Object* Map_Manager::Get_First_Objet_Under(SDL_Point point)
 	return nullptr;
 }
 
-bool Map_Manager::touches_walls(SDL_Rect box)
+bool Map_Manager::TouchesWalls(Transform* sourceTransform)
 {
 	//Go through the tiles
-	//for (int i = 0; i < _total_tiles; ++i)
-	//{
-	//	//If the tile is a wall type tile
-	//	if (_tileSet[i]->Is_Wall())
-	//	{
-	//		//If the collision box touches the wall tile
-	//		if (Constants::checkCollision(box, _tileSet[i]->getBox()))
-	//		{
-	//			return true;
-	//		}
-	//	}
-	//}
+	for (int i = 0; i < _layout.Size(); ++i)
+	{
+		SpriteData* sData = _layout.ItemAt(i);
+		//If the tile is a wall type tile
+		if (sData->IsWall())
+		{
+			//If the collision box touches the wall tile
+			if (Constants::CheckCollision(sourceTransform, &sData->Transform))
+			{
+				return true;
+			}
+		}
+	}
 	//
 	//
 	//for (int i = 0; i < _total_objects; ++i)
