@@ -173,7 +173,10 @@ void FleeRenderer::RenderTick(float dt)
 			wordlTransform->Height = pair->SpriteData->Transform.Height;
 			wordlTransform->Rotation = pair->SpriteData->Transform.Rotation;
 
-			_spriteSheet->Render(&pair->Sprite->Transform, wordlTransform);
+			if (Constants::CheckCollision(&pair->SpriteData->Transform, _camera))
+			{
+				_spriteSheet->Render(&pair->Sprite->Transform, wordlTransform);
+			}
 		}
 	}
 

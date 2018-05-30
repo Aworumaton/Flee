@@ -149,22 +149,6 @@ bool Map_Manager::Read()
 	return loaded;
 }
 
-
-
-
-void Map_Manager::Render(SDL_Rect &camera)
-{
-	//Render level
-	//for (int i = 0; i < _total_tiles; ++i)
-	//{
-	//	_tileSet[i]->Render(camera);
-	//}
-	//for (int i = 0; i < _total_objects; ++i)
-	//{
-	//	_objects[i]->Render(camera);
-	//}
-}
-
 int Map_Manager::Get_Level_Width()
 {
 	return _level_width;

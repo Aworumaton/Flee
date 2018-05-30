@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include "Transform.h"
 
 namespace Constants
 {
@@ -26,6 +27,51 @@ namespace Constants
 		rightB = b.x + b.w;
 		topB = b.y;
 		bottomB = b.y + b.h;
+
+		//If any of the sides from A are outside of B
+		if (bottomA <= topB)
+		{
+			return false;
+		}
+
+		if (topA >= bottomB)
+		{
+			return false;
+		}
+
+		if (rightA <= leftB)
+		{
+			return false;
+		}
+
+		if (leftA >= rightB)
+		{
+			return false;
+		}
+
+		//If none of the sides from A are outside B
+		return true;
+	}
+
+	static bool CheckCollision(Transform* a, Transform* b)
+	{
+		//The sides of the rectangles
+		int leftA, leftB;
+		int rightA, rightB;
+		int topA, topB;
+		int bottomA, bottomB;
+
+		//Calculate the sides of rect A
+		leftA = a->X;
+		rightA = a->X + a->Width;
+		topA = a->Y;
+		bottomA = a->Y + a->Height;
+
+		//Calculate the sides of rect B
+		leftB = b->X;
+		rightB = b->X + b->Width;
+		topB = b->Y;
+		bottomB = b->Y + b->Height;
 
 		//If any of the sides from A are outside of B
 		if (bottomA <= topB)
