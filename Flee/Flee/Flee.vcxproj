@@ -154,6 +154,7 @@
     <ClCompile Include="FleeRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Dot.h" />
