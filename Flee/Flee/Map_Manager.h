@@ -18,7 +18,7 @@ public:
 	Map_Manager();
 	~Map_Manager();
 
-	bool TouchesWalls(Transform* sourceTransform);
+	bool TouchesWalls(FleeTransform* sourceTransform);
 
 	void Tick(int dt);
 

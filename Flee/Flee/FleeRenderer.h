@@ -7,7 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include "Constants.h"
-#include "Transform.h"
+#include "FleeTransform.h"
 #include "FleeList.h"
 #include "Flee_Sprite_Part.h"
 #include "Flee_Animated_Sprite_Part.h"
@@ -25,7 +25,7 @@ struct Sprite
 	};
 
 	std::string Id;
-	Transform Transform; //spritesheet transform
+	FleeTransform Transform; //spritesheet transform
 	unsigned int Flags;
 };
 
@@ -36,10 +36,15 @@ public:
 	{
 		_id = id;
 		IsHidden = false;
-
-		Transform.Width = -1;
-		Transform.Height = -1;
+		Transform = new FleeTransform();
+		Transform->Width = -1;
+		Transform->Height = -1;
 	};
+
+	~SpriteData()
+	{
+		delete(Transform);
+	}
 
 	bool InitializeWith(Sprite* source)
 	{
@@ -50,21 +55,21 @@ public:
 
 		_isWall = (source->Flags & Sprite::FlagTypes::Wall) == Sprite::FlagTypes::Wall;
 
-		if (Transform.Width < 0)
+		if (Transform->Width < 0)
 		{
-			Transform.Width = source->Transform.Width;
+			Transform->Width = source->Transform.Width;
 		}
 
-		if (Transform.Height < 0)
+		if (Transform->Height < 0)
 		{
-			Transform.Height = source->Transform.Height;
+			Transform->Height = source->Transform.Height;
 		}
 
 
 		return true;
 	};
 
-	Transform Transform; //World transform
+	FleeTransform* Transform; //World transform
 	bool IsHidden;
 
 	bool IsWall()
@@ -91,12 +96,12 @@ public:
 	static bool Initialize();
 	static void Free();
 
-	static bool Register(SpriteData* spriteData);
+	static bool Register(SpriteData* spriteData, int layerIndex);
 	//static Flee_Animated_Sprite_Part* Create_Animated_Sprite(std::string sprite_id);
 	
 	static void Tick(float dt);
 
-	static Transform* GetCamera();
+	static FleeTransform* GetCamera();
 private:
 	const static int SCREEN_WIDTH;
 	const static int SCREEN_HEIGHT;
@@ -105,7 +110,7 @@ private:
 	FleeRenderer(bool& success);
 	~FleeRenderer();
 
-	bool RegisterSprite(SpriteData* spriteData);
+	bool RegisterSprite(SpriteData* spriteData, int layerIndex);
 	Sprite* GetSprite(std::string id);
 	void RenderTick(float dt);
 
@@ -118,10 +123,10 @@ private:
 
 	static FleeRenderer* _current;
 
-	FleeList<SpriteDataSpritePair*> SpriteDataSpriteList;
+	FleeList<FleeList<SpriteDataSpritePair*>*> Layers;
 	FleeList<Sprite*> _sprites;
 	Flee_Texture* _spriteSheet;
-	Transform* _camera;
+	FleeTransform* _camera;
 	SDL_Window * _window;
 	SDL_Renderer* _renderer;
 	SDL_Surface* _screen_surface;

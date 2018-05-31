@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string>
 #include "Constants.h"
-#include "Transform.h"
+#include "FleeTransform.h"
 
 
 //Texture wrapper class
@@ -43,7 +43,7 @@ public:
 	void render(int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 	//Renders texture at given point
-	void Render(Transform * renderClip, Transform * worldClip);
+	void Render(FleeTransform * renderClip, FleeTransform * worldClip);
 
 	//Gets image dimensions
 	int getWidth();

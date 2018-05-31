@@ -1,7 +1,7 @@
 #pragma once
 #include "Dot.h"
 
-Dot::Dot(Map_Manager* map, Main_Agent_Controls* controls, Transform* camera) : _visualData("main_character_0")
+Dot::Dot(Map_Manager* map, Main_Agent_Controls* controls, FleeTransform* camera)// : _visualData("main_character_0")
 {
 	_camera = camera;
 	_map = map;
@@ -11,11 +11,13 @@ Dot::Dot(Map_Manager* map, Main_Agent_Controls* controls, Transform* camera) : _
 
 	//Initialize the collision box
 	
-	//_visual = Texture_Manager::Create_Animated_Sprite("main_character");
+	_visual = AnimationManager::GetAnimationsOf("Player");
+	_visual->SetAnimation("Movement");
 
-	FleeRenderer::Register(&_visualData);
 
-	_transform = &_visualData.Transform;
+	//FleeRenderer::Register(&_visualData);
+
+	_transform = &_visual->Transform;
 	_actionRadius = 2 * (0.5*(_transform->Width + _transform->Height));
 
 	_transform->X = 250;
@@ -37,9 +39,9 @@ void Dot::Update()
 
 	if (_controls->on_action)
 	{
-		if (_visualData.IsHidden)
+		if (IsHidden)
 		{
-			_visualData.IsHidden = false;
+			IsHidden = false;
 		}
 		else
 		{
@@ -56,7 +58,7 @@ void Dot::Update()
 					if (target_object->Is_Hiding_Place())
 					{
 						target_object->OnAction();
-						_visualData.IsHidden = true;
+						IsHidden = true;
 					}
 					//else if (target_object->Is_Door() && !Constants::checkCollision(mBox, target_object->getBox()))
 					//{
@@ -69,7 +71,7 @@ void Dot::Update()
 }
 void Dot::Move()
 {
-	if (_visualData.IsHidden)
+	if (IsHidden)
 	{
 		return;
 	}
@@ -155,7 +157,7 @@ void Dot::Move()
 
 void Dot::Update_Camera()
 {
-	if (_visualData.IsHidden)
+	if (IsHidden)
 	{
 		return;
 	}

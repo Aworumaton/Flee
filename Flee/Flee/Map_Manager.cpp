@@ -34,10 +34,10 @@ bool Map_Manager::Read()
 		{
 			SpriteData* sData = new SpriteData("Tile_" + std::to_string(tileType));
 
-			sData->Transform.Y = cur_height;
-			sData->Transform.X = cur_width;
+			sData->Transform->Y = cur_height;
+			sData->Transform->X = cur_width;
 			
-			if (!FleeRenderer::Register(sData))
+			if (!FleeRenderer::Register(sData, 0))
 			{
 				//Stop loading map
 				printf("Error loading map: Invalid tile type at %d!\n", _total_tiles);
@@ -54,7 +54,7 @@ bool Map_Manager::Read()
 
 				cur_width = 0;
 				column_count = 1;
-				cur_height += sData->Transform.Height;
+				cur_height += sData->Transform->Height;
 
 			}
 			else if (map.peek() == ' ') //Move to next tile spot
@@ -64,7 +64,7 @@ bool Map_Manager::Read()
 				{
 					max_column_count = column_count;
 				}
-				cur_width += sData->Transform.Width;
+				cur_width += sData->Transform->Width;
 			}
 			_total_tiles++;
 		}
@@ -75,8 +75,8 @@ bool Map_Manager::Read()
 		}
 		else
 		{
-			_level_width = cur_width + _layout.ItemAt(_layout.Size() - 1)->Transform.Width;
-			_level_height = cur_height + _layout.ItemAt(_layout.Size() - 1)->Transform.Height;
+			_level_width = cur_width + _layout.ItemAt(_layout.Size() - 1)->Transform->Width;
+			_level_height = cur_height + _layout.ItemAt(_layout.Size() - 1)->Transform->Height;
 		}
 		//Close the file
 		map.close();
@@ -162,7 +162,7 @@ Flee_Interactable_Object* Map_Manager::Get_First_Objet_Under(SDL_Point point)
 	return nullptr;
 }
 
-bool Map_Manager::TouchesWalls(Transform* sourceTransform)
+bool Map_Manager::TouchesWalls(FleeTransform* sourceTransform)
 {
 	//Go through the tiles
 	for (int i = 0; i < _layout.Size(); ++i)
@@ -172,7 +172,7 @@ bool Map_Manager::TouchesWalls(Transform* sourceTransform)
 		if (sData->IsWall())
 		{
 			//If the collision box touches the wall tile
-			if (Constants::CheckCollision(sourceTransform, &sData->Transform))
+			if (Constants::CheckCollision(sourceTransform, sData->Transform))
 			{
 				return true;
 			}

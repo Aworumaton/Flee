@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include "Transform.h"
+#include "FleeTransform.h"
 
 namespace Constants
 {
@@ -53,7 +53,7 @@ namespace Constants
 		return true;
 	}
 
-	static bool CheckCollision(Transform* a, Transform* b)
+	static bool CheckCollision(FleeTransform* a, FleeTransform* b)
 	{
 		//The sides of the rectangles
 		int leftA, leftB;

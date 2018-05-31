@@ -3,19 +3,20 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "math.h"
-#include "Transform.h"
+#include "FleeTransform.h"
 #include "Flee_Animated_Sprite_Part.h"
 #include "Flee_Interactable_Object.h"
 #include "Input.h"
 #include "Constants.h"
 #include "Map_Manager.h"
+#include "AnimationManager.h"
 
 //The dot that will move around on the screen
 class Dot
 {
 public:
 	//Initializes the variables
-	Dot(Map_Manager* map, Main_Agent_Controls* controls, Transform* camera);
+	Dot(Map_Manager* map, Main_Agent_Controls* controls, FleeTransform* camera);
 	~Dot();
 
 	void Update();
@@ -25,12 +26,13 @@ public:
 
 	void Tick_Animations(int dt);
 private:
-	Transform * _camera;
+	FleeTransform * _camera;
 
-	Transform* _transform;
-	SpriteData _visualData;
+	FleeTransform* _transform;
+	//SpriteData _visualData;
 
-
+	AnimationSet* _visual;
+	bool IsHidden;
 
 	//Moves and check collision against tiles
 	void Move();

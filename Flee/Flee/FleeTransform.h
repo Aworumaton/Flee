@@ -1,7 +1,7 @@
-#ifndef Transform_H
-#define Transform_H
+#ifndef FleeTransform_H
+#define FleeTransform_H
 
-class Transform
+class FleeTransform
 {
 public:
 	int X = 0;

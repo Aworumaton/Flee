@@ -45,6 +45,9 @@
     <ClCompile Include="FleeRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -80,9 +83,6 @@
     <ClInclude Include="Flee_Interactable_Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FleeRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -90,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AnimationManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FleeTransform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

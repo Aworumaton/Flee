@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="Dot.cpp" />
     <ClCompile Include="Flee_Animated_Sprite_Part.cpp" />
     <ClCompile Include="Flee_Interactable_Object.cpp" />
@@ -168,7 +169,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Map_Manager.h" />
     <ClInclude Include="FleeRenderer.h" />
-    <ClInclude Include="Transform.h" />
+    <ClInclude Include="FleeTransform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

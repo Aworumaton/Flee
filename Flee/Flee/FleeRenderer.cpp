@@ -45,7 +45,7 @@ FleeRenderer::FleeRenderer(bool& success)
 
 
 
-	_camera = new Transform();
+	_camera = new FleeTransform();
 	_camera->X = 0;
 	_camera->Y = 0;
 	_camera->Width = FleeRenderer::SCREEN_WIDTH;
@@ -111,14 +111,20 @@ void FleeRenderer::Free()
 	delete(_current);
 }
 
-bool FleeRenderer::Register(SpriteData* spriteData)
+bool FleeRenderer::Register(SpriteData* spriteData, int layerIndex)
 {
-	return  _current->RegisterSprite(spriteData);
+	return  _current->RegisterSprite(spriteData, layerIndex);
 }
 
 
-bool FleeRenderer::RegisterSprite(SpriteData* spriteData)
+bool FleeRenderer::RegisterSprite(SpriteData* spriteData, int layerIndex)
 {
+	int targetSize = layerIndex + 1;
+	while (Layers.Size() < targetSize)
+	{
+		Layers.Add(new FleeList<SpriteDataSpritePair*>());
+	}
+
 	SpriteDataSpritePair* pair = new SpriteDataSpritePair();
 	pair->SpriteData = spriteData;
 	pair->Sprite = GetSprite(spriteData->Id());
@@ -133,7 +139,7 @@ bool FleeRenderer::RegisterSprite(SpriteData* spriteData)
 	}
 
 
-	SpriteDataSpriteList.Add(pair);
+	Layers.ItemAt(layerIndex)->Add(pair);
 	return true;
 }
 
@@ -142,7 +148,7 @@ void FleeRenderer::Tick(float dt)
 	_current->RenderTick(dt);
 }
 
-Transform* FleeRenderer::GetCamera()
+FleeTransform* FleeRenderer::GetCamera()
 {
 	return _current->_camera;
 }
@@ -154,22 +160,26 @@ void FleeRenderer::RenderTick(float dt)
 	SDL_RenderClear(_renderer);
 
 
-	Transform* wordlTransform = new Transform();
+	FleeTransform* wordlTransform = new FleeTransform();
 
-	for (int i = 0; i < SpriteDataSpriteList.Size(); i++)
+	for (int layerIndex = 0; layerIndex < Layers.Size(); layerIndex++)
 	{
-		SpriteDataSpritePair* pair = SpriteDataSpriteList.ItemAt(i);
-		if (!pair->SpriteData->IsHidden)
+		FleeList<SpriteDataSpritePair*>* SpriteDataSpriteList = Layers.ItemAt(layerIndex);
+		for (int i = 0; i < SpriteDataSpriteList->Size(); i++)
 		{
-			wordlTransform->X = pair->SpriteData->Transform.X - _camera->X;
-			wordlTransform->Y = pair->SpriteData->Transform.Y - _camera->Y;
-			wordlTransform->Width = pair->SpriteData->Transform.Width;
-			wordlTransform->Height = pair->SpriteData->Transform.Height;
-			wordlTransform->Rotation = pair->SpriteData->Transform.Rotation;
-
-			if (Constants::CheckCollision(&pair->SpriteData->Transform, _camera))
+			SpriteDataSpritePair* pair = SpriteDataSpriteList->ItemAt(i);
+			if (!pair->SpriteData->IsHidden)
 			{
-				_spriteSheet->Render(&pair->Sprite->Transform, wordlTransform);
+				wordlTransform->X = pair->SpriteData->Transform->X - _camera->X;
+				wordlTransform->Y = pair->SpriteData->Transform->Y - _camera->Y;
+				wordlTransform->Width = pair->SpriteData->Transform->Width;
+				wordlTransform->Height = pair->SpriteData->Transform->Height;
+				wordlTransform->Rotation = pair->SpriteData->Transform->Rotation;
+
+				if (Constants::CheckCollision(pair->SpriteData->Transform, _camera))
+				{
+					_spriteSheet->Render(&pair->Sprite->Transform, wordlTransform);
+				}
 			}
 		}
 	}

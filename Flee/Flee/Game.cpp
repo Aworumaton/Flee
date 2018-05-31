@@ -75,7 +75,7 @@ Game::Game()
 bool Game::init()
 {
 	FleeRenderer::Initialize();
-	
+	AnimationManager::Initialize();
 
 	_map_manager = new Map_Manager();
 

@@ -1,13 +1,23 @@
-main_character
-4
-main_character_0
-main_character_1
-main_character_2
-main_character_3
-door
+Player
 2
-door_opened
-door_closed
-closet
+Movement
+3
 1
-closet
+main_character_1 1
+main_character_2 2
+main_character_3 1
+Idle
+2
+1
+main_character_1 1
+main_character_2 1
+Door
+2
+Opened
+1
+0
+door_opened 0
+Closed
+1
+0
+door_closed 0

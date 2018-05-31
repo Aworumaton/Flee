@@ -8,6 +8,7 @@
 #include "Constants.h"
 #include "Map_Manager.h"
 #include "Dot.h"
+#include "AnimationManager.h"
 //#include "Texture_Manager.h"
 
 class Game
