@@ -37,7 +37,7 @@ bool Map_Manager::Read()
 			sData->Transform->Y = cur_height;
 			sData->Transform->X = cur_width;
 			
-			if (!FleeRenderer::Register(sData, 0))
+			if (!FleeRenderer::Register(sData, Constants::VisualLayers::GroundLayer))
 			{
 				//Stop loading map
 				printf("Error loading map: Invalid tile type at %d!\n", _total_tiles);

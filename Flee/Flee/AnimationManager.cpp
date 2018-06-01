@@ -1,5 +1,58 @@
 #include "AnimationManager.h"
 
+void AnimationManager::Tick(float dt)
+{
+	_current->TickAnimations(dt);
+}
+
+void AnimationManager::TickAnimations(float dt)
+{
+	for (int i = 0; i < _activeAnimations.Size(); i++)
+	{
+		AnimationGroup* currentAnimation = _activeAnimations.ItemAt(i);
+		AnimationGroup::AnimationSet* currentAnimationSet = currentAnimation->ActiveAnimationSet();
+		if (currentAnimationSet != NULL)
+		{
+			AnimationGroup::KeyFrame* oldFrame = currentAnimationSet->Frames.ItemAt(currentAnimation->ActiveKeyFrameIndex);
+			oldFrame->TextureData->IsHidden = true;
+		}
+
+		if (currentAnimation->GetAnimationData()->IsDirty)
+		{
+			currentAnimation->GetAnimationData()->IsDirty = false;
+			currentAnimation->SetActiveAnimationSet(currentAnimation->GetAnimationData()->GetActiveAnimationId());
+			currentAnimationSet = currentAnimation->ActiveAnimationSet();
+		}
+
+		if (!currentAnimation->GetAnimationData()->IsHidden)
+		{
+			AnimationGroup::KeyFrame* targetFrame = currentAnimationSet->Frames.ItemAt(currentAnimation->ActiveKeyFrameIndex);
+
+			int cumilativeAnimatedTime = 0;
+			int targetTime = dt;
+			while (cumilativeAnimatedTime < targetTime)
+			{
+				targetFrame = currentAnimationSet->Frames.ItemAt(currentAnimation->ActiveKeyFrameIndex);
+
+				if (cumilativeAnimatedTime + targetFrame->TargetDuration - targetFrame->ElapsedDuration < targetTime)
+				{
+					cumilativeAnimatedTime += targetFrame->TargetDuration - targetFrame->ElapsedDuration;
+					targetFrame->ElapsedDuration = 0;
+					currentAnimation->ActiveKeyFrameIndex = (currentAnimation->ActiveKeyFrameIndex + 1) % currentAnimationSet->Frames.Size();
+				}
+				else
+				{
+					targetFrame->ElapsedDuration += targetTime - cumilativeAnimatedTime;
+					cumilativeAnimatedTime = targetTime;
+
+				}
+			}
+
+			targetFrame->TextureData->IsHidden = false;
+		}
+	}
+}
+
 
 void AnimationManager::Initialize()
 {
@@ -13,9 +66,14 @@ void AnimationManager::Initialize()
 }
 
 
-AnimationSet*  AnimationManager::GetAnimationsOf(std::string id)
+AnimationData*  AnimationManager::CreateAnimationsOf(std::string id, Constants::VisualLayers layerIndex)
 {
-	return _current->GetAnimationsSet(id);
+	AnimationData* data = new AnimationData();
+	AnimationGroup* target = _current->CloneAnimationGroup(data, id);
+	target->Register(layerIndex);
+
+	_current->_activeAnimations.Add(target);
+	return data;
 }
 
 AnimationManager::AnimationManager()
@@ -25,27 +83,26 @@ AnimationManager::AnimationManager()
 
 AnimationManager::~AnimationManager()
 {
-	Free();
 }
 
 void AnimationManager::Free()
 {
-	for (int i = _templates.Size() - 1; i >= 0; i--)
-	{
-		AnimationSet item = _templates.ItemAt(i);
-		_templates.RemoveAt(i);
-		item.Free();
-	}
+	//for (int i = _templates.Size() - 1; i >= 0; i--)
+	//{
+	//	AnimationGroup item = _templates.ItemAt(i);
+	//	_templates.RemoveAt(i);
+	//	item.Free();
+	//}
 }
 
 
-AnimationSet* AnimationManager::GetAnimationsSet(std::string id)
+AnimationGroup* AnimationManager::CloneAnimationGroup(AnimationData* data, std::string id)
 {
 	for (int i = 0; i < _templates.Size(); i++)
 	{
 		if (_templates.ItemAt(i).Id() == id)
 		{
-			return _templates.ItemAt(i).Clone();
+			return _templates.ItemAt(i).Clone(data);
 		}
 	}
 
@@ -71,7 +128,7 @@ bool AnimationManager::Read()
 		{
 			int animationCount;
 			file >> animationCount;
-			AnimationSet* targetSet = new AnimationSet(id, animationCount);
+			AnimationGroup* targetGroup = new AnimationGroup(id, animationCount);
 
 			for (int i = 0; i < animationCount; i++)
 			{
@@ -86,21 +143,21 @@ bool AnimationManager::Read()
 				int isRepeating;
 				file >> isRepeating;
 
-				Animation* animation = targetSet->AddAnimation(aniamtionId, isRepeating == 1, frameCount);
+				targetGroup->AddAnimation(aniamtionId, isRepeating == 1, frameCount);
 
 				for (int j = 0; j < frameCount; j++)
 				{
-					std::string frameId = "";
-					file >> frameId;
+					std::string spriteId = "";
+					file >> spriteId;
 
 					int frameDuration;
 					file >> frameDuration;
 
-					animation->AddKeyFrame(frameId, frameDuration);
+					targetGroup->AddKeyFrame(aniamtionId, spriteId, frameDuration);
 				}
 			}
 
-			_templates.Add(*targetSet);
+			_templates.Add(*targetGroup);
 		}
 
 		//Close the file

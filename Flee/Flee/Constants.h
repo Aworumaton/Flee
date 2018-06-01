@@ -1,12 +1,18 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include "FleeTransform.h"
+#include <SDL.h>
+#include "FleeLibrary.h"
 
 namespace Constants
 {
 	//Screen dimension constants
-
+	enum VisualLayers
+	{
+		GroundLayer = 0,
+		DynamicObjectsLayer = 1,
+		UserInterfaceLayer = 2,
+	};
 
 	static bool checkCollision(SDL_Rect a, SDL_Rect b)
 	{

@@ -11,13 +11,13 @@ Dot::Dot(Map_Manager* map, Main_Agent_Controls* controls, FleeTransform* camera)
 
 	//Initialize the collision box
 	
-	_visual = AnimationManager::GetAnimationsOf("Player");
-	_visual->SetAnimation("Movement");
+	_visualData = AnimationManager::CreateAnimationsOf("Player", Constants::VisualLayers::DynamicObjectsLayer);
+	_visualData->SetAnimation("Idle");
 
 
 	//FleeRenderer::Register(&_visualData);
 
-	_transform = &_visual->Transform;
+	_transform = _visualData->Transform;
 	_actionRadius = 2 * (0.5*(_transform->Width + _transform->Height));
 
 	_transform->X = 250;
@@ -29,10 +29,9 @@ Dot::Dot(Map_Manager* map, Main_Agent_Controls* controls, FleeTransform* camera)
 Dot::~Dot()
 {
 	_transform = nullptr;
-	//delete(_visual);
 }
 
-void Dot::Update()
+void Dot::Tick()
 {
 	Move();
 
@@ -41,7 +40,7 @@ void Dot::Update()
 	{
 		if (IsHidden)
 		{
-			IsHidden = false;
+			SetIsHidden(false);
 		}
 		else
 		{
@@ -58,7 +57,7 @@ void Dot::Update()
 					if (target_object->Is_Hiding_Place())
 					{
 						target_object->OnAction();
-						IsHidden = true;
+						SetIsHidden(true);
 					}
 					//else if (target_object->Is_Door() && !Constants::checkCollision(mBox, target_object->getBox()))
 					//{
@@ -68,6 +67,9 @@ void Dot::Update()
 			}
 		}
 	}
+
+
+	UpdateCamera();
 }
 void Dot::Move()
 {
@@ -150,12 +152,23 @@ void Dot::Move()
 	_transform->Rotation = (450 + (int)_transform->Rotation) % 360;
 
 
-	printf("dot pos (%d, %d)\n", x, y);
+	//printf("dot pos (%d, %d)\n", x, y);
+	bool willMove = oldX != _transform->X || oldY != _transform->Y;
+	if (willMove && !IsMoving)
+	{
+		IsMoving = true;
+		_visualData->SetAnimation("Movement");
+	}
+	else if (!willMove && IsMoving)
+	{
+		IsMoving = false;
+		_visualData->SetAnimation("Idle");
 
+	}
 
 }
 
-void Dot::Update_Camera()
+void Dot::UpdateCamera()
 {
 	if (IsHidden)
 	{
@@ -185,18 +198,5 @@ void Dot::Update_Camera()
 	{
 		_camera->Y = _map->Get_Level_Height() - _camera->Height;
 	}
-	printf("dot pos (%d, %d)       camera dot pos (%d, %d)\n", x, y, _camera->X, _camera->Y);
-}
-
-void Dot::Tick_Animations(int dt)
-{
-	_animation_timer += dt;
-	if (_animation_frame_rate < _animation_timer)
-	{
-		_animation_timer = _animation_timer % _animation_frame_rate;
-		//_visual->Set_Frame_Index((_visual->Get_Frame_Index()+1)% _visual->Get_Frame_Count());
-
-
-		//_visual->Tick_Animations(dt);
-	}
+	//printf("dot pos (%d, %d)       camera dot pos (%d, %d)\n", x, y, _camera->X, _camera->Y);
 }

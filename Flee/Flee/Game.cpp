@@ -43,19 +43,16 @@ void Game::run()
 
 			_input.Tick(delta_game_time);
 			//Move the dot
-			_dot->Update();
-			_dot->Update_Camera();
+			_dot->Tick();
 
 			_map_manager->Tick(delta_game_time);
 
 			game_tick(delta_game_time);
 		}
 
-		//renderer
 		{
 
-			_dot->Tick_Animations(delta_time);
-
+			AnimationManager::Tick(1);
 			FleeRenderer::Tick(0.0f);
 
 		}

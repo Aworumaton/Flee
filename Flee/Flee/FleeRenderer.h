@@ -7,7 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include "Constants.h"
-#include "FleeTransform.h"
+#include "FleeLibrary.h"
 #include "FleeList.h"
 #include "Flee_Sprite_Part.h"
 #include "Flee_Animated_Sprite_Part.h"
@@ -15,78 +15,10 @@
 
 struct Sprite
 {
-	enum FlagTypes
-	{
-		None = 0b0000000000000000,
-		Ground = 0b0000000000000001,
-		Wall = 0b0000000000000010,
-		Door = 0b0000000000000100,
-		Hiding_Place = 0b0000000000001000,
-	};
 
 	std::string Id;
 	FleeTransform Transform; //spritesheet transform
 	unsigned int Flags;
-};
-
-class SpriteData
-{
-public:
-	SpriteData(std::string id)
-	{
-		_id = id;
-		IsHidden = false;
-		Transform = new FleeTransform();
-		Transform->Width = -1;
-		Transform->Height = -1;
-	};
-
-	~SpriteData()
-	{
-		delete(Transform);
-	}
-
-	bool InitializeWith(Sprite* source)
-	{
-		if (source->Id != _id)
-		{
-			return false;
-		}
-
-		_isWall = (source->Flags & Sprite::FlagTypes::Wall) == Sprite::FlagTypes::Wall;
-
-		if (Transform->Width < 0)
-		{
-			Transform->Width = source->Transform.Width;
-		}
-
-		if (Transform->Height < 0)
-		{
-			Transform->Height = source->Transform.Height;
-		}
-
-
-		return true;
-	};
-
-	FleeTransform* Transform; //World transform
-	bool IsHidden;
-
-	bool IsWall()
-	{
-		return _isWall;
-	};
-
-	std::string Id()
-	{
-		return _id;
-	};
-
-private:
-	std::string _id;
-	bool _isWall;
-
-
 };
 
 class FleeRenderer
@@ -96,7 +28,7 @@ public:
 	static bool Initialize();
 	static void Free();
 
-	static bool Register(SpriteData* spriteData, int layerIndex);
+	static bool Register(SpriteData* spriteData, Constants::VisualLayers layerIndex);
 	//static Flee_Animated_Sprite_Part* Create_Animated_Sprite(std::string sprite_id);
 	
 	static void Tick(float dt);
@@ -110,7 +42,7 @@ private:
 	FleeRenderer(bool& success);
 	~FleeRenderer();
 
-	bool RegisterSprite(SpriteData* spriteData, int layerIndex);
+	bool RegisterSprite(SpriteData* spriteData, Constants::VisualLayers layerIndex);
 	Sprite* GetSprite(std::string id);
 	void RenderTick(float dt);
 

@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "math.h"
-#include "FleeTransform.h"
+#include "FleeLibrary.h"
 #include "Flee_Animated_Sprite_Part.h"
 #include "Flee_Interactable_Object.h"
 #include "Input.h"
@@ -19,23 +19,22 @@ public:
 	Dot(Map_Manager* map, Main_Agent_Controls* controls, FleeTransform* camera);
 	~Dot();
 
-	void Update();
+	void Tick();
 
-	//Centers the camera over the dot
-	void Update_Camera();
-
-	void Tick_Animations(int dt);
 private:
 	FleeTransform * _camera;
 
 	FleeTransform* _transform;
 	//SpriteData _visualData;
 
-	AnimationSet* _visual;
+	AnimationData* _visualData;
 	bool IsHidden;
+	bool IsMoving;
 
 	//Moves and check collision against tiles
 	void Move();
+	//Centers the camera over the dot
+	void UpdateCamera();
 	int _actionRadius;
 
 
@@ -50,6 +49,12 @@ private:
 	//Flee_Animated_Sprite_Part * _visual;
 	Main_Agent_Controls * _controls;
 	Map_Manager * _map;
+
+	void SetIsHidden(bool value)
+	{
+		IsHidden = value;
+		_visualData->IsHidden = value;
+	};
 
 	void Get_Position(int &x, int &y)
 	{

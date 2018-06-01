@@ -1,7 +1,7 @@
 #include "FleeRenderer.h"
 
 const int FleeRenderer::SCREEN_WIDTH = 800;
-const int FleeRenderer:: SCREEN_HEIGHT = 600;
+const int FleeRenderer::SCREEN_HEIGHT = 600;
 
 FleeRenderer* FleeRenderer::_current;
 
@@ -111,15 +111,15 @@ void FleeRenderer::Free()
 	delete(_current);
 }
 
-bool FleeRenderer::Register(SpriteData* spriteData, int layerIndex)
+bool FleeRenderer::Register(SpriteData* spriteData, Constants::VisualLayers layerIndex)
 {
 	return  _current->RegisterSprite(spriteData, layerIndex);
 }
 
 
-bool FleeRenderer::RegisterSprite(SpriteData* spriteData, int layerIndex)
+bool FleeRenderer::RegisterSprite(SpriteData* spriteData, Constants::VisualLayers layerIndex)
 {
-	int targetSize = layerIndex + 1;
+	int targetSize = (int)layerIndex + 1;
 	while (Layers.Size() < targetSize)
 	{
 		Layers.Add(new FleeList<SpriteDataSpritePair*>());
@@ -133,7 +133,7 @@ bool FleeRenderer::RegisterSprite(SpriteData* spriteData, int layerIndex)
 		return false;
 	}
 	
-	if (!spriteData->InitializeWith(pair->Sprite))
+	if (!spriteData->InitializeWith(pair->Sprite->Flags, pair->Sprite->Transform.Width, pair->Sprite->Transform.Height))
 	{
 		return false;
 	}
