@@ -24,7 +24,7 @@ void AnimationManager::TickAnimations(float dt)
 			currentAnimationSet = currentAnimation->ActiveAnimationSet();
 		}
 
-		if (!currentAnimation->GetAnimationData()->IsHidden)
+		if (!currentAnimation->GetAnimationData()->IsHidden)    
 		{
 			AnimationGroup::KeyFrame* targetFrame = currentAnimationSet->Frames.ItemAt(currentAnimation->ActiveKeyFrameIndex);
 

@@ -7,7 +7,7 @@
 #include "Input.h"
 #include "Constants.h"
 #include "Map_Manager.h"
-#include "Dot.h"
+#include "Player.h"
 #include "AnimationManager.h"
 //#include "Texture_Manager.h"
 
@@ -24,7 +24,7 @@ private:
 	Map_Manager* _map_manager;
 
 	//The dot that will be moving around on the screen
-	Dot* _dot;
+	Player* _player;
 
 	bool _is_running;
 	Game();

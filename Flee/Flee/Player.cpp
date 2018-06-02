@@ -1,51 +1,45 @@
 #pragma once
-#include "Dot.h"
+#include "Player.h"
 
-Dot::Dot(Map_Manager* map, Main_Agent_Controls* controls, FleeTransform* camera)// : _visualData("main_character_0")
+Player::Player(Map_Manager* map, Main_Agent_Controls* controls, FleeTransform* camera)// : _visualData("main_character_0")
 {
-	_camera = camera;
 	_map = map;
+	_camera = camera;
 	_controls = controls;
 
-	_animation_timer = 0;
-
-	//Initialize the collision box
 	
 	_visualData = AnimationManager::CreateAnimationsOf("Player", Constants::VisualLayers::DynamicObjectsLayer);
 	_visualData->SetAnimation("Idle");
 
+	Transform = _visualData->Transform;
+	_actionRadius = 2 * (0.5*(Transform->Width + Transform->Height));
 
-	//FleeRenderer::Register(&_visualData);
-
-	_transform = _visualData->Transform;
-	_actionRadius = 2 * (0.5*(_transform->Width + _transform->Height));
-
-	_transform->X = 250;
-	_transform->Y = 250;
+	Transform->X = 250;
+	Transform->Y = 250;
 	//mBox.w = _visual->getBox().w;
 	//mBox.h = _visual->getBox().h;
 }
 
-Dot::~Dot()
+Player::~Player()
 {
-	_transform = nullptr;
+	Character::~Character();
 }
 
-void Dot::Tick()
+void Player::Tick()
 {
 	Move();
 
 
 	if (_controls->on_action)
 	{
-		if (IsHidden)
+		if (_isHidden)
 		{
 			SetIsHidden(false);
 		}
 		else
 		{
 			SDL_Point pos;
-			Get_Position(pos.x, pos.y);
+			GetPosition(pos.x, pos.y);
 
 			SDL_Point target_action_pos = SDL_Point{ (_controls->look_at_y + _camera->Y),(_controls->look_at_x + _camera->X) };
 			if (Constants::Get_Distance_Between(target_action_pos, pos) <= _actionRadius)
@@ -71,17 +65,17 @@ void Dot::Tick()
 
 	UpdateCamera();
 }
-void Dot::Move()
+void Player::Move()
 {
-	if (IsHidden)
+	if (_isHidden)
 	{
 		return;
 	}
 
-	int vel = DEFAULT_DOT_VEL;
+	int vel = DEFAULT_VELOCITY;
 	if (_controls->sprint)
 	{
-		vel = MAX_DOT_VEL;
+		vel = MAX_VELOCITY;
 	}
 
 	int mVelY = 0;
@@ -104,79 +98,75 @@ void Dot::Move()
 		mVelX += vel;
 	}
 
-	int oldX = _transform->X;
-	int oldY = _transform->Y;
+	int oldX = Transform->X;
+	int oldY = Transform->Y;
 
-	_transform->X += mVelX;
+	Transform->X += mVelX;
 
-	if (_transform->X < 0)
+	if (Transform->X < 0)
 	{
-		_transform->X = 0;
+		Transform->X = 0;
 	}
-	else if(_transform->X + _transform->Width > _map->Get_Level_Width())
+	else if(Transform->X + Transform->Width > _map->Get_Level_Width())
 	{
-		_transform->X = _map->Get_Level_Width() - _transform->Width;
+		Transform->X = _map->Get_Level_Width() - Transform->Width;
 	}
-	else if(_map->TouchesWalls(_transform))
+	else if(_map->TouchesWalls(Transform))
 	{
 		//move back
-		_transform->X = oldX;
+		Transform->X = oldX;
 	}
 	
-	_transform->Y += mVelY;
+	Transform->Y += mVelY;
 
-	//If the dot went too far to the left or right or touched a wall
-	if (_transform->Y < 0)
+	//If went too far to the left or right or touched a wall
+	if (Transform->Y < 0)
 	{
-		_transform->Y = 0;
+		Transform->Y = 0;
 	}
-	else if (_transform->Y + _transform->Height > _map->Get_Level_Height())
+	else if (Transform->Y + Transform->Height > _map->Get_Level_Height())
 	{
-		_transform->Y = _map->Get_Level_Height() - _transform->Height;
+		Transform->Y = _map->Get_Level_Height() - Transform->Height;
 	}
-	else if (_map->TouchesWalls(_transform))
+	else if (_map->TouchesWalls(Transform))
 	{
 		//move back
-		_transform->Y = oldY;
+		Transform->Y = oldY;
 	}
-
-	
-	//_visual->Set_Position(mBox.x, mBox.y);
 
 	int x, y;
-	Get_Position(x, y);
-	_transform->Rotation = (int)(180.0f / M_PI * atan2((_controls->look_at_y + _camera->Y) - y,
+	GetPosition(x, y);
+	Transform->Rotation = (int)(180.0f / M_PI * atan2((_controls->look_at_y + _camera->Y) - y,
 							(_controls->look_at_x + _camera->X) - x));
 
 	//normalize
-	_transform->Rotation = (450 + (int)_transform->Rotation) % 360;
+	Transform->Rotation = (450 + (int)Transform->Rotation) % 360;
 
 
-	//printf("dot pos (%d, %d)\n", x, y);
-	bool willMove = oldX != _transform->X || oldY != _transform->Y;
-	if (willMove && !IsMoving)
+	bool willMove = oldX != Transform->X || oldY != Transform->Y;
+	if (willMove && !_isMoving)
 	{
-		IsMoving = true;
+		_isMoving = true;
 		_visualData->SetAnimation("Movement");
 	}
-	else if (!willMove && IsMoving)
+	else if (!willMove && _isMoving)
 	{
-		IsMoving = false;
+		_isMoving = false;
 		_visualData->SetAnimation("Idle");
 
 	}
 
 }
 
-void Dot::UpdateCamera()
+void Player::UpdateCamera()
 {
-	if (IsHidden)
+	if (_isHidden)
 	{
 		return;
 	}
 
 	int x, y;
-	Get_Position(x, y);
+	GetPosition(x, y);
 	//Center the camera over the dot
 	_camera->X = x - _camera->Width / 2;
 	_camera->Y = y - _camera->Height / 2;
@@ -198,5 +188,17 @@ void Dot::UpdateCamera()
 	{
 		_camera->Y = _map->Get_Level_Height() - _camera->Height;
 	}
-	//printf("dot pos (%d, %d)       camera dot pos (%d, %d)\n", x, y, _camera->X, _camera->Y);
+}
+
+
+void Player::SetIsHidden(bool value)
+{
+	_isHidden = value;
+	_visualData->IsHidden = value;
+}
+
+void Player::GetPosition(int &x, int &y)
+{
+	x = Transform->X + (Transform->Width*0.5);
+	y = Transform->Y + (Transform->Height*0.5);
 }

@@ -43,7 +43,7 @@ void Game::run()
 
 			_input.Tick(delta_game_time);
 			//Move the dot
-			_dot->Tick();
+			_player->Tick();
 
 			_map_manager->Tick(delta_game_time);
 
@@ -77,7 +77,7 @@ bool Game::init()
 	_map_manager = new Map_Manager();
 
 	//The dot that will be moving around on the screen
-	_dot = new Dot(_map_manager, &(_input._main_agent_controls), FleeRenderer::GetCamera());
+	_player = new Player(_map_manager, &(_input._main_agent_controls), FleeRenderer::GetCamera());
 
 	//load level and characters
 

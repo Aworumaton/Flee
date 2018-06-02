@@ -144,7 +144,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationGroup.cpp" />
     <ClCompile Include="AnimationManager.cpp" />
-    <ClCompile Include="Dot.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Flee_Animated_Sprite_Part.cpp" />
     <ClCompile Include="Flee_Interactable_Object.cpp" />
     <ClCompile Include="Flee_Texture.cpp" />
@@ -160,7 +160,7 @@
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Controls.h" />
-    <ClInclude Include="Dot.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="FleeLibrary.h" />
     <ClInclude Include="FleeList.h" />
     <ClInclude Include="Flee_Animated_Sprite_Part.h" />
@@ -169,6 +169,7 @@
     <ClInclude Include="Flee_Texture.h" />
     <ClInclude Include="Flee_Sprite_Part.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameEntity.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Map_Manager.h" />
     <ClInclude Include="FleeRenderer.h" />
