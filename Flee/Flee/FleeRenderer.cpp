@@ -183,110 +183,6 @@ void FleeRenderer::RenderTick(float dt)
 	//Update screen
 	SDL_RenderPresent(_renderer);
 }
-//Flee_Animated_Sprite_Part * FleeRenderer::Create_Animated_Sprite(std::string id)
-//{
-//	int count = _current->_animated_sprite_count;
-//	Flee_Animated_Sprite*  clips = _current->_animations;
-//
-//	for (int i = 0; i < count; i++)
-//	{
-//		Flee_Animated_Sprite* target = &clips[i];
-//		if (id.compare(target->string_id) == 0)
-//		{
-//			SDL_Rect** return_sprites = new SDL_Rect*[target->animation_frame_count];
-//			unsigned int* return_flags =new unsigned int[target->animation_frame_count];
-//
-//			for (int j = 0; j < target->animation_frame_count; j++)
-//			{
-//				return_sprites[j] = &(target->animation_targets[j]->bounds);
-//				return_flags[j] = target->animation_targets[j]->flags;
-//			}
-//
-//			return new Flee_Animated_Sprite_Part(_current->_sprite_sheet, target->animation_frame_count, return_sprites, return_flags);
-//		}
-//	}
-//
-//	return nullptr;
-//}
-
-//bool FleeRenderer::Read_Animations()
-//{
-//	//Success flag
-//	bool success = true;
-//
-//	std::ifstream file("Resources/animations.txt");
-//
-//	if (!file.is_open())
-//	{
-//		printf("Unable to load sprite animations file!\n");
-//		success = false;
-//	}
-//	else
-//	{
-//		int capacity = 32;
-//		_animations = new Flee_Animated_Sprite[capacity];
-//		_animated_sprite_count = 0;
-//		std::string string_id = "";
-//		while (file >> string_id)
-//		{
-//			Flee_Animated_Sprite target;
-//			target.string_id = string_id;
-//			if (file.eof())
-//			{
-//				printf("Unable to parse sprite sheet file!\n");
-//				success = false;
-//				break;
-//			}
-//			
-//			file >> target.animation_frame_count;
-//			if (file.eof())
-//			{
-//				printf("Unable to parse sprite sheet file!\n");
-//				success = false;
-//				break;
-//			}
-//
-//			target.animation_targets = new Flee_Sprite*[target.animation_frame_count];
-//			for (int i = 0; i < target.animation_frame_count; i++)
-//			{
-//				std::string sprite_id;
-//				if (file.eof())
-//				{
-//					printf("Unable to parse sprite sheet file!\n");
-//					success = false;
-//					break;
-//				}
-//				file >> sprite_id;
-//
-//				target.animation_targets[i] = Get_Flee_Sprite(sprite_id);
-//			}
-//
-//			if (capacity == _animated_sprite_count)
-//			{
-//				capacity = (int)(capacity * 1.8f);
-//				Flee_Animated_Sprite* new_set = new Flee_Animated_Sprite[capacity];
-//				for (int i = 0; i < _animated_sprite_count; i++)
-//				{
-//					new_set[i] = _animations[i];
-//				}
-//			//	delete(_tile_clips);
-//				_animations = new_set;
-//			}
-//
-//			_animations[_animated_sprite_count] = target;
-//			_animated_sprite_count++;
-//		}
-//
-//		//Close the file
-//		file.close();
-//	}
-//
-//	//If the map was loaded fine
-//	return success;
-//}
-
-
-
 
 bool FleeRenderer::ReadSprites()
 {
@@ -307,44 +203,9 @@ bool FleeRenderer::ReadSprites()
 	{
 		Sprite* target = new Sprite();
 		target->Id = string_id;
-		if (file.eof())
-		{
-			printf("Unable to parse sprite sheet file!\n");
-			return false;
-		}
-		unsigned int flags;
-		file >> flags;
-		target->Flags = new GameEntityFlags(flags);
-
-		if (file.eof())
-		{
-			printf("Unable to parse sprite sheet file!\n");
-			return false;
-		}
 		file >> target->Transform.X;
-
-
-		if (file.eof())
-		{
-			printf("Unable to parse sprite sheet file!\n");
-			return false;
-		}
 		file >> target->Transform.Y;
-
-
-		if (file.eof())
-		{
-			printf("Unable to parse sprite sheet file!\n");
-			return false;
-		}
 		file >> target->Transform.Width;
-
-
-		if (file.eof())
-		{
-			printf("Unable to parse sprite sheet file!\n");
-			return false;
-		}
 		file >> target->Transform.Height;
 			
 		_sprites.Add(target);
