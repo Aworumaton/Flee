@@ -9,7 +9,7 @@
 #include "Constants.h"
 #include "FleeLibrary.h"
 #include "FleeList.h"
-#include "Flee_Texture.h"
+#include "FleeTexture.h"
 
 struct Sprite
 {
@@ -54,7 +54,7 @@ private:
 
 	FleeList<FleeList<SpriteDataSpritePair*>*> Layers;
 	FleeList<Sprite*> _sprites;
-	Flee_Texture* _spriteSheet;
+	FleeTexture* _spriteSheet;
 	FleeTransform* _camera;
 	SDL_Window * _window;
 	SDL_Renderer* _renderer;

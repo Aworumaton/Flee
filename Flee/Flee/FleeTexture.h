@@ -10,55 +10,55 @@
 
 
 //Texture wrapper class
-class Flee_Texture
+class FleeTexture
 {
 public:
 	//Initializes variables
-	Flee_Texture(SDL_Renderer * renderer);
+	FleeTexture(SDL_Renderer * renderer);
 
 	//Deallocates memory
-	~Flee_Texture();
+	~FleeTexture();
 
 	//Loads image at specified path
-	bool loadFromFile(std::string path);
+	bool LoadFromFile(std::string path);
 
 #ifdef _SDL_TTF_H
 	//Creates image from font string
-	bool loadFromRenderedText(std::string textureText, SDL_Color textColor);
+	bool LoadFromRenderedText(std::string textureText, SDL_Color textColor);
 #endif
 
 	//Deallocates texture
-	void free();
+	void Free();
 
 	//Set color modulation
-	void setColor(Uint8 red, Uint8 green, Uint8 blue);
+	void SetColor(Uint8 red, Uint8 green, Uint8 blue);
 
 	//Set blending
-	void setBlendMode(SDL_BlendMode blending);
+	void SetBlendMode(SDL_BlendMode blending);
 
 	//Set alpha modulation
-	void setAlpha(Uint8 alpha);
+	void SetAlpha(Uint8 alpha);
 
 	//Renders texture at given point
-	void render(int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void Render(int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 	//Renders texture at given point
 	void Render(FleeTransform * renderClip, FleeTransform * worldClip);
 
 	//Gets image dimensions
-	int getWidth();
-	int getHeight();
+	int GetWidth();
+	int GetHeight();
 
 private:
 	//The window renderer
-	SDL_Renderer * gRenderer = NULL;
+	SDL_Renderer * _renderer = NULL;
 
 	//The actual hardware texture
-	SDL_Texture * mTexture;
+	SDL_Texture * _texture;
 
 	//Image dimensions
-	int mWidth;
-	int mHeight;
+	int _width;
+	int _height;
 };
 
 #endif

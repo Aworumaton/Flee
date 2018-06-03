@@ -51,10 +51,10 @@ FleeRenderer::FleeRenderer(bool& success)
 	_camera->Width = FleeRenderer::SCREEN_WIDTH;
 	_camera->Height = FleeRenderer::SCREEN_HEIGHT;
 	
-	_spriteSheet = new Flee_Texture(_renderer);
+	_spriteSheet = new FleeTexture(_renderer);
 
 	//Load tile texture
-	if (!_spriteSheet->loadFromFile("Resources/sprite_sheet.png"))
+	if (!_spriteSheet->LoadFromFile("Resources/sprite_sheet.png"))
 	{
 		printf("Failed to load tile set texture!\n");
 		return;

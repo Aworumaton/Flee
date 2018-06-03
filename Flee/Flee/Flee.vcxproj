@@ -145,7 +145,7 @@
     <ClCompile Include="AnimationGroup.cpp" />
     <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Flee_Texture.cpp" />
+    <ClCompile Include="FleeTexture.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -160,7 +160,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="FleeLibrary.h" />
     <ClInclude Include="FleeList.h" />
-    <ClInclude Include="Flee_Texture.h" />
+    <ClInclude Include="FleeTexture.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="Input.h" />
