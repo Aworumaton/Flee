@@ -29,6 +29,9 @@ AnimationGroup* AnimationGroup::Clone(AnimationData* animationData)
 		}
 	}
 
+	newGroup->ActiveKeyFrameIndex = 0;
+	newGroup->_activeAnimationSet = newGroup->_animations.ItemAt(0);
+
 	return newGroup;
 };
 

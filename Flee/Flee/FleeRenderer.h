@@ -9,16 +9,13 @@
 #include "Constants.h"
 #include "FleeLibrary.h"
 #include "FleeList.h"
-#include "Flee_Sprite_Part.h"
-#include "Flee_Animated_Sprite_Part.h"
 #include "Flee_Texture.h"
 
 struct Sprite
 {
-
 	std::string Id;
 	FleeTransform Transform; //spritesheet transform
-	unsigned int Flags;
+	GameEntityFlags* Flags;		
 };
 
 class FleeRenderer
@@ -65,7 +62,7 @@ private:
 	
 
 
-	FleeList<Sprite*>* ReadSprites();
+	bool ReadSprites();
 };
 
 #endif

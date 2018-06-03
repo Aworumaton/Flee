@@ -6,7 +6,7 @@
 #include "Controls.h"
 #include "Input.h"
 #include "Constants.h"
-#include "Map_Manager.h"
+#include "Scene.h"
 #include "Player.h"
 #include "AnimationManager.h"
 //#include "Texture_Manager.h"
@@ -14,28 +14,28 @@
 class Game
 {
 public:
-	static Game* create_game();
+	static Game* CreateGame();
 
-	void run();
+	void Run();
 
 	~Game();
 private:
 	Input _input;
-	Map_Manager* _map_manager;
+	Scene* _scene;
 
 	//The dot that will be moving around on the screen
 	Player* _player;
 
-	bool _is_running;
+	bool _isRunning;
 	Game();
 
 
-	bool init();
+	bool Initialize();
 
-	void tick(int dt);
+	void Tick(int dt);
 
-	void game_tick(int dt);
-	void exit();
+	void GameTick(int dt);
+	void Exit();
 };
 
 #endif

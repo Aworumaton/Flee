@@ -5,17 +5,16 @@
 #include "math.h"
 #include "FleeLibrary.h"
 #include "GameEntity.h"
-#include "Flee_Interactable_Object.h"
 #include "Input.h"
 #include "Constants.h"
-#include "Map_Manager.h"
+#include "Scene.h"
 #include "AnimationManager.h"
 
 
 class Player : public Character
 {
 public:
-	Player(Map_Manager* map, Main_Agent_Controls* controls, FleeTransform* camera);
+	Player(Scene* map, Main_Agent_Controls* controls, FleeTransform* camera);
 	~Player();
 
 	void Tick();
@@ -23,7 +22,7 @@ public:
 private:
 	const int DEFAULT_VELOCITY = 4;
 	const int MAX_VELOCITY = 10;
-	Map_Manager * _map;
+	Scene * _map;
 	FleeTransform * _camera;
 	int _actionRadius;
 	Main_Agent_Controls * _controls;

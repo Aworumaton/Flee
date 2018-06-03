@@ -1,19 +1,19 @@
 #pragma once
 #include "Game.h"
 
-Game* Game::create_game()
+Game* Game::CreateGame()
 {
 	Game* g = new Game();
-	if (!g->init())
+	if (!g->Initialize())
 	{
 		printf("Failed to initialize!\n");
 	}
 	return g;
 }
 
-void Game::run()
+void Game::Run()
 {
-	_is_running = true;
+	_isRunning = true;
 	//Event handler
 	float _spent_time = 0.0f;
 
@@ -25,7 +25,7 @@ void Game::run()
 	int target_game_frame_rate = 1000 / 60;
 
 
-	while (_is_running)
+	while (_isRunning)
 	{
 		int now = SDL_GetTicks();
 		int delta_time = now - elapsed_time;
@@ -45,9 +45,9 @@ void Game::run()
 			//Move the dot
 			_player->Tick();
 
-			_map_manager->Tick(delta_game_time);
+			_scene->Tick(delta_game_time);
 
-			game_tick(delta_game_time);
+			GameTick(delta_game_time);
 		}
 
 		{
@@ -61,7 +61,7 @@ void Game::run()
 
 Game::~Game()
 {
-	exit();
+	Exit();
 }
 
 Game::Game()
@@ -69,15 +69,15 @@ Game::Game()
 }
 
 
-bool Game::init()
+bool Game::Initialize()
 {
 	FleeRenderer::Initialize();
 	AnimationManager::Initialize();
 
-	_map_manager = new Map_Manager();
+	_scene = new Scene();
 
 	//The dot that will be moving around on the screen
-	_player = new Player(_map_manager, &(_input._main_agent_controls), FleeRenderer::GetCamera());
+	_player = new Player(_scene, &(_input._main_agent_controls), FleeRenderer::GetCamera());
 
 	//load level and characters
 
@@ -85,17 +85,17 @@ bool Game::init()
 	return true;
 }
 
-void Game::tick(int dt)
+void Game::Tick(int dt)
 {
 
 }
 
-void Game::game_tick(int dt)
+void Game::GameTick(int dt)
 {
 	
 	if (_input._game_controls.escape)
 	{
-		_is_running = false;
+		_isRunning = false;
 	}
 
 
@@ -121,9 +121,8 @@ void Game::game_tick(int dt)
 	//}
 	//printf("mouse pos: (%d,%d)\n", _input._main_agent_controls.look_at_x, _input._main_agent_controls.look_at_y);
 }
-void Game::exit()
+void Game::Exit()
 {
-	delete(_map_manager);
 	//Quit SDL subsystems
 	SDL_Quit();
 }

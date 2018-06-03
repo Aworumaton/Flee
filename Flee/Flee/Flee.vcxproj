@@ -145,14 +145,11 @@
     <ClCompile Include="AnimationGroup.cpp" />
     <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Flee_Animated_Sprite_Part.cpp" />
-    <ClCompile Include="Flee_Interactable_Object.cpp" />
     <ClCompile Include="Flee_Texture.cpp" />
-    <ClCompile Include="Flee_Sprite_Part.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Map_Manager.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="FleeRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,16 +160,13 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="FleeLibrary.h" />
     <ClInclude Include="FleeList.h" />
-    <ClInclude Include="Flee_Animated_Sprite_Part.h" />
-    <ClInclude Include="Flee_Interactable_Object.h" />
-    <ClInclude Include="Flee_Sprite_Part_Base.h" />
     <ClInclude Include="Flee_Texture.h" />
-    <ClInclude Include="Flee_Sprite_Part.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="Map_Manager.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="FleeRenderer.h" />
+    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

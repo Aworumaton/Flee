@@ -1,7 +1,7 @@
 #pragma once
 #include "Player.h"
 
-Player::Player(Map_Manager* map, Main_Agent_Controls* controls, FleeTransform* camera)// : _visualData("main_character_0")
+Player::Player(Scene* map, Main_Agent_Controls* controls, FleeTransform* camera)// : _visualData("main_character_0")
 {
 	_map = map;
 	_camera = camera;
@@ -44,19 +44,19 @@ void Player::Tick()
 			SDL_Point target_action_pos = SDL_Point{ (_controls->look_at_y + _camera->Y),(_controls->look_at_x + _camera->X) };
 			if (Constants::Get_Distance_Between(target_action_pos, pos) <= _actionRadius)
 			{
-				Flee_Interactable_Object* target_object = _map->Get_First_Objet_Under(target_action_pos);
+				GameObject* target_object = _map->GetFirstObjetUnder(target_action_pos);
 
 				if (target_object != nullptr)
 				{
-					if (target_object->Is_Hiding_Place())
+					if (target_object->HasFlag(GameEntityFlags::Hiding_Place))
 					{
-						target_object->OnAction();
+						//target_object->OnAction();
 						SetIsHidden(true);
 					}
-					//else if (target_object->Is_Door() && !Constants::checkCollision(mBox, target_object->getBox()))
-					//{
-					//	target_object->OnAction();
-					//}
+					else if (target_object->HasFlag(GameEntityFlags::Door) && !Constants::CheckCollision(Transform, target_object->Transform))
+					{
+						((Door*)target_object)->Toggle();
+					}
 				}
 			}
 		}
@@ -107,9 +107,9 @@ void Player::Move()
 	{
 		Transform->X = 0;
 	}
-	else if(Transform->X + Transform->Width > _map->Get_Level_Width())
+	else if(Transform->X + Transform->Width > _map->GetLevelWidth())
 	{
-		Transform->X = _map->Get_Level_Width() - Transform->Width;
+		Transform->X = _map->GetLevelWidth() - Transform->Width;
 	}
 	else if(_map->TouchesWalls(Transform))
 	{
@@ -124,9 +124,9 @@ void Player::Move()
 	{
 		Transform->Y = 0;
 	}
-	else if (Transform->Y + Transform->Height > _map->Get_Level_Height())
+	else if (Transform->Y + Transform->Height > _map->GetLevelHeight())
 	{
-		Transform->Y = _map->Get_Level_Height() - Transform->Height;
+		Transform->Y = _map->GetLevelHeight() - Transform->Height;
 	}
 	else if (_map->TouchesWalls(Transform))
 	{
@@ -180,13 +180,13 @@ void Player::UpdateCamera()
 	{
 		_camera->Y = 0;
 	}
-	if (_camera->X > _map->Get_Level_Width() - _camera->Width)
+	if (_camera->X > _map->GetLevelWidth() - _camera->Width)
 	{
-		_camera->X = _map->Get_Level_Width() - _camera->Width;
+		_camera->X = _map->GetLevelWidth() - _camera->Width;
 	}
-	if (_camera->Y > _map->Get_Level_Height() - _camera->Height)
+	if (_camera->Y > _map->GetLevelHeight() - _camera->Height)
 	{
-		_camera->Y = _map->Get_Level_Height() - _camera->Height;
+		_camera->Y = _map->GetLevelHeight() - _camera->Height;
 	}
 }
 

@@ -17,6 +17,50 @@ public:
 };
 
 
+class GameEntityFlags
+{
+
+
+public:
+	enum FlagTypes
+	{
+		None = 0b0000000000000000,
+		Ground = 0b0000000000000001,
+		Obstruction = 0b0000000000000010,
+		Door = 0b0000000000000100,
+		Hiding_Place = 0b0000000000001000,
+	};
+
+	GameEntityFlags(unsigned int flags)
+	{
+		_isGround = (flags & FlagTypes::Ground) == FlagTypes::Ground;
+		_isWall = (flags & FlagTypes::Obstruction) == FlagTypes::Obstruction;
+	}
+
+	bool IsGround()
+	{
+		return _isGround;
+	};
+
+	bool IsWall()
+	{
+		return _isWall;
+	};
+
+	bool IsObstruction()
+	{
+		return _isWall;
+	};
+
+	bool IsEmpty()
+	{
+		return !_isGround && !_isWall;
+	};
+private:
+	bool _isGround;
+	bool _isWall;
+};
+
 
 
 class AnimationData
@@ -42,18 +86,12 @@ public:
 		return _activeAnimation;
 	};
 
-	std::string GetOneShotAnimation()
-	{
-		return _oneShotAnimation;
-	};
-
 	FleeTransform * Transform;
 	bool IsDirty;
 	bool IsHidden;
 	int ElapsedTime;
 private:
 	std::string _activeAnimation;
-	std::string _oneShotAnimation;
 };
 
 class SpriteData
@@ -73,9 +111,9 @@ public:
 		delete(Transform);
 	}
 
-	bool InitializeWith(unsigned int flags, int suggestedWith, int suggestedHeight)
+	bool InitializeWith(GameEntityFlags* flags, int suggestedWith, int suggestedHeight)
 	{
-		_isWall = (flags & FlagTypes::Wall) == FlagTypes::Wall;
+		Flags = flags;
 
 		if (Transform->Width < 0)
 		{
@@ -90,11 +128,6 @@ public:
 
 		return true;
 	};
-	
-	bool IsWall()
-	{
-		return _isWall;
-	};
 
 	std::string Id()
 	{
@@ -103,21 +136,11 @@ public:
 
 	FleeTransform* Transform; //World transform
 	bool IsHidden;
-
+	GameEntityFlags* Flags;
 private:
 	std::string _id;
 	bool _isWall;
 
-	enum FlagTypes
-	{
-		None = 0b0000000000000000,
-		Ground = 0b0000000000000001,
-		Wall = 0b0000000000000010,
-		Door = 0b0000000000000100,
-		Hiding_Place = 0b0000000000001000,
-	};
 
 };
-
-
 #endif

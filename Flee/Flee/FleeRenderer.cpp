@@ -60,14 +60,7 @@ FleeRenderer::FleeRenderer(bool& success)
 		return;
 	}
 
-	FleeList<Sprite*>* sprites = ReadSprites();
-	if (sprites == nullptr)
-	{
-		//	success = _current->Read_Animations();
-		return;
-	}
-	_sprites = *sprites;
-
+	ReadSprites();
 
 	success = true;
 }
@@ -295,7 +288,7 @@ void FleeRenderer::RenderTick(float dt)
 
 
 
-FleeList<Sprite*>* FleeRenderer::ReadSprites()
+bool FleeRenderer::ReadSprites()
 {
 
 	//Open the map
@@ -305,10 +298,9 @@ FleeList<Sprite*>* FleeRenderer::ReadSprites()
 	if (!file.is_open())
 	{
 		printf("Unable to load sprite sheet file!\n");
-		return nullptr;
+		return false;
 	}
 
-	FleeList<Sprite*>* sprites = new FleeList<Sprite*>();
 
 	std::string string_id = "";
 	while (file >> string_id)
@@ -318,17 +310,16 @@ FleeList<Sprite*>* FleeRenderer::ReadSprites()
 		if (file.eof())
 		{
 			printf("Unable to parse sprite sheet file!\n");
-			delete(sprites);
-			return nullptr;
+			return false;
 		}
-		file >> target->Flags;
-
+		unsigned int flags;
+		file >> flags;
+		target->Flags = new GameEntityFlags(flags);
 
 		if (file.eof())
 		{
 			printf("Unable to parse sprite sheet file!\n");
-			delete(sprites);
-			return nullptr;
+			return false;
 		}
 		file >> target->Transform.X;
 
@@ -336,8 +327,7 @@ FleeList<Sprite*>* FleeRenderer::ReadSprites()
 		if (file.eof())
 		{
 			printf("Unable to parse sprite sheet file!\n");
-			delete(sprites);
-			return nullptr;
+			return false;
 		}
 		file >> target->Transform.Y;
 
@@ -345,8 +335,7 @@ FleeList<Sprite*>* FleeRenderer::ReadSprites()
 		if (file.eof())
 		{
 			printf("Unable to parse sprite sheet file!\n");
-			delete(sprites);
-			return nullptr;
+			return false;
 		}
 		file >> target->Transform.Width;
 
@@ -354,19 +343,16 @@ FleeList<Sprite*>* FleeRenderer::ReadSprites()
 		if (file.eof())
 		{
 			printf("Unable to parse sprite sheet file!\n");
-			delete(sprites);
-			return nullptr;
+			return false;
 		}
 		file >> target->Transform.Height;
 			
-		sprites->Add(target);
+		_sprites.Add(target);
 	}
 
 	//Close the file
 	file.close();
-
-	//If the map was loaded fine
-	return sprites;
+	return true;
 }
 
 Sprite* FleeRenderer::GetSprite(std::string id)

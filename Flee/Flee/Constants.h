@@ -109,6 +109,11 @@ namespace Constants
 		return (a.x <= b.x && b.x <= (a.x + a.w) && a.y <= b.y && b.y <= (a.y + a.h));
 	}
 
+	static bool checkCollision(FleeTransform a, SDL_Point b)
+	{
+		return (a.X <= b.x && b.x <= (a.X + a.Width) && a.Y <= b.y && b.y <= (a.Y + a.Height));
+	}
+
 	static double Get_Distance_Between(SDL_Point a, SDL_Point b)
 	{
 		int w = b.x - a.x;

@@ -27,18 +27,6 @@
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Map_Manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Flee_Sprite_Part.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Flee_Animated_Sprite_Part.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Flee_Interactable_Object.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FleeRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -49,6 +37,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,21 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map_Manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Flee_Sprite_Part.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Flee_Animated_Sprite_Part.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Flee_Sprite_Part_Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Flee_Interactable_Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FleeRenderer.h">
@@ -102,6 +78,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

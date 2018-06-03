@@ -4,8 +4,8 @@
 
 int main(int argc, char* args[])
 {
-	Game* game = Game::create_game();
-	game->run();
+	Game* game = Game::CreateGame();
+	game->Run();
 
 	delete(game);
 

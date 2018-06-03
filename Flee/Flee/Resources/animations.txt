@@ -14,8 +14,14 @@ Door
 Opened
 1
 0
-door_opened 0
+door_opened 9999999
 Closed
 1
 0
-door_closed 0
+door_closed 9999999
+Closet
+1
+Closet
+1
+0
+closet 9999999

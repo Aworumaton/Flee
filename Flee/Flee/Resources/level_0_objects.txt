@@ -1,8 +1,8 @@
-closet
-10
-300
-300
-door
-6
+Door
+0
 500
 500
+HidingPlace
+0
+200
+200
