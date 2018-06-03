@@ -17,19 +17,20 @@ public:
 	Player(Scene* map, Main_Agent_Controls* controls, FleeTransform* camera);
 	~Player();
 
-	void Tick();
+	void Tick(int dt);
 
 private:
-	const int DEFAULT_VELOCITY = 4;
-	const int MAX_VELOCITY = 10;
+	const float DEFAULT_VELOCITY = 64.0f /1000.0f;
+	const float SPRINT_MULTIPTLIER = 3.0f;
 	Scene * _map;
 	FleeTransform * _camera;
 	int _actionRadius;
 	Main_Agent_Controls * _controls;
 	bool _isHidden;
 	bool _isMoving;
+	bool _isRunning;
 	
-	void Move();
+	void Move(int dt);
 	void UpdateCamera();
 
 	void SetIsHidden(bool value);

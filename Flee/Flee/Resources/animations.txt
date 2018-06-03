@@ -1,14 +1,19 @@
 Player
-2
-Movement
+3
+Walk
 2
 1
-main_character_1 1
-main_character_3 1
+main_character_1 500
+main_character_3 500
+Run
+2
+1
+main_character_1 200
+main_character_3 200
 Idle
 1
 1
-main_character_2 1
+main_character_2 9999999
 Door
 2
 Opened

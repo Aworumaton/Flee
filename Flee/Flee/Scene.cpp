@@ -34,14 +34,44 @@ bool Scene::Read()
 				map >> tileType;
 
 
-				Tile* tile = new Tile(tileType);
-				tile->Transform()->X = columnIndex * Tile::TILE_WIDTH;
-				tile->Transform()->Y = rowIndex * Tile::TILE_HEIGHT;
-
+				Tile* tile = new Tile(tileType, columnIndex, rowIndex);
 				_mapLayout.Add(tile);
 			}
 		}
 
+		for (int rowIndex = 0; rowIndex < rowSize; rowIndex++)
+		{
+			for (int columnIndex = 0; columnIndex < columnSize; columnIndex++)
+			{
+				Tile* targetTile = _mapLayout.ItemAt(rowIndex  * columnSize + columnIndex);
+				printf("rowIndex  * rowSize  + columnIndex   %d\n", (rowIndex  * columnSize + columnIndex));
+
+				Tile* topTile = nullptr;
+				Tile* bottomTile = nullptr;
+				Tile* leftTile = nullptr;
+				Tile* rightTile = nullptr;
+
+				if (rowIndex > 0)
+				{
+					topTile = _mapLayout.ItemAt((rowIndex-1)  * columnSize + columnIndex);
+				}
+				if (rowIndex+1 < rowSize)
+				{
+					bottomTile = _mapLayout.ItemAt((rowIndex + 1)  * columnSize + columnIndex);
+				}
+
+				if (columnIndex > 0)
+				{
+					leftTile = _mapLayout.ItemAt(rowIndex * columnSize + columnIndex - 1);
+				}
+				if (columnIndex+1 < columnSize)
+				{
+					rightTile = _mapLayout.ItemAt(rowIndex * columnSize + columnIndex + 1);
+				}
+							
+				targetTile->InitializeWith(topTile, bottomTile, leftTile, rightTile);
+			}
+		}
 		//Close the file
 		map.close();
 	}

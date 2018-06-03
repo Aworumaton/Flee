@@ -11,21 +11,12 @@ FleeRenderer::FleeRenderer(bool& success)
 
 
 
-	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	//Create window
+	_window = SDL_CreateWindow("Flee", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, FleeRenderer::SCREEN_WIDTH, FleeRenderer::SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	if (_window == NULL)
 	{
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		return;
-	}
-	else
-	{
-		//Create window
-		_window = SDL_CreateWindow("Flee", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, FleeRenderer::SCREEN_WIDTH, FleeRenderer::SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if (_window == NULL)
-		{
-			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-			return;
-		}
 	}
 
 	//Create renderer for window
@@ -42,8 +33,6 @@ FleeRenderer::FleeRenderer(bool& success)
 		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 		return;
 	}
-
-
 
 	_camera = new FleeTransform();
 	_camera->X = 0;
@@ -136,7 +125,7 @@ bool FleeRenderer::RegisterSprite(SpriteData* spriteData, Constants::VisualLayer
 	return true;
 }
 
-void FleeRenderer::Tick(float dt)
+void FleeRenderer::Tick(int dt)
 {
 	_current->RenderTick(dt);
 }
@@ -146,7 +135,7 @@ FleeTransform* FleeRenderer::GetCamera()
 	return _current->_camera;
 }
 
-void FleeRenderer::RenderTick(float dt)
+void FleeRenderer::RenderTick(int dt)
 {
 	//Clear screen
 	SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -216,7 +205,7 @@ bool FleeRenderer::ReadSprites()
 	return true;
 }
 
-Sprite* FleeRenderer::GetSprite(std::string id)
+FleeRenderer::Sprite* FleeRenderer::GetSprite(std::string id)
 {
 	for (int i = 0; i < _sprites.Size(); i++)
 	{

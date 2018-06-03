@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include "Game.h"
 
 Game* Game::CreateGame()
@@ -14,47 +14,32 @@ Game* Game::CreateGame()
 void Game::Run()
 {
 	_isRunning = true;
-	//Event handler
-	float _spent_time = 0.0f;
 
-
-	int elapsed_time = SDL_GetTicks();
-	int elapsed_game_time = elapsed_time;
-
-	int target_frame_rate = 1000 / 120;
-	int target_game_frame_rate = 1000 / 60;
-
+	Uint32 elapsed_time = SDL_GetTicks();
+	Uint32 target_frame_rate = (Uint32)1000 / (Uint32)60;
 
 	while (_isRunning)
 	{
-		int now = SDL_GetTicks();
-		int delta_time = now - elapsed_time;
-		int delta_game_time = now - elapsed_game_time;
-		elapsed_time = now;
-
-		//printf("Renderer frame rate: %f\n", (1000.0f / delta_time));
-
-
-		//game
-		if(target_game_frame_rate < delta_game_time)
+		Uint32 now = SDL_GetTicks();
+		Uint32 delta_time = now - elapsed_time;
+		if (delta_time > 0)
 		{
-			elapsed_game_time = now ;
-			//printf("Game frame rate: %f\n", (1000.0f / delta_game_time));
+			if(target_frame_rate < delta_time)
+			{
+				elapsed_time = now ;
 
-			_input.Tick(delta_game_time);
-			//Move the dot
-			_player->Tick();
+				_input.Tick(delta_time);
 
-			_scene->Tick(delta_game_time);
+				_player->Tick(delta_time);
 
-			GameTick(delta_game_time);
-		}
+				_scene->Tick(delta_time);
 
-		{
+				GameTick(delta_time);
 
-			AnimationManager::Tick(1);
-			FleeRenderer::Tick(0.0f);
 
+				AnimationManager::Tick(delta_time);
+				FleeRenderer::Tick(delta_time);
+			}
 		}
 	}
 }
@@ -71,6 +56,14 @@ Game::Game()
 
 bool Game::Initialize()
 {
+
+	//Initialize SDL
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
+	{
+		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		return false;
+	}
+
 	FleeRenderer::Initialize();
 	AnimationManager::Initialize();
 

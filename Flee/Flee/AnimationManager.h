@@ -9,14 +9,14 @@ class AnimationManager
 public:
 	static void Initialize();
 	static AnimationData*  CreateAnimationsOf(std::string id, Constants::VisualLayers layerIndex);
-	static void Tick(float dt);
+	static void Tick(int dt);
 
 private:
 	AnimationManager();
 	~AnimationManager();
 
 	void Free();
-	void TickAnimations(float dt);
+	void TickAnimations(int dt);
 	AnimationGroup* CloneAnimationGroup(AnimationData* data, std::string id);
 	bool Read();
 

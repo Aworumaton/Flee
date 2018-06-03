@@ -10,6 +10,8 @@ Player::Player(Scene* map, Main_Agent_Controls* controls, FleeTransform* camera)
 	
 	_visualData = AnimationManager::CreateAnimationsOf("Player", Constants::VisualLayers::DynamicObjectsLayer);
 	_visualData->SetAnimation("Idle");
+	_isMoving = false;
+	_isRunning = false;
 
 	Transform = _visualData->Transform;
 	_actionRadius = 2 * (0.5*(Transform->Width + Transform->Height));
@@ -25,9 +27,9 @@ Player::~Player()
 	Character::~Character();
 }
 
-void Player::Tick()
+void Player::Tick(int dt)
 {
-	Move();
+	Move(dt);
 
 
 	if (_controls->on_action)
@@ -65,17 +67,21 @@ void Player::Tick()
 
 	UpdateCamera();
 }
-void Player::Move()
+void Player::Move(int dt)
 {
 	if (_isHidden)
 	{
 		return;
 	}
 
-	int vel = DEFAULT_VELOCITY;
+	int vel = 0;
 	if (_controls->sprint)
 	{
-		vel = MAX_VELOCITY;
+		vel = DEFAULT_VELOCITY * dt * SPRINT_MULTIPTLIER;
+	}
+	else
+	{
+		vel = DEFAULT_VELOCITY * dt;
 	}
 
 	int mVelY = 0;
@@ -144,14 +150,24 @@ void Player::Move()
 
 
 	bool willMove = oldX != Transform->X || oldY != Transform->Y;
-	if (willMove && !_isMoving)
+	if (willMove && (!_isMoving || _isRunning != _controls->sprint))
 	{
 		_isMoving = true;
-		_visualData->SetAnimation("Movement");
+		if (!_controls->sprint)
+		{
+			_isRunning = false;
+			_visualData->SetAnimation("Walk");
+		}
+		else if (!_isRunning && _controls->sprint)
+		{
+			_isRunning = true;
+			_visualData->SetAnimation("Run");
+		}
 	}
 	else if (!willMove && _isMoving)
 	{
 		_isMoving = false;
+		_isRunning = false;
 		_visualData->SetAnimation("Idle");
 
 	}

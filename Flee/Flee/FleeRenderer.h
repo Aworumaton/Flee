@@ -11,15 +11,16 @@
 #include "FleeList.h"
 #include "FleeTexture.h"
 
-struct Sprite
-{
-	std::string Id;
-	FleeTransform Transform; //spritesheet transform
-	GameEntityFlags* Flags;		
-};
 
 class FleeRenderer
 {
+private:
+	struct Sprite
+	{
+		std::string Id;
+		FleeTransform Transform; //spritesheet transform
+		GameEntityFlags* Flags;
+	};
 
 public:
 	static bool Initialize();
@@ -28,7 +29,7 @@ public:
 	static bool Register(SpriteData* spriteData, Constants::VisualLayers layerIndex);
 	//static Flee_Animated_Sprite_Part* Create_Animated_Sprite(std::string sprite_id);
 	
-	static void Tick(float dt);
+	static void Tick(int dt);
 
 	static FleeTransform* GetCamera();
 private:
@@ -41,7 +42,7 @@ private:
 
 	bool RegisterSprite(SpriteData* spriteData, Constants::VisualLayers layerIndex);
 	Sprite* GetSprite(std::string id);
-	void RenderTick(float dt);
+	void RenderTick(int dt);
 
 
 	struct SpriteDataSpritePair

@@ -1,11 +1,11 @@
 #include "AnimationManager.h"
 
-void AnimationManager::Tick(float dt)
+void AnimationManager::Tick(int dt)
 {
 	_current->TickAnimations(dt);
 }
 
-void AnimationManager::TickAnimations(float dt)
+void AnimationManager::TickAnimations(int dt)
 {
 	for (int i = 0; i < _activeAnimations.Size(); i++)
 	{
