@@ -9,6 +9,7 @@
 #include "Constants.h"
 #include "Scene.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "AnimationManager.h"
 //#include "Texture_Manager.h"
 
@@ -26,6 +27,7 @@ private:
 
 	//The dot that will be moving around on the screen
 	Player* _player;
+	Enemy* _enemy;
 
 	bool _isRunning;
 	Game();
