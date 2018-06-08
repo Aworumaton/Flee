@@ -1,5 +1,5 @@
-#ifndef Map_Manager_H
-#define Map_Manager_H
+#ifndef Scene_H
+#define Scene_H
 
 #include <SDL.h>
 #include <fstream>
@@ -16,7 +16,8 @@ public:
 	Scene();
 	~Scene();
 
-	bool TouchesWalls(FleeTransform* sourceTransform);
+	bool Initialize();
+	bool IsBlocked(FleeTransform* sourceTransform);
 
 	void Tick(int dt);
 

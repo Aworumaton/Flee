@@ -117,7 +117,7 @@ void Player::Move(int dt)
 	{
 		Transform->X = _map->GetLevelWidth() - Transform->Width;
 	}
-	else if(_map->TouchesWalls(Transform))
+	else if(_map->IsBlocked(Transform))
 	{
 		//move back
 		Transform->X = oldX;
@@ -134,7 +134,7 @@ void Player::Move(int dt)
 	{
 		Transform->Y = _map->GetLevelHeight() - Transform->Height;
 	}
-	else if (_map->TouchesWalls(Transform))
+	else if (_map->IsBlocked(Transform))
 	{
 		//move back
 		Transform->Y = oldY;

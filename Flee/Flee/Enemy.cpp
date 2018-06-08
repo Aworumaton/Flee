@@ -15,6 +15,7 @@ Enemy::Enemy(Scene* map)
 
 	Transform->X = 450;
 	Transform->Y = 250;
+
 	//mBox.w = _visual->getBox().w;
 	//mBox.h = _visual->getBox().h;
 }
@@ -43,11 +44,11 @@ void Enemy::Move(int dt)
 	bool willMove = false;
 	if (targetX != sourceX || targetY != sourceY)
 	{
-		int vel = 0;
+		float vel = 0;
 		vel = DEFAULT_VELOCITY * dt;
 
-		float mVelY = 0;
-		float mVelX = 0;
+		double mVelY = 0;
+		double mVelX = 0;
 		mVelX = (targetX - sourceX);
 		mVelY = (targetY - sourceY);
 
@@ -55,17 +56,23 @@ void Enemy::Move(int dt)
 		//mVelX = (int)(mVelX / targetTotalVel);
 		//mVelY = (int)(mVelY / targetTotalVel);
 
-		float degrees = atan2f(mVelY,  mVelX);
-		
-		mVelX = cosf(degrees)*DEFAULT_VELOCITY * dt;
-		mVelY = sinf(degrees)*DEFAULT_VELOCITY * dt;
-		printf("vel x:%f\t\ty:%f\n", (cosf(degrees)*DEFAULT_VELOCITY * dt), (sinf(degrees)*DEFAULT_VELOCITY * dt));
-		printf("vel x:%f\t\ty:%f\n", roundf((cosf(degrees)*DEFAULT_VELOCITY * dt)), roundf((sinf(degrees)*DEFAULT_VELOCITY * dt)));
+		double targetTotalDistance = sqrt((mVelX*mVelX) + (mVelY*mVelY));
+		mVelX = mVelX / targetTotalDistance * vel;
+		mVelY = mVelY / targetTotalDistance * vel;
 
+		printf("speed: %f\d\n", (mVelX + mVelY)/dt);
+		/*
+		double degrees = atan2(mVelY,  mVelX);
+		
+		mVelX = cos(degrees)*DEFAULT_VELOCITY * dt;
+		mVelY = sin(degrees)*DEFAULT_VELOCITY * dt;
+		printf("vel x:%f\t\ty:%f\n", (cos(degrees)*DEFAULT_VELOCITY * dt), (sin(degrees)*DEFAULT_VELOCITY * dt));
+		printf("vel x:%f\t\ty:%f\n", roundf((cos(degrees)*DEFAULT_VELOCITY * dt)), roundf((sin(degrees)*DEFAULT_VELOCITY * dt)));
+		*/
 		int oldX = Transform->X;
 		int oldY = Transform->Y;
 
-		Transform->X += roundf( mVelX);
+		Transform->X += round(mVelX);
 
 		if (Transform->X < 0)
 		{
@@ -75,7 +82,7 @@ void Enemy::Move(int dt)
 		{
 			Transform->X = _map->GetLevelWidth() - Transform->Width;
 		}
-		else if (_map->TouchesWalls(Transform))
+		else if (_map->IsBlocked(Transform))
 		{
 			//move back
 			Transform->X = oldX;
@@ -92,7 +99,7 @@ void Enemy::Move(int dt)
 		{
 			Transform->Y = _map->GetLevelHeight() - Transform->Height;
 		}
-		else if (_map->TouchesWalls(Transform))
+		else if (_map->IsBlocked(Transform))
 		{
 			//move back
 			Transform->Y = oldY;

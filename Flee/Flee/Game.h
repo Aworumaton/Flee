@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "AnimationManager.h"
+#include "NavigationGridMap.h"
 //#include "Texture_Manager.h"
 
 class Game
@@ -24,6 +25,7 @@ public:
 private:
 	Input _input;
 	Scene* _scene;
+	NavigationGridMap* _navMap;
 
 	//The dot that will be moving around on the screen
 	Player* _player;

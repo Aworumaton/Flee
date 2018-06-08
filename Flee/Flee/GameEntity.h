@@ -32,7 +32,6 @@ protected:
 	FleeList<Behaviour*> _behaviours;
 };
 
-
 class Character : public GameEntity
 {
 public:
@@ -47,6 +46,7 @@ public:
 	};
 
 	std::string  Id;
+	const static int Size =  40;
 
 protected:
 	AnimationData* _visualData;

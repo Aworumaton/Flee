@@ -156,7 +156,7 @@ GameObject* Scene::GetFirstObjetUnder(SDL_Point point)
 	return nullptr;
 }
 
-bool Scene::TouchesWalls(FleeTransform* sourceTransform)
+bool Scene::IsBlocked(FleeTransform* sourceTransform)
 {
 	//Go through the tiles
 	for (int i = 0; i < _mapLayout.Size(); ++i)
@@ -198,15 +198,20 @@ void Scene::Tick(int dt)
 	}
 }
 
+bool Scene::Initialize()
+{
+	if (!Read())
+	{
+		printf("Failed to load tile set!\n");
+		return false;
+	}
+	return true;
+}
+
 Scene::~Scene()
 {
 }
 
 Scene::Scene()
 {	
-	if (!Read())
-	{
-		printf("Failed to load tile set!\n");
-		return;
-	}
 }

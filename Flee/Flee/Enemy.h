@@ -2,6 +2,7 @@
 #define Enemy_H
 #include "Constants.h"
 #include "Scene.h"
+#include "GameEntity.h"
 #include "AnimationManager.h"
 
 class Enemy : public Character
@@ -12,7 +13,6 @@ public:
 
 	void SetTarget(FleeTransform* target);
 	void Tick(int dt);
-
 private:
 	const float DEFAULT_VELOCITY = 96.0f / 1000.0f;
 	const float SPRINT_MULTIPTLIER = 3.0f;

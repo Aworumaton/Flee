@@ -160,6 +160,7 @@
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="InteractiveGameObject.h" />
+    <ClInclude Include="NavigationGridMap.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="FleeLibrary.h" />
     <ClInclude Include="FleeList.h" />
