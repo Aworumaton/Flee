@@ -8,8 +8,13 @@
 class Behaviour
 {
 public:
-	Behaviour() {};
 	std::string  Id;
+	virtual void Tick(int dt)
+	{
+
+	};
+protected:
+	Behaviour() {};
 };
 
 class GameEntity
@@ -21,7 +26,6 @@ public :
 	}
 	virtual ~GameEntity()
 	{
-
 	};
 
 	virtual void Tick(int dt) = 0;
@@ -42,7 +46,10 @@ public:
 
 	virtual void Tick(int dt)
 	{
-
+		for (int i = 0; i < _behaviours.Size(); i++)
+		{
+			_behaviours.ItemAt(i)->Tick(dt);
+		}
 	};
 
 	std::string  Id;

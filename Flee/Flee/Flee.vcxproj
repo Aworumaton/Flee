@@ -145,6 +145,7 @@
     <ClCompile Include="AnimationGroup.cpp" />
     <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="FleeTexture.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="InteractiveGameObject.h" />
     <ClInclude Include="NavigationGridMap.h" />
+    <ClInclude Include="PathFinder.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="FleeLibrary.h" />
     <ClInclude Include="FleeList.h" />

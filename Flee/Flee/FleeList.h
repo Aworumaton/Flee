@@ -142,6 +142,18 @@ public:
 
 	};
 
+	void SwapItemsAt(int a, int b)
+	{
+		if (a < 0 || a >= _size || b < 0 || b >= _size)
+		{
+			return ;
+		}
+
+		T* tmp = &_items[a];
+		_items[a] = _items[b];
+		_items[b] = tmp;
+	}
+
 private:
 	T * _items;
 	int _size;

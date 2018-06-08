@@ -33,11 +33,11 @@ void Game::Run()
 				_player->Tick(delta_time);
 
 
-				//_enemy->SetTarget(_player->Transform);
-				FleeTransform* testTarget = new FleeTransform();
-				testTarget->X = _input._main_agent_controls.look_at_x + FleeRenderer::GetCamera()->X;
-				testTarget->Y = _input._main_agent_controls.look_at_y + FleeRenderer::GetCamera()->Y;
-				_enemy->SetTarget(testTarget);
+				_enemy->SetTarget(_player->Transform);
+				//FleeTransform* testTarget = new FleeTransform();
+				//testTarget->X = _input._main_agent_controls.look_at_x + FleeRenderer::GetCamera()->X;
+				//testTarget->Y = _input._main_agent_controls.look_at_y + FleeRenderer::GetCamera()->Y;
+				//_enemy->SetTarget(testTarget);
 
 				_enemy->Tick(delta_time);
 
@@ -83,7 +83,7 @@ bool Game::Initialize()
 	_navMap->Initialize(_scene);
 	//The dot that will be moving around on the screen
 	_player = new Player(_scene, &(_input._main_agent_controls), FleeRenderer::GetCamera());
-	_enemy = new Enemy(_scene);
+	_enemy = new Enemy(_scene, _navMap);
 
 	//load level and characters
 

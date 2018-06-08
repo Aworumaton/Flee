@@ -1,7 +1,7 @@
 #pragma once
 #include "Enemy.h"
 
-Enemy::Enemy(Scene* map)
+Enemy::Enemy(Scene* map, NavigationGridMap* navMap)
 {
 	_map = map;
 
@@ -16,6 +16,8 @@ Enemy::Enemy(Scene* map)
 	Transform->X = 450;
 	Transform->Y = 250;
 
+	_pathFinder = new PathFinder(Transform, navMap);
+	_behaviours.Add(_pathFinder);
 	//mBox.w = _visual->getBox().w;
 	//mBox.h = _visual->getBox().h;
 }
@@ -28,92 +30,101 @@ Enemy::~Enemy()
 void Enemy::Tick(int dt)
 {
 	Move(dt);
+
+	Character::Tick(dt);
+
 }
 
 void Enemy::Move(int dt)
 {
 
-	int targetX;
-	int targetY;
-	GetPositionOf(targetX, targetY, _target);
-
-	int sourceX;
-	int sourceY;
-	GetPositionOf(sourceX, sourceY, Transform);
-
 	bool willMove = false;
-	if (targetX != sourceX || targetY != sourceY)
+
+	if (_pathFinder->LocalTarget != nullptr)
 	{
-		float vel = 0;
-		vel = DEFAULT_VELOCITY * dt;
+		int targetX;
+		int targetY;
+		GetPositionOf(targetX, targetY, _pathFinder->LocalTarget);
 
-		double mVelY = 0;
-		double mVelX = 0;
-		mVelX = (targetX - sourceX);
-		mVelY = (targetY - sourceY);
+		int sourceX;
+		int sourceY;
+		GetPositionOf(sourceX, sourceY, Transform);
 
-		//double targetTotalVel = sqrt((mVelX*mVelX) + (mVelY*mVelY)) / (DEFAULT_VELOCITY * dt);
-		//mVelX = (int)(mVelX / targetTotalVel);
-		//mVelY = (int)(mVelY / targetTotalVel);
+		if (targetX != sourceX || targetY != sourceY)
+		{
+			float vel = 0;
+			vel = DEFAULT_VELOCITY * dt;
 
-		double targetTotalDistance = sqrt((mVelX*mVelX) + (mVelY*mVelY));
-		mVelX = mVelX / targetTotalDistance * vel;
-		mVelY = mVelY / targetTotalDistance * vel;
+			double mVelY = 0;
+			double mVelX = 0;
+			mVelX = (targetX - sourceX);
+			mVelY = (targetY - sourceY);
 
-		printf("speed: %f\d\n", (mVelX + mVelY)/dt);
-		/*
-		double degrees = atan2(mVelY,  mVelX);
+			//double targetTotalVel = sqrt((mVelX*mVelX) + (mVelY*mVelY)) / (DEFAULT_VELOCITY * dt);
+			//mVelX = (int)(mVelX / targetTotalVel);
+			//mVelY = (int)(mVelY / targetTotalVel);
+
+			double targetTotalDistance = sqrt((mVelX*mVelX) + (mVelY*mVelY));
+			mVelX = mVelX / targetTotalDistance * vel;
+			mVelY = mVelY / targetTotalDistance * vel;
+
+			//printf("speed: %f\d\n", (mVelX + mVelY)/dt);
+			/*
+			double degrees = atan2(mVelY,  mVelX);
 		
-		mVelX = cos(degrees)*DEFAULT_VELOCITY * dt;
-		mVelY = sin(degrees)*DEFAULT_VELOCITY * dt;
-		printf("vel x:%f\t\ty:%f\n", (cos(degrees)*DEFAULT_VELOCITY * dt), (sin(degrees)*DEFAULT_VELOCITY * dt));
-		printf("vel x:%f\t\ty:%f\n", roundf((cos(degrees)*DEFAULT_VELOCITY * dt)), roundf((sin(degrees)*DEFAULT_VELOCITY * dt)));
-		*/
-		int oldX = Transform->X;
-		int oldY = Transform->Y;
+			mVelX = cos(degrees)*DEFAULT_VELOCITY * dt;
+			mVelY = sin(degrees)*DEFAULT_VELOCITY * dt;
+			printf("vel x:%f\t\ty:%f\n", (cos(degrees)*DEFAULT_VELOCITY * dt), (sin(degrees)*DEFAULT_VELOCITY * dt));
+			printf("vel x:%f\t\ty:%f\n", roundf((cos(degrees)*DEFAULT_VELOCITY * dt)), roundf((sin(degrees)*DEFAULT_VELOCITY * dt)));
+			*/
+			int oldX = Transform->X;
+			int oldY = Transform->Y;
 
-		Transform->X += round(mVelX);
+			Transform->X += round(mVelX);
 
-		if (Transform->X < 0)
-		{
-			Transform->X = 0;
+			if (Transform->X < 0)
+			{
+				Transform->X = 0;
+			}
+			else if (Transform->X + Transform->Width > _map->GetLevelWidth())
+			{
+				Transform->X = _map->GetLevelWidth() - Transform->Width;
+			}
+			else if (_map->IsBlocked(Transform))
+			{
+				//move back
+				Transform->X = oldX;
+			}
+
+			Transform->Y += roundf(mVelY);
+
+			//If went too far to the left or right or touched a wall
+			if (Transform->Y < 0)
+			{
+				Transform->Y = 0;
+			}
+			else if (Transform->Y + Transform->Height > _map->GetLevelHeight())
+			{
+				Transform->Y = _map->GetLevelHeight() - Transform->Height;
+			}
+			else if (_map->IsBlocked(Transform))
+			{
+				//move back
+				Transform->Y = oldY;
+			}
+
+			Transform->Rotation = (int)(180.0f / M_PI * atan2(mVelY, mVelX));
+
+			//normalize
+			Transform->Rotation = (450 + (int)Transform->Rotation) % 360;
+
+
+			willMove = oldX != Transform->X || oldY != Transform->Y;
+
 		}
-		else if (Transform->X + Transform->Width > _map->GetLevelWidth())
-		{
-			Transform->X = _map->GetLevelWidth() - Transform->Width;
-		}
-		else if (_map->IsBlocked(Transform))
-		{
-			//move back
-			Transform->X = oldX;
-		}
-
-		Transform->Y += roundf(mVelY);
-
-		//If went too far to the left or right or touched a wall
-		if (Transform->Y < 0)
-		{
-			Transform->Y = 0;
-		}
-		else if (Transform->Y + Transform->Height > _map->GetLevelHeight())
-		{
-			Transform->Y = _map->GetLevelHeight() - Transform->Height;
-		}
-		else if (_map->IsBlocked(Transform))
-		{
-			//move back
-			Transform->Y = oldY;
-		}
-
-		Transform->Rotation = (int)(180.0f / M_PI * atan2(mVelY, mVelX));
-
-		//normalize
-		Transform->Rotation = (450 + (int)Transform->Rotation) % 360;
-
-
-		willMove = oldX != Transform->X || oldY != Transform->Y;
-
 	}
+
+
 	if (willMove && !_isMoving)
 	{
 		_isMoving = true;
@@ -133,7 +144,7 @@ void Enemy::Move(int dt)
 
 void Enemy::SetTarget(FleeTransform* target)
 {
-	_target = target;
+	_pathFinder->GlobalTarget = target;
 }
 
 void Enemy::GetPositionOf(int &x, int &y, FleeTransform* target)
