@@ -30,3 +30,13 @@ Closet
 1
 0
 closet 9999999
+DebugRect
+2
+Active
+1
+0
+debug_rect_0 9999999
+Inactive
+1
+0
+debug_rect_1 9999999

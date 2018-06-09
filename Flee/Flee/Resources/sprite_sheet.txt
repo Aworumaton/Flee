@@ -98,6 +98,16 @@ main_character_3
 240
 40
 40
+debug_rect_0
+90
+250
+20
+20
+debug_rect_1
+50
+250
+20
+20
 closet
 120
 350

@@ -2,6 +2,7 @@
 #define NavigationGridMap_H
 #include "Scene.h"
 #include "GameEntity.h"
+#include "AnimationManager.h"
 
 
 class NavigationGridBlock
@@ -9,6 +10,9 @@ class NavigationGridBlock
 public:
 	NavigationGridBlock(int x, int y) : X(x), Y(y)
 	{
+		DebugAnimation = AnimationManager::CreateAnimationsOf("DebugRect", Constants::VisualLayers::UserInterfaceLayer);
+		DebugAnimation->Transform->X = x;
+		DebugAnimation->Transform->Y = y;
 	};
 
 	NavigationGridBlock() : X(0), Y(0)
@@ -21,6 +25,7 @@ public:
 	const int X;
 	const int Y;
 	bool IsBlocked;
+	AnimationData* DebugAnimation;
 private:
 };
 
@@ -85,7 +90,7 @@ public:
 
 	NavigationGridBlock* GetBlockAt(int x, int y)
 	{
-		if (x < _width && x > 0 && y < _height && y > 0)
+		if (x < _width && x >= 0 && y < _height && y >= 0)
 		{
 			return _grid[x][y];
 		}
