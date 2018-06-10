@@ -27,6 +27,10 @@ private:
 		bool IsVisited = false;
 		double CostOfArrival;
 		double EstimatedCostToDestination;
+		double EstimatedTotalCost()
+		{
+			return CostOfArrival + EstimatedCostToDestination;
+		};
 
 
 		void Reset()
@@ -43,22 +47,21 @@ private:
 	FleeTransform* _targetTransform;
 
 	PathNode** _path;
-	SDL_Point* _queue;
+	PathNode** _queue;
 	int _queueSize;
 
-	bool GetShortestPath();
+	bool GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNodeIndeces);
 
-	void UpdateNodesUsingPath(int x, int y);
+	void UpdateAdjacentNodesOf(PathNode* sourceNode);
 
-	int GetRealCostSquaredBetween(int aIndexX, int aIndexY, int bIndexX, int bIndexY);
-	int GetRealCostSquaredBetweenDestination(int indexX, int indexY);
+	void SetEstimatedCostToDestination(PathNode* a);
+	SDL_Point GetGlobalTargetPosition();
 
-	void PushNode(SDL_Point node);
-	SDL_Point PopNode();
-	SDL_Point GetCheapestOf(SDL_Point const nodeIndex1, SDL_Point const nodeIndex2);
-	
+	//void RePrioritazeQueue();
 
-	void TestPrintPath(int x, int y);
+	void PushNode(PathNode* node);
+	PathNode* RemoveCheapestNode();
+
 };
 
 

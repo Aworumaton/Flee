@@ -38,6 +38,8 @@ void Enemy::Tick(int dt)
 void Enemy::Move(int dt)
 {
 
+	//Use collision detection to make movements smoother
+
 	bool willMove = false;
 
 	if (_pathFinder->LocalTarget != nullptr)
@@ -60,28 +62,18 @@ void Enemy::Move(int dt)
 			mVelX = (targetX - sourceX);
 			mVelY = (targetY - sourceY);
 
-			//double targetTotalVel = sqrt((mVelX*mVelX) + (mVelY*mVelY)) / (DEFAULT_VELOCITY * dt);
-			//mVelX = (int)(mVelX / targetTotalVel);
-			//mVelY = (int)(mVelY / targetTotalVel);
 
 			double targetTotalDistance = sqrt((mVelX*mVelX) + (mVelY*mVelY));
 			mVelX = mVelX / targetTotalDistance * vel;
 			mVelY = mVelY / targetTotalDistance * vel;
 
-			//printf("speed: %f\d\n", (mVelX + mVelY)/dt);
-			/*
-			double degrees = atan2(mVelY,  mVelX);
-		
-			mVelX = cos(degrees)*DEFAULT_VELOCITY * dt;
-			mVelY = sin(degrees)*DEFAULT_VELOCITY * dt;
-			printf("vel x:%f\t\ty:%f\n", (cos(degrees)*DEFAULT_VELOCITY * dt), (sin(degrees)*DEFAULT_VELOCITY * dt));
-			printf("vel x:%f\t\ty:%f\n", roundf((cos(degrees)*DEFAULT_VELOCITY * dt)), roundf((sin(degrees)*DEFAULT_VELOCITY * dt)));
-			*/
+
 			int oldX = Transform->X;
 			int oldY = Transform->Y;
 
 			Transform->X += round(mVelX);
 
+			//If went too far to the top or down or touched a wall
 			if (Transform->X < 0)
 			{
 				Transform->X = 0;
@@ -128,6 +120,8 @@ void Enemy::Move(int dt)
 	if (willMove && !_isMoving)
 	{
 		_isMoving = true;
+
+		//add walking animations
 		{
 			_isRunning = true;
 			_visualData->SetAnimation("Run");

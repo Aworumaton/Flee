@@ -11,8 +11,8 @@ public:
 	NavigationGridBlock(int x, int y) : X(x), Y(y)
 	{
 		DebugAnimation = AnimationManager::CreateAnimationsOf("DebugRect", Constants::VisualLayers::UserInterfaceLayer);
-		DebugAnimation->Transform->X = x;
-		DebugAnimation->Transform->Y = y;
+		DebugAnimation->Transform->X = x + Character::Size/2;
+		DebugAnimation->Transform->Y = y + Character::Size/2;
 	};
 
 	NavigationGridBlock() : X(0), Y(0)
@@ -96,6 +96,16 @@ public:
 		}
 		return nullptr;
 	}
+
+	int GetRealCostSquaredBetween(NavigationGridBlock* a, NavigationGridBlock* b)
+	{
+		//handle closed doors and other movement slowing effects later
+		int dX = a->X - b->X;
+		int dY = a->Y - b->Y;
+
+		return (dX * dX) + (dY * dY);
+	}
+
 private :
 	NavigationGridBlock*** _grid;
 	int _width;
