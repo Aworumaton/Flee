@@ -29,11 +29,26 @@ void PathFinder::Tick(int dt)
 		SDL_Point sourceIndeces;
 		SDL_Point targetIndeces;
 
-		sourceIndeces.x = _sourceTransform->X / Character::Size;
-		sourceIndeces.y = _sourceTransform->Y / Character::Size;
-		
-		targetIndeces.x = GetGlobalTargetPosition().x / Character::Size;
-		targetIndeces.y = GetGlobalTargetPosition().y / Character::Size;
+		FleeTransform tmpTarget;
+		tmpTarget.X = GetGlobalTargetPosition().x;
+		tmpTarget.Y = GetGlobalTargetPosition().y;
+		tmpTarget.Width = 1;
+		tmpTarget.Height = 1;
+		//
+		//FleeTransform tmpSource;
+		//tmpSource.X = _sourceTransform->X + Character::Size;
+		//tmpSource.Y = _sourceTransform->Y + Character::Size;
+		//tmpSource.Width = 1;
+		//tmpSource.Height = 1;
+
+		_navMap->GetNearestBlockOfPosition(_sourceTransform, sourceIndeces.x, sourceIndeces.y);
+		_navMap->GetNearestBlockOfPosition(&tmpTarget, targetIndeces.x, targetIndeces.y);
+
+		//sourceIndeces.x = _sourceTransform->X / Character::Size;
+		//sourceIndeces.y = _sourceTransform->Y / Character::Size;
+		//
+		//targetIndeces.x = GetGlobalTargetPosition().x / Character::Size;
+		//targetIndeces.y = GetGlobalTargetPosition().y / Character::Size;
 
 		if (sourceIndeces.x == targetIndeces.x && sourceIndeces.y == targetIndeces.y)
 		{
@@ -44,8 +59,6 @@ void PathFinder::Tick(int dt)
 			PathNode* sourceNode = &_path[sourceIndeces.x][sourceIndeces.y];
 			if (GetShortestPath(sourceNode, &targetIndeces))
 			{
-				printf("SOURCE X:%d Y:%d\n", _sourceTransform->X, _sourceTransform->Y);
-				printf("Target X:%d Y:%d\n\n", GlobalTarget->X, GlobalTarget->Y);
 
 				PathNode* arrivedNode = _path[targetIndeces.x][targetIndeces.y].ArrivedFromNode;
 				if (arrivedNode != nullptr)
@@ -61,8 +74,8 @@ void PathFinder::Tick(int dt)
 						arrivedNode = arrivedNode->ArrivedFromNode;
 					}
 
-					_targetTransform->X = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->X + Character::Size / 2;
-					_targetTransform->Y = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->Y + Character::Size / 2;
+					_targetTransform->X = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->X ;
+					_targetTransform->Y = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->Y ;
 					LocalTarget = _targetTransform;
 
 				}
@@ -114,7 +127,7 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 		{
 			for (int j = -1; j < 2; j++)
 			{
-				if ((i == 0 && j == 0) || (i*j != 0) ||
+				if ((i == 0 && j == 0) ||
 					curNode->x + i < 0 || curNode->x + i >= _navMap->GridWidth() ||
 					curNode->y + j < 0 || curNode->y + j >= _navMap->GridHeight())
 				{
@@ -145,23 +158,23 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 		}
 	}
 
-	for (int i = 0; i < _navMap->GridWidth(); i++)
-	{
-		for (int j = 0; j < _navMap->GridHeight(); j++)
-		{
-			int val = (int)(_path[i][j].CostOfArrival / 1000);
-			if (_path[i][j].CostOfArrival == std::numeric_limits<double>::infinity())
-			{
-				val = -1;
-			}
-			else if (val < 10)
-			{
-				printf(" ");
-			}
-			printf("%d ", val);
-		}
-		printf("\n");
-	}
+	//for (int j = 0; j < _navMap->GridHeight(); j++)
+	//{
+	//	for (int i = 0; i < _navMap->GridWidth(); i++)
+	//	{
+	//		int val = (int)(_path[i][j].CostOfArrival / 1000);
+	//		if (_path[i][j].CostOfArrival == std::numeric_limits<double>::infinity())
+	//		{
+	//			val = -1;
+	//		}
+	//		else if (val < 10)
+	//		{
+	//			printf(" ");
+	//		}
+	//		printf("%d ", val);
+	//	}
+	//	printf("\n");
+	//}
 
 	return false;
 }
@@ -174,7 +187,7 @@ void PathFinder::UpdateAdjacentNodesOf(PathNode* sourceNode)
 	{
 		for (int j = -1; j < 2; j++)
 		{
-			if ((i == 0 && j == 0) || (i*j != 0) || 
+			if ((i == 0 && j == 0) ||
 				sourceNode->x + i < 0 || sourceNode->x + i >= _navMap->GridWidth() ||
 				sourceNode->y + j < 0 || sourceNode->y + j >= _navMap->GridHeight())
 			{

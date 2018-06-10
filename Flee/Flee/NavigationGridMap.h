@@ -13,6 +13,7 @@ public:
 		DebugAnimation = AnimationManager::CreateAnimationsOf("DebugRect", Constants::VisualLayers::UserInterfaceLayer);
 		DebugAnimation->Transform->X = x + Character::Size/2;
 		DebugAnimation->Transform->Y = y + Character::Size/2;
+		//DebugAnimation->IsHidden = true;
 	};
 
 	NavigationGridBlock() : X(0), Y(0)
@@ -32,8 +33,9 @@ private:
 
 class NavigationGridMap
 {
+	const int BlockSize;
 public:
-	NavigationGridMap() 
+	NavigationGridMap() : BlockSize(Character::Size / 4 * 3) //BlockSize(Character::Size / 4 * 3)
 	{
 	
 	};
@@ -45,8 +47,8 @@ public:
 	
 	bool Initialize(Scene* scene)
 	{
-		_width = ceil(1.0 * scene->GetLevelWidth() / Character::Size);
-		_height = ceil(1.0 * scene->GetLevelHeight() / Character::Size);
+		_width = ceil(1.0 * scene->GetLevelWidth() / BlockSize);
+		_height = ceil(1.0 * scene->GetLevelHeight() / BlockSize);
 		
 	
 			
@@ -59,34 +61,51 @@ public:
 		FleeTransform curBlock;
 		curBlock.Width = Character::Size;
 		curBlock.Height = Character::Size;
-	
-		for (int i = 0; i < _width; i++)
+
+		for (int j = 0; j < _height; j++)
 		{
-			for (int j = 0; j < _height; j++)
+			for (int i = 0; i < _width; i++)
 			{
-				curBlock.X = i * Character::Size;// +Character::Size / 2;
-				curBlock.Y = j * Character::Size;// +Character::Size / 2;
+				curBlock.X = i * BlockSize;
+				curBlock.Y = j * BlockSize;
 				_grid[i][j] = new NavigationGridBlock(curBlock.X, curBlock.Y);
 				_grid[i][j]->IsBlocked = scene->IsBlocked(&curBlock);
 			}
 		}
+		
+		//for (int j = 0; j < GridHeight(); j++)
+		//{
+		//	for (int i = 0; i < GridWidth(); i++)
+		//	{
+		//		if (_grid[i][j]->IsBlocked)
+		//		{
+		//			printf(" ");
+		//		}
+		//		else
+		//		{
+		//			printf("X");
+		//		}
+		//	}
+		//	printf("\n");
+		//}
+		
 		return true;
 	};
 
 	int GridSize()
 	{
 		return _width * _height;
-	}
+	};
 
 	int GridWidth()
 	{
 		return _width;
-	}
+	};
 
 	int GridHeight()
 	{
 		return _height;
-	}
+	};
 
 	NavigationGridBlock* GetBlockAt(int x, int y)
 	{
@@ -95,7 +114,7 @@ public:
 			return _grid[x][y];
 		}
 		return nullptr;
-	}
+	};
 
 	int GetRealCostSquaredBetween(NavigationGridBlock* a, NavigationGridBlock* b)
 	{
@@ -104,7 +123,13 @@ public:
 		int dY = a->Y - b->Y;
 
 		return (dX * dX) + (dY * dY);
-	}
+	};
+
+	void GetNearestBlockOfPosition(FleeTransform* transform, int& x, int& y)
+	{
+		x = transform->X / BlockSize;
+		y = transform->Y / BlockSize;
+	};
 
 private :
 	NavigationGridBlock*** _grid;

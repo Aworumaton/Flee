@@ -64,7 +64,7 @@ void Input::Tick(int dt)
 
 				_main_agent_controls.active_action = true;
 
-				printf("ttry: %d\n", _main_agent_controls.on_action);
+				printf("try: _main_agent_controls.active_action\n");
 				break;
 			default:
 				break;

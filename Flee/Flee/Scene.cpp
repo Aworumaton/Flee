@@ -44,7 +44,6 @@ bool Scene::Read()
 			for (int columnIndex = 0; columnIndex < columnSize; columnIndex++)
 			{
 				Tile* targetTile = _mapLayout.ItemAt(rowIndex  * columnSize + columnIndex);
-				printf("rowIndex  * rowSize  + columnIndex   %d\n", (rowIndex  * columnSize + columnIndex));
 
 				Tile* topTile = nullptr;
 				Tile* bottomTile = nullptr;

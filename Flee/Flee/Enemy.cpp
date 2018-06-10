@@ -37,7 +37,6 @@ void Enemy::Tick(int dt)
 
 void Enemy::Move(int dt)
 {
-
 	//Use collision detection to make movements smoother
 
 	bool willMove = false;
@@ -57,10 +56,8 @@ void Enemy::Move(int dt)
 			float vel = 0;
 			vel = DEFAULT_VELOCITY * dt;
 
-			double mVelY = 0;
-			double mVelX = 0;
-			mVelX = (targetX - sourceX);
-			mVelY = (targetY - sourceY);
+			double mVelX = (targetX - sourceX);
+			double mVelY = (targetY - sourceY);
 
 
 			double targetTotalDistance = sqrt((mVelX*mVelX) + (mVelY*mVelY));
@@ -72,7 +69,6 @@ void Enemy::Move(int dt)
 			int oldY = Transform->Y;
 
 			Transform->X += round(mVelX);
-
 			//If went too far to the top or down or touched a wall
 			if (Transform->X < 0)
 			{
@@ -86,6 +82,22 @@ void Enemy::Move(int dt)
 			{
 				//move back
 				Transform->X = oldX;
+
+				mVelX = 0;
+
+				int deltaY = targetY - sourceY;
+				if (deltaY * deltaY < vel*vel)
+				{
+					mVelY = deltaY;
+				}
+				else
+				{
+					mVelY = vel;
+					if (deltaY < 0)
+					{
+						mVelY *= -1.0;
+					}
+				}
 			}
 
 			Transform->Y += roundf(mVelY);
@@ -103,6 +115,38 @@ void Enemy::Move(int dt)
 			{
 				//move back
 				Transform->Y = oldY;
+
+				mVelY = 0;
+
+				int deltaX = targetX - sourceX;
+				if (deltaX * deltaX < vel*vel)
+				{
+					mVelX = deltaX;
+				}
+				else
+				{
+					mVelX = vel;
+					if (deltaX < 0)
+					{
+						mVelX *= -1.0;
+					}
+				}
+				//try horizontal movement again
+				Transform->X += round(mVelX);
+				//If went too far to the top or down or touched a wall
+				if (Transform->X < 0)
+				{
+					Transform->X = 0;
+				}
+				else if (Transform->X + Transform->Width > _map->GetLevelWidth())
+				{
+					Transform->X = _map->GetLevelWidth() - Transform->Width;
+				}
+				else if (_map->IsBlocked(Transform))
+				{
+					//move back
+					Transform->X = oldX;
+				}
 			}
 
 			Transform->Rotation = (int)(180.0f / M_PI * atan2(mVelY, mVelX));
