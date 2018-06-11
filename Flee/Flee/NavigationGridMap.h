@@ -10,9 +10,9 @@ class NavigationGridBlock
 public:
 	NavigationGridBlock(int x, int y) : X(x), Y(y)
 	{
-		DebugAnimation = AnimationManager::CreateAnimationsOf("DebugRect", Constants::VisualLayers::UserInterfaceLayer);
-		DebugAnimation->Transform->X = x + Character::Size/2;
-		DebugAnimation->Transform->Y = y + Character::Size/2;
+		//DebugAnimation = AnimationManager::CreateAnimationsOf("DebugRect", Constants::VisualLayers::UserInterfaceLayer);
+		//DebugAnimation->Transform->X = x + Character::Size/2;
+		//DebugAnimation->Transform->Y = y + Character::Size/2;
 		//DebugAnimation->IsHidden = true;
 	};
 
@@ -26,7 +26,7 @@ public:
 	const int X;
 	const int Y;
 	bool IsBlocked;
-	AnimationData* DebugAnimation;
+	//AnimationData* DebugAnimation;
 private:
 };
 
@@ -35,7 +35,7 @@ class NavigationGridMap
 {
 	const int BlockSize;
 public:
-	NavigationGridMap() : BlockSize(Character::Size / 4 * 3) //BlockSize(Character::Size / 4 * 3)
+	NavigationGridMap() : BlockSize(Character::Size * 0.75)
 	{
 	
 	};
@@ -90,11 +90,6 @@ public:
 		//}
 		
 		return true;
-	};
-
-	int GridSize()
-	{
-		return _width * _height;
 	};
 
 	int GridWidth()

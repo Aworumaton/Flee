@@ -97,35 +97,11 @@ void Game::Tick(int dt)
 }
 
 void Game::GameTick(int dt)
-{
-	
+{	
 	if (_input._game_controls.escape)
 	{
 		_isRunning = false;
 	}
-
-
-	//if (_input._main_agent_controls.move_forward)
-	//{
-	//	printf("move_forward\n");
-	//}
-	//if (_input._main_agent_controls.move_left)
-	//{
-	//	printf("move_forward\n");
-	//}
-	//if (_input._main_agent_controls.move_backward)
-	//{
-	//	printf("move_backward\n");
-	//}
-	//if (_input._main_agent_controls.move_right)
-	//{
-	//	printf("move_right\n");
-	//}
-	//if (_input._main_agent_controls.action)
-	//{
-	//	printf("action\n");
-	//}
-	//printf("mouse pos: (%d,%d)\n", _input._main_agent_controls.look_at_x, _input._main_agent_controls.look_at_y);
 }
 void Game::Exit()
 {

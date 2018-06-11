@@ -18,10 +18,7 @@ public:
 		_items = new T[capacity];
 	};
 
-	~FleeList()
-	{
-		//delete(_items);
-	};
+	~FleeList()	{	};
 
 	void Add(T item)
 	{

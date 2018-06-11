@@ -57,8 +57,6 @@ private:
 	void SetEstimatedCostToDestination(PathNode* a);
 	SDL_Point GetGlobalTargetPosition();
 
-	//void RePrioritazeQueue();
-
 	void PushNode(PathNode* node);
 	PathNode* RemoveCheapestNode();
 

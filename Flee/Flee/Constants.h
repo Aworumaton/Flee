@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include "FleeLibrary.h"
 
+//implement PhysicsManager and delete this
 namespace Constants
 {
 	//Screen dimension constants

@@ -87,12 +87,6 @@ AnimationManager::~AnimationManager()
 
 void AnimationManager::Free()
 {
-	//for (int i = _templates.Size() - 1; i >= 0; i--)
-	//{
-	//	AnimationGroup item = _templates.ItemAt(i);
-	//	_templates.RemoveAt(i);
-	//	item.Free();
-	//}
 }
 
 

@@ -27,7 +27,6 @@ public:
 	static void Free();
 
 	static bool Register(SpriteData* spriteData, Constants::VisualLayers layerIndex);
-	//static Flee_Animated_Sprite_Part* Create_Animated_Sprite(std::string sprite_id);
 	
 	static void Tick(int dt);
 

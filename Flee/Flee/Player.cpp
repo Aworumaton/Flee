@@ -16,10 +16,9 @@ Player::Player(Scene* map, Main_Agent_Controls* controls, FleeTransform* camera)
 	Transform = _visualData->Transform;
 	_actionRadius = 2 * (0.5*(Transform->Width + Transform->Height));
 
+	//use a spawner later
 	Transform->X = 250;
 	Transform->Y = 250;
-	//mBox.w = _visual->getBox().w;
-	//mBox.h = _visual->getBox().h;
 }
 
 Player::~Player()

@@ -9,12 +9,17 @@ PathFinder::PathFinder(FleeTransform* sourceTransform, NavigationGridMap* navMap
 	_targetTransform->Width = Character::Size;
 	_targetTransform->Height = Character::Size;
 
-	_queue = new PathNode*[_navMap->GridSize()];
+	_queue = new PathNode*[_navMap->GridWidth()*_navMap->GridHeight()];
 
 	_path = new PathNode*[_navMap->GridWidth()];
 	for (int i = 0; i < _navMap->GridWidth(); i++)
 	{
 		_path[i] = new PathNode[_navMap->GridHeight()];
+		for (int j = 0; j < _navMap->GridHeight(); j++)
+		{
+			_path[i][j].x = i;
+			_path[i][j].y = j;
+		}
 	}
 	_queueSize = 0;
 }
@@ -34,21 +39,9 @@ void PathFinder::Tick(int dt)
 		tmpTarget.Y = GetGlobalTargetPosition().y;
 		tmpTarget.Width = 1;
 		tmpTarget.Height = 1;
-		//
-		//FleeTransform tmpSource;
-		//tmpSource.X = _sourceTransform->X + Character::Size;
-		//tmpSource.Y = _sourceTransform->Y + Character::Size;
-		//tmpSource.Width = 1;
-		//tmpSource.Height = 1;
 
 		_navMap->GetNearestBlockOfPosition(_sourceTransform, sourceIndeces.x, sourceIndeces.y);
 		_navMap->GetNearestBlockOfPosition(&tmpTarget, targetIndeces.x, targetIndeces.y);
-
-		//sourceIndeces.x = _sourceTransform->X / Character::Size;
-		//sourceIndeces.y = _sourceTransform->Y / Character::Size;
-		//
-		//targetIndeces.x = GetGlobalTargetPosition().x / Character::Size;
-		//targetIndeces.y = GetGlobalTargetPosition().y / Character::Size;
 
 		if (sourceIndeces.x == targetIndeces.x && sourceIndeces.y == targetIndeces.y)
 		{
@@ -66,7 +59,7 @@ void PathFinder::Tick(int dt)
 
 					while (sourceIndeces.x != arrivedNode->x || sourceIndeces.y != arrivedNode->y)
 					{
-						_navMap->GetBlockAt(arrivedNode->x, arrivedNode->y)->DebugAnimation->SetAnimation("Active");
+						//_navMap->GetBlockAt(arrivedNode->x, arrivedNode->y)->DebugAnimation->SetAnimation("Active");
 
 						targetIndeces.x = arrivedNode->x;
 						targetIndeces.y = arrivedNode->y;
@@ -74,8 +67,8 @@ void PathFinder::Tick(int dt)
 						arrivedNode = arrivedNode->ArrivedFromNode;
 					}
 
-					_targetTransform->X = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->X ;
-					_targetTransform->Y = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->Y ;
+					_targetTransform->X = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->X;
+					_targetTransform->Y = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->Y;
 					LocalTarget = _targetTransform;
 
 				}
@@ -94,9 +87,7 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 		for (int j = 0; j < _navMap->GridHeight(); j++)
 		{
 			_path[i][j].Reset();
-			_path[i][j].x = i;
-			_path[i][j].y = j;
-			_navMap->GetBlockAt(i, j)->DebugAnimation->SetAnimation("Inactive");
+			//_navMap->GetBlockAt(i, j)->DebugAnimation->SetAnimation("Inactive");
 		}
 	}
 
@@ -158,24 +149,6 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 		}
 	}
 
-	//for (int j = 0; j < _navMap->GridHeight(); j++)
-	//{
-	//	for (int i = 0; i < _navMap->GridWidth(); i++)
-	//	{
-	//		int val = (int)(_path[i][j].CostOfArrival / 1000);
-	//		if (_path[i][j].CostOfArrival == std::numeric_limits<double>::infinity())
-	//		{
-	//			val = -1;
-	//		}
-	//		else if (val < 10)
-	//		{
-	//			printf(" ");
-	//		}
-	//		printf("%d ", val);
-	//	}
-	//	printf("\n");
-	//}
-
 	return false;
 }
 
@@ -214,7 +187,7 @@ void PathFinder::UpdateAdjacentNodesOf(PathNode* sourceNode)
 }
 
 
-//implement fibonacci heap 
+//implement fibonacci heap later
 void PathFinder::PushNode(PathNode* node)
 {
 	_queue[_queueSize] = node;

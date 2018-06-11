@@ -86,11 +86,6 @@ public:
 		return _isWall;
 	};
 
-	bool IsWall()
-	{
-		return _isWall;
-	};
-
 	FleeTransform* Transform()
 	{
 		return _visualData->Transform;

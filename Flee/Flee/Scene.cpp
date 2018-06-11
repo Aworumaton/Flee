@@ -162,7 +162,7 @@ bool Scene::IsBlocked(FleeTransform* sourceTransform)
 	{
 		Tile* sData = _mapLayout.ItemAt(i);
 		//If the tile is a wall type tile
-		if (sData->IsWall())
+		if (sData->IsObstacle())
 		{
 			//If the collision box touches the wall tile
 			if (Constants::CheckCollision(sourceTransform, sData->Transform()))
@@ -185,7 +185,7 @@ bool Scene::IsBlocked(FleeTransform* sourceTransform)
 		}
 	}
 	
-	//If no wall tiles were touched
+	//If no obstacles were touched
 	return false;
 }
 

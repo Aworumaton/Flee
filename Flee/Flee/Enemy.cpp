@@ -13,13 +13,12 @@ Enemy::Enemy(Scene* map, NavigationGridMap* navMap)
 	Transform = _visualData->Transform;
 	_actionRadius = 2 * (0.5*(Transform->Width + Transform->Height));
 
+	//use a spawner later
 	Transform->X = 450;
 	Transform->Y = 250;
 
 	_pathFinder = new PathFinder(Transform, navMap);
 	_behaviours.Add(_pathFinder);
-	//mBox.w = _visual->getBox().w;
-	//mBox.h = _visual->getBox().h;
 }
 
 Enemy::~Enemy()
