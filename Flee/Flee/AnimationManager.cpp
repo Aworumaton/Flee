@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #include "AnimationManager.h"
 
 void AnimationManager::Tick(int dt)

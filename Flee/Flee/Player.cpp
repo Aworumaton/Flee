@@ -1,7 +1,10 @@
+/*
+*	Author: Omer Sari
+*/
 #pragma once
 #include "Player.h"
 
-Player::Player(Scene* map, Main_Agent_Controls* controls, FleeTransform* camera)// : _visualData("main_character_0")
+Player::Player(Scene* map, Main_Agent_Controls* controls, FleeTransform* camera)
 {
 	_map = map;
 	_camera = camera;
@@ -51,7 +54,6 @@ void Player::Tick(int dt)
 				{
 					if (target_object->HasFlag(GameEntityFlags::Hiding_Place))
 					{
-						//target_object->OnAction();
 						SetIsHidden(true);
 					}
 					else if (target_object->HasFlag(GameEntityFlags::Door) && !Constants::CheckCollision(Transform, target_object->Transform))

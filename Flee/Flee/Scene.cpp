@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #include "Scene.h"
 bool Scene::Read()
 {

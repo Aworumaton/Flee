@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef INPUT_H
 #define INPUT_H
 

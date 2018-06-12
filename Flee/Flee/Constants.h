@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 

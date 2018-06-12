@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef InteractiveGameObject_H
 #define InteractiveGameObject_H
 #include "GameEntity.h"

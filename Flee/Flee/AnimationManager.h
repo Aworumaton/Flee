@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef AnimationManager_H
 #define AnimationManager_H
 

@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef FleeRenderer_H
 #define FleeRenderer_H
 

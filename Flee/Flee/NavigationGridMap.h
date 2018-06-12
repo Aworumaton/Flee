@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef NavigationGridMap_H
 #define NavigationGridMap_H
 #include "Scene.h"

@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef FLEE_TEXTURE_H
 #define FLEE_TEXTURE_H
 

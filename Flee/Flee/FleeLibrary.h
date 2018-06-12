@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef FleeLibrary_H
 #define FleeLibrary_H
 #include <string>

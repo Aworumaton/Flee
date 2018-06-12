@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef Player_H
 #define Player_H
 #include <SDL.h>

@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef CONTROLS_H
 #define CONTROLS_H
 

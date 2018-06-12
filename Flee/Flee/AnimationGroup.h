@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef AnimationGroup_H
 #define AnimationGroup_H
 #include <string>

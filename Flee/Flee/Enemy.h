@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef Enemy_H
 #define Enemy_H
 #include "Constants.h"

@@ -1,4 +1,7 @@
- #pragma once
+/*
+*	Author: Omer Sari
+*/
+#pragma once
 #include "Game.h"
 
 Game* Game::CreateGame()

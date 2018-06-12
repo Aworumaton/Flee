@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef Scene_H
 #define Scene_H
 

@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #include "PathFinder.h"
 
 PathFinder::PathFinder(FleeTransform* sourceTransform, NavigationGridMap* navMap)

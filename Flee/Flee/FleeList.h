@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef FleeList_H
 #define FleeList_H
 

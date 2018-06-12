@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef Tile_H
 #define Tile_h
 #include "FleeRenderer.h"

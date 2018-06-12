@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #include "FleeRenderer.h"
 
 const int FleeRenderer::SCREEN_WIDTH = 800;

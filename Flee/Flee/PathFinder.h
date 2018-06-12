@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef PathFinder_H
 #define PathFinder_H
 #include <limits>

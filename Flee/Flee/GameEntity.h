@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #ifndef GameEntity_H
 #define GameEntity_H
 #include "FleeLibrary.h"

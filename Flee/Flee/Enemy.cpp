@@ -1,3 +1,6 @@
+/*
+*	Author: Omer Sari
+*/
 #pragma once
 #include "Enemy.h"
 
