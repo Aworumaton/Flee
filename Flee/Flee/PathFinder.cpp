@@ -36,15 +36,9 @@ void PathFinder::Tick(int dt)
 	{
 		SDL_Point sourceIndeces;
 		SDL_Point targetIndeces;
-
-		FleeTransform tmpTarget;
-		tmpTarget.X = GetGlobalTargetPosition().x;
-		tmpTarget.Y = GetGlobalTargetPosition().y;
-		tmpTarget.Width = 1;
-		tmpTarget.Height = 1;
-
-		_navMap->GetNearestBlockOfPosition(_sourceTransform, sourceIndeces.x, sourceIndeces.y);
-		_navMap->GetNearestBlockOfPosition(&tmpTarget, targetIndeces.x, targetIndeces.y);
+		
+		_navMap->GetNearestValidBlockAtPosition(_sourceTransform, sourceIndeces.x, sourceIndeces.y);
+		_navMap->GetNearestValidBlockAtPosition(GlobalTarget, targetIndeces.x, targetIndeces.y);
 
 		if (sourceIndeces.x == targetIndeces.x && sourceIndeces.y == targetIndeces.y)
 		{
@@ -62,7 +56,7 @@ void PathFinder::Tick(int dt)
 
 					while (sourceIndeces.x != arrivedNode->x || sourceIndeces.y != arrivedNode->y)
 					{
-						//_navMap->GetBlockAt(arrivedNode->x, arrivedNode->y)->DebugAnimation->SetAnimation("Active");
+						_navMap->GetBlockAt(arrivedNode->x, arrivedNode->y)->DebugAnimation->SetAnimation("Active");
 
 						targetIndeces.x = arrivedNode->x;
 						targetIndeces.y = arrivedNode->y;
@@ -90,7 +84,14 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 		for (int j = 0; j < _navMap->GridHeight(); j++)
 		{
 			_path[i][j].Reset();
-			//_navMap->GetBlockAt(i, j)->DebugAnimation->SetAnimation("Inactive");
+			if (_navMap->GetBlockAt(i, j)->IsBlocked)
+			{
+				_navMap->GetBlockAt(i, j)->DebugAnimation->SetAnimation("Disabled");
+			}
+			else
+			{
+				_navMap->GetBlockAt(i, j)->DebugAnimation->SetAnimation("Inactive");
+			}
 		}
 	}
 
@@ -99,6 +100,9 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 	SetEstimatedCostToDestination(sourceNode);
 	PushNode(sourceNode);
 
+	int globalTargetX;
+	int globalTargetY;
+	_navMap->GetNearestValidBlockAtPosition(GlobalTarget, globalTargetX, globalTargetY);
 
 
 	while (_queueSize > 0)
@@ -106,11 +110,11 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 		PathNode* curNode = RemoveCheapestNode();
 
 		NavigationGridBlock* curGridBlock = _navMap->GetBlockAt(curNode->x, curNode->y);
-		_targetTransform->X = curGridBlock->X;
-		_targetTransform->Y = curGridBlock->Y;
+		//_targetTransform->X = curGridBlock->X;
+		//_targetTransform->Y = curGridBlock->Y;
 
-		//if (targetNodeIndeces.x == targetIndexX && targetNodeIndeces.y == targetIndexY)
-		if (Constants::CheckCollision(_targetTransform, GlobalTarget))
+		//if (Constants::CheckCollision(_targetTransform, GlobalTarget))
+		if (curNode->x == globalTargetX && curNode->y == globalTargetY)
 		{
 			targetNodeIndeces->x = curNode->x;
 			targetNodeIndeces->y = curNode->y;
@@ -129,23 +133,21 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 				}
 
 				PathNode* comparedNode = &_path[curNode->x + i][curNode->y + j];
+
 				NavigationGridBlock* comparedGridBlock = _navMap->GetBlockAt(comparedNode->x, comparedNode->y);
 
 				if (comparedGridBlock != nullptr && !comparedGridBlock->IsBlocked)
 				{
-					double dDistance = _navMap->GetRealCostSquaredBetween(curGridBlock, comparedGridBlock);
+					double dDistance = _navMap->GetRealCostBetween(curGridBlock, comparedGridBlock);
 
 					if (comparedNode->CostOfArrival > (dDistance + curNode->CostOfArrival))
 					{
 						comparedNode->CostOfArrival = dDistance + curNode->CostOfArrival;
 						comparedNode->ArrivedFromNode = curNode;
-						if (!comparedNode->IsVisited)
-						{
-							comparedNode->IsVisited = true;
-							SetEstimatedCostToDestination(comparedNode);
-							PushNode(comparedNode);
-						}
-						UpdateAdjacentNodesOf(comparedNode);
+
+						comparedNode->IsVisited = true;
+						SetEstimatedCostToDestination(comparedNode);
+						PushNode(comparedNode);
 					}
 				}
 			}
@@ -154,41 +156,6 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 
 	return false;
 }
-
-
-void PathFinder::UpdateAdjacentNodesOf(PathNode* sourceNode)
-{
-	NavigationGridBlock* sourceBlock = _navMap->GetBlockAt(sourceNode->x, sourceNode->y);
-	for (int i = -1; i < 2; i++)
-	{
-		for (int j = -1; j < 2; j++)
-		{
-			if ((i == 0 && j == 0) ||
-				sourceNode->x + i < 0 || sourceNode->x + i >= _navMap->GridWidth() ||
-				sourceNode->y + j < 0 || sourceNode->y + j >= _navMap->GridHeight())
-			{
-				continue;
-			}
-
-			PathNode* comparedNode = &_path[sourceNode->x + i][sourceNode->y + j];
-
-			if (comparedNode->IsVisited)
-			{
-				NavigationGridBlock* comparedBlock = _navMap->GetBlockAt(comparedNode->x, comparedNode->y);
-
-				int dDistance = _navMap->GetRealCostSquaredBetween(sourceBlock, comparedBlock);
-
-				if (comparedNode->CostOfArrival > dDistance + sourceNode->CostOfArrival)
-				{
-					comparedNode->CostOfArrival = dDistance + sourceNode->CostOfArrival;
-					comparedNode->ArrivedFromNode = sourceNode;
-					UpdateAdjacentNodesOf(comparedNode);
-				}
-			}
-		}
-	}
-}
-
 
 //implement fibonacci heap later
 void PathFinder::PushNode(PathNode* node)
@@ -226,7 +193,7 @@ void PathFinder::SetEstimatedCostToDestination(PathNode* a)
 	int dX = aNode->X - tPos.x;
 	int dY = aNode->Y - tPos.y;
 
-	a->EstimatedCostToDestination = (dX * dX) + (dY * dY);
+	a->EstimatedCostToDestination = sqrt((dX * dX) + (dY * dY));
 }
 
 SDL_Point PathFinder::GetGlobalTargetPosition()

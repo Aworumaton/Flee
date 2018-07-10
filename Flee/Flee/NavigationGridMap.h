@@ -13,10 +13,10 @@ class NavigationGridBlock
 public:
 	NavigationGridBlock(int x, int y) : X(x), Y(y)
 	{
-		//DebugAnimation = AnimationManager::CreateAnimationsOf("DebugRect", Constants::VisualLayers::UserInterfaceLayer);
-		//DebugAnimation->Transform->X = x + Character::Size/2;
-		//DebugAnimation->Transform->Y = y + Character::Size/2;
-		//DebugAnimation->IsHidden = true;
+		DebugAnimation = AnimationManager::CreateAnimationsOf("DebugRect", Constants::VisualLayers::UserInterfaceLayer);
+		DebugAnimation->Transform->X = x + (Character::Size - DebugAnimation->Transform->Width )/2;
+		DebugAnimation->Transform->Y = y + (Character::Size - DebugAnimation->Transform->Height)/2;
+		DebugAnimation->IsHidden = true;
 	};
 
 	NavigationGridBlock() : X(0), Y(0)
@@ -29,7 +29,7 @@ public:
 	const int X;
 	const int Y;
 	bool IsBlocked;
-	//AnimationData* DebugAnimation;
+	AnimationData* DebugAnimation;
 private:
 };
 
@@ -38,7 +38,7 @@ class NavigationGridMap
 {
 	const int BlockSize;
 public:
-	NavigationGridMap() : BlockSize(Character::Size * 0.75)
+	NavigationGridMap() : BlockSize(Character::Size * 0.5)
 	{
 	
 	};
@@ -114,19 +114,34 @@ public:
 		return nullptr;
 	};
 
-	int GetRealCostSquaredBetween(NavigationGridBlock* a, NavigationGridBlock* b)
+	double GetRealCostBetween(NavigationGridBlock* a, NavigationGridBlock* b)
 	{
 		//handle closed doors and other movement slowing effects later
 		int dX = a->X - b->X;
 		int dY = a->Y - b->Y;
 
-		return (dX * dX) + (dY * dY);
+		return sqrt((dX * dX) + (dY * dY));
 	};
 
-	void GetNearestBlockOfPosition(FleeTransform* transform, int& x, int& y)
+	void GetNearestValidBlockAtPosition(FleeTransform* transform, int& x, int& y)
 	{
-		x = transform->X / BlockSize;
-		y = transform->Y / BlockSize;
+		int xPadding = 0;
+		int yPadding = 0;
+		do
+		{
+			x = (transform->X + xPadding) / BlockSize;
+			y = (transform->Y + yPadding) / BlockSize;
+			xPadding += BlockSize;
+			if (transform->Width < xPadding)
+			{
+				xPadding = 0;
+				yPadding += BlockSize;
+				if (transform->Height < yPadding)
+				{
+					return;
+				}
+			}
+		} while (_grid[x][y]->IsBlocked);
 	};
 
 private :

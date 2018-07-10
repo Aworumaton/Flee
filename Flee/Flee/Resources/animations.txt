@@ -31,7 +31,7 @@ Closet
 0
 closet 9999999
 DebugRect
-2
+3
 Active
 1
 0
@@ -40,3 +40,7 @@ Inactive
 1
 0
 debug_rect_1 9999999
+Disabled
+1
+0
+debug_rect_2 9999999

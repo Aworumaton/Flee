@@ -1,0 +1,7 @@
+TODO:
+Proper memory management
+Proper physics manager (for door movements , collision detection )
+Win and Lose conditions(lose if caught, win if a certain object is gathered and escaped with)
+User interface (menu and win/lose screens)
+Map Generator
+Line of sight (OpenGL)
