@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "GameEntity.h"
 #include "PathFinder.h"
+#include "CharacterVision.h"
 #include "AnimationManager.h"
 
 class Enemy : public Character
@@ -18,6 +19,7 @@ public:
 	void SetTarget(FleeTransform* target);
 	void Tick(int dt);
 private:
+	const float VISION_DISTANCE = 150.0f;
 	const float DEFAULT_VELOCITY = 96.0f / 1000.0f;
 	const float SPRINT_MULTIPTLIER = 3.0f;
 	Scene * _map;
@@ -26,9 +28,9 @@ private:
 	bool _isRunning;
 
 	void Move(int dt);
-	void GetPositionOf(int &x, int &y, FleeTransform* target);
 
 	PathFinder* _pathFinder;
+	CharacterVision* _vision;
 };
 
 

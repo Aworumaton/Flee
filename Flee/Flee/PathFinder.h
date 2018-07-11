@@ -16,8 +16,9 @@ public:
 
 	void Tick(int dt);
 
-	FleeTransform* GlobalTarget;
-	FleeTransform* LocalTarget;
+	void SetTarget(FleeTransform* target);
+	bool WillMove();
+	FleeTransform LocalTarget;
 private:
 	struct PathNode
 	{
@@ -27,7 +28,6 @@ private:
 		int x; //const
 		int y; //const
 
-		bool IsVisited = false;
 		double CostOfArrival;
 		double EstimatedCostToDestination;
 		double EstimatedTotalCost()
@@ -38,16 +38,16 @@ private:
 
 		void Reset()
 		{
-			IsVisited = false;
 			CostOfArrival = std::numeric_limits<double>::infinity();
 			EstimatedCostToDestination = std::numeric_limits<double>::infinity();
 			ArrivedFromNode = nullptr;
 		}
 	};
 	NavigationGridMap * _navMap;
-
+	FleeTransform _globalTarget;
+	bool _isInDestination;
+	bool _isLost;
 	FleeTransform* _sourceTransform;
-	FleeTransform* _targetTransform;
 
 	PathNode** _path;
 	PathNode** _queue;
@@ -55,15 +55,10 @@ private:
 
 	bool GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNodeIndeces);
 
-	void UpdateAdjacentNodesOf(PathNode* sourceNode);
-
 	void SetEstimatedCostToDestination(PathNode* a);
 	SDL_Point GetGlobalTargetPosition();
 
 	void PushNode(PathNode* node);
 	PathNode* RemoveCheapestNode();
-
 };
-
-
 #endif

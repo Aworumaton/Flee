@@ -22,6 +22,9 @@ Enemy::Enemy(Scene* map, NavigationGridMap* navMap)
 
 	_pathFinder = new PathFinder(Transform, navMap);
 	_behaviours.Add(_pathFinder);
+
+	_vision = new CharacterVision(_map, Transform, VISION_DISTANCE);
+	_behaviours.Add(_vision);
 }
 
 Enemy::~Enemy()
@@ -31,9 +34,14 @@ Enemy::~Enemy()
 
 void Enemy::Tick(int dt)
 {
-	Move(dt);
+	if (_vision->IsTargetInVision())
+	{
+		_pathFinder->SetTarget(_vision->GetTarget());
+	}
 
 	Character::Tick(dt);
+
+	Move(dt);
 
 }
 
@@ -43,15 +51,13 @@ void Enemy::Move(int dt)
 
 	bool willMove = false;
 
-	if (_pathFinder->LocalTarget != nullptr)
+	if (_pathFinder->WillMove())
 	{
-		int targetX;
-		int targetY;
-		GetPositionOf(targetX, targetY, _pathFinder->LocalTarget);
+		int targetX = _pathFinder->LocalTarget.X + (_pathFinder->LocalTarget.Width*0.5);
+		int targetY = _pathFinder->LocalTarget.Y + (_pathFinder->LocalTarget.Height*0.5);
 
-		int sourceX;
-		int sourceY;
-		GetPositionOf(sourceX, sourceY, Transform);
+		int sourceX = Transform->X;
+		int sourceY = Transform->Y;
 
 		if (targetX != sourceX || targetY != sourceY)
 		{
@@ -184,11 +190,5 @@ void Enemy::Move(int dt)
 
 void Enemy::SetTarget(FleeTransform* target)
 {
-	_pathFinder->GlobalTarget = target;
-}
-
-void Enemy::GetPositionOf(int &x, int &y, FleeTransform* target)
-{
-	x = target->X + (target->Width*0.5);
-	y = target->Y + (target->Height*0.5);
+	_vision->SetTarget(target);
 }

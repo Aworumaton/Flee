@@ -20,7 +20,7 @@ void Game::Run()
 
 	Uint32 elapsed_time = SDL_GetTicks();
 	Uint32 target_frame_rate = (Uint32)1000 / (Uint32)60;
-
+	
 	while (_isRunning)
 	{
 		Uint32 now = SDL_GetTicks();
@@ -30,17 +30,19 @@ void Game::Run()
 			if(target_frame_rate < delta_time)
 			{
 				elapsed_time = now ;
-
+				delta_time = 27;
 				_input.Tick(delta_time);
 
 				_player->Tick(delta_time);
 
 
-				_enemy->SetTarget(_player->Transform);
-				//FleeTransform* testTarget = new FleeTransform();
-				//testTarget->X = _input._main_agent_controls.look_at_x + FleeRenderer::GetCamera()->X;
-				//testTarget->Y = _input._main_agent_controls.look_at_y + FleeRenderer::GetCamera()->Y;
-				//_enemy->SetTarget(testTarget);
+				//_enemy->SetTarget(_player->Transform);
+				FleeTransform* testTarget = new FleeTransform();
+				testTarget->X = _input._main_agent_controls.look_at_x + FleeRenderer::GetCamera()->X;
+				testTarget->Y = _input._main_agent_controls.look_at_y + FleeRenderer::GetCamera()->Y;
+				testTarget->Width = 1;
+				testTarget->Height = 1;
+				_enemy->SetTarget(testTarget);
 
 				_enemy->Tick(delta_time);
 

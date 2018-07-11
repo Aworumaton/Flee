@@ -16,7 +16,7 @@ public:
 		DebugAnimation = AnimationManager::CreateAnimationsOf("DebugRect", Constants::VisualLayers::UserInterfaceLayer);
 		DebugAnimation->Transform->X = x + (Character::Size - DebugAnimation->Transform->Width )/2;
 		DebugAnimation->Transform->Y = y + (Character::Size - DebugAnimation->Transform->Height)/2;
-		DebugAnimation->IsHidden = true;
+	//	DebugAnimation->IsHidden = true;
 	};
 
 	NavigationGridBlock() : X(0), Y(0)

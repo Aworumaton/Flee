@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationGroup.cpp" />
     <ClCompile Include="AnimationManager.cpp" />
+    <ClCompile Include="CharacterVision.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -157,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="AnimationGroup.h" />
     <ClInclude Include="AnimationManager.h" />
+    <ClInclude Include="CharacterVision.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Enemy.h" />

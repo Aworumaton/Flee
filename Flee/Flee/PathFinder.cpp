@@ -8,10 +8,6 @@ PathFinder::PathFinder(FleeTransform* sourceTransform, NavigationGridMap* navMap
 	_navMap = navMap;
 	_sourceTransform = sourceTransform;
 
-	_targetTransform = new FleeTransform();
-	_targetTransform->Width = Character::Size;
-	_targetTransform->Height = Character::Size;
-
 	_queue = new PathNode*[_navMap->GridWidth()*_navMap->GridHeight()];
 
 	_path = new PathNode*[_navMap->GridWidth()];
@@ -25,53 +21,77 @@ PathFinder::PathFinder(FleeTransform* sourceTransform, NavigationGridMap* navMap
 		}
 	}
 	_queueSize = 0;
+
+	SetTarget(sourceTransform);
 }
 
 
 void PathFinder::Tick(int dt)
 {
-
-	LocalTarget = nullptr;
-	if (GlobalTarget != nullptr)
+	if (Constants::CheckCollision(_sourceTransform, &_globalTarget))
 	{
-		SDL_Point sourceIndeces;
-		SDL_Point targetIndeces;
-		
-		_navMap->GetNearestValidBlockAtPosition(_sourceTransform, sourceIndeces.x, sourceIndeces.y);
-		_navMap->GetNearestValidBlockAtPosition(GlobalTarget, targetIndeces.x, targetIndeces.y);
+		_isInDestination = true;
+		return;
+	}
+	
+	_isInDestination = false;
+	_isLost = false;
 
-		if (sourceIndeces.x == targetIndeces.x && sourceIndeces.y == targetIndeces.y)
+	SDL_Point sourceIndeces;
+	SDL_Point targetIndeces;
+		
+	_navMap->GetNearestValidBlockAtPosition(_sourceTransform, sourceIndeces.x, sourceIndeces.y);
+	_navMap->GetNearestValidBlockAtPosition(&_globalTarget, targetIndeces.x, targetIndeces.y);
+
+	if (sourceIndeces.x == targetIndeces.x && sourceIndeces.y == targetIndeces.y)
+	{
+		LocalTarget.X = _globalTarget.X;
+		LocalTarget.Y = _globalTarget.Y;
+	}
+	else
+	{
+		PathNode* sourceNode = &_path[sourceIndeces.x][sourceIndeces.y];
+		if (GetShortestPath(sourceNode, &targetIndeces))
 		{
-			LocalTarget = GlobalTarget;
+
+			PathNode* arrivedNode = _path[targetIndeces.x][targetIndeces.y].ArrivedFromNode;
+			if (arrivedNode != nullptr)
+			{
+
+				while (sourceIndeces.x != arrivedNode->x || sourceIndeces.y != arrivedNode->y)
+				{
+					_navMap->GetBlockAt(arrivedNode->x, arrivedNode->y)->DebugAnimation->SetAnimation("Active");
+
+					targetIndeces.x = arrivedNode->x;
+					targetIndeces.y = arrivedNode->y;
+
+					arrivedNode = arrivedNode->ArrivedFromNode;
+				}
+
+				LocalTarget.X = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->X;
+				LocalTarget.Y = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->Y;
+			}
 		}
 		else
 		{
-			PathNode* sourceNode = &_path[sourceIndeces.x][sourceIndeces.y];
-			if (GetShortestPath(sourceNode, &targetIndeces))
-			{
 
-				PathNode* arrivedNode = _path[targetIndeces.x][targetIndeces.y].ArrivedFromNode;
-				if (arrivedNode != nullptr)
-				{
-
-					while (sourceIndeces.x != arrivedNode->x || sourceIndeces.y != arrivedNode->y)
-					{
-						_navMap->GetBlockAt(arrivedNode->x, arrivedNode->y)->DebugAnimation->SetAnimation("Active");
-
-						targetIndeces.x = arrivedNode->x;
-						targetIndeces.y = arrivedNode->y;
-
-						arrivedNode = arrivedNode->ArrivedFromNode;
-					}
-
-					_targetTransform->X = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->X;
-					_targetTransform->Y = _navMap->GetBlockAt(targetIndeces.x, targetIndeces.y)->Y;
-					LocalTarget = _targetTransform;
-
-				}
-			}
+			_isLost = true;
 		}
 	}
+}
+
+void PathFinder::SetTarget(FleeTransform * target)
+{
+	_globalTarget.Height = target->Height;
+	_globalTarget.Width = target->Width;
+	_globalTarget.X = target->X;
+	_globalTarget.Y = target->Y;
+	_globalTarget.Rotation = target->Rotation;
+}
+
+bool PathFinder::WillMove()
+{
+	return !_isInDestination && !_isLost;
 }
 
 //using A*
@@ -95,14 +115,13 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 		}
 	}
 
-	sourceNode->IsVisited = true;
 	sourceNode->CostOfArrival = 0;
 	SetEstimatedCostToDestination(sourceNode);
 	PushNode(sourceNode);
 
 	int globalTargetX;
 	int globalTargetY;
-	_navMap->GetNearestValidBlockAtPosition(GlobalTarget, globalTargetX, globalTargetY);
+	_navMap->GetNearestValidBlockAtPosition(&_globalTarget, globalTargetX, globalTargetY);
 
 
 	while (_queueSize > 0)
@@ -145,7 +164,6 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 						comparedNode->CostOfArrival = dDistance + curNode->CostOfArrival;
 						comparedNode->ArrivedFromNode = curNode;
 
-						comparedNode->IsVisited = true;
 						SetEstimatedCostToDestination(comparedNode);
 						PushNode(comparedNode);
 					}
@@ -153,7 +171,6 @@ bool PathFinder::GetShortestPath(PathNode* const sourceNode, SDL_Point* targetNo
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -198,8 +215,8 @@ void PathFinder::SetEstimatedCostToDestination(PathNode* a)
 
 SDL_Point PathFinder::GetGlobalTargetPosition()
 {
-	int dX = GlobalTarget->X + (GlobalTarget->Width / 2);
-	int dY = GlobalTarget->Y + (GlobalTarget->Height / 2);
+	int dX = _globalTarget.X + (_globalTarget.Width / 2);
+	int dY = _globalTarget.Y + (_globalTarget.Height / 2);
 	return SDL_Point{ dX, dY };
 }
 
